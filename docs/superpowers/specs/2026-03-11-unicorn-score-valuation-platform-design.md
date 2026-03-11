@@ -26,6 +26,80 @@
 
 ---
 
+## Enumerations & Lookup Tables
+
+### Sectors (11 options — wizard dropdown):
+1. SaaS
+2. Fintech
+3. D2C (Direct-to-Consumer)
+4. EdTech
+5. HealthTech
+6. E-commerce
+7. Marketplace
+8. AgriTech
+9. Logistics
+10. CleanTech
+11. Other
+
+### Stages (7 options — wizard dropdown):
+1. Idea (no product, no revenue)
+2. Pre-seed (prototype/early MVP)
+3. Seed (MVP live, some traction)
+4. Pre-Series A (product-market fit emerging)
+5. Series A (proven PMF, scaling)
+6. Series B (growth stage)
+7. Series C+ (late stage / pre-IPO)
+
+### Business Models (wizard dropdown):
+1. SaaS (subscription recurring revenue)
+2. Marketplace (take-rate / commission)
+3. E-commerce (product sales)
+4. Advertising (ad-supported)
+5. Freemium (free + premium conversion)
+6. Transaction-based (per-transaction fee)
+7. Licensing (IP / technology licensing)
+8. Services (consulting / professional services)
+9. Hardware + Software
+10. Other
+
+### Stage-Based Pre-Money Valuation Benchmarks (INR):
+Used by Scorecard, Risk Factor Summation, and percentile scoring.
+
+| Stage | Typical Pre-Money (INR) | Low | High |
+|-------|------------------------|-----|------|
+| Idea | Rs 50 L | Rs 20 L | Rs 1 Cr |
+| Pre-seed | Rs 2 Cr | Rs 50 L | Rs 5 Cr |
+| Seed | Rs 8 Cr | Rs 3 Cr | Rs 15 Cr |
+| Pre-Series A | Rs 20 Cr | Rs 10 Cr | Rs 40 Cr |
+| Series A | Rs 50 Cr | Rs 25 Cr | Rs 100 Cr |
+| Series B | Rs 200 Cr | Rs 80 Cr | Rs 500 Cr |
+| Series C+ | Rs 500 Cr | Rs 200 Cr | Rs 2,000 Cr |
+
+### Risk Factor Per-Adjustment Amount by Stage:
+
+| Stage | Per-Factor Adjustment |
+|-------|----------------------|
+| Idea | Rs 10 L |
+| Pre-seed | Rs 25 L |
+| Seed | Rs 50 L |
+| Pre-Series A | Rs 1 Cr |
+| Series A | Rs 3 Cr |
+| Series B | Rs 5 Cr |
+| Series C+ | Rs 10 Cr |
+
+### Valuation Percentile Table (for Unicorn Score component 1):
+Score = where the weighted-average valuation falls relative to the stage benchmark range.
+- Below Low → score 10-25
+- At Low → score 25
+- Between Low and Typical → score 25-50
+- At Typical → score 50
+- Between Typical and High → score 50-75
+- At High → score 75
+- Above High → score 75-95 (capped at 95)
+Linear interpolation within each band.
+
+---
+
 ## User Flow
 
 ```
@@ -36,7 +110,7 @@ LANDING PAGE
 6-STEP WIZARD (3-5 minutes)
   Step 1: Company Info
     - Company name, sector (11 options), stage (7 options),
-      business model, city, founding year, team size
+      business model (10 options), city, founding year, team size
   Step 2: Financials
     - Annual revenue, revenue growth %, gross margin %,
       monthly burn, cash in bank, runway months, CAC, LTV
@@ -98,34 +172,87 @@ UNICORN SCORE = Weighted Average of 5 Components:
    - Score component = percentile rank vs sector/stage benchmark table
 
 2. GROWTH TRAJECTORY (20% weight)
-   - Revenue growth rate vs Damodaran India sector median
-   - Burn rate efficiency: revenue / monthly burn ratio
-   - Runway health: months remaining (>18 = excellent, <6 = critical)
-   - Unit economics: LTV/CAC ratio health (>3x = excellent)
+   Sub-scores (equal weight, each 0-100, averaged):
+   a) Revenue growth percentile:
+      - 0% or pre-revenue → 30
+      - Below sector median (from Damodaran marginIndia) → 30 + (growth/median × 20)
+      - At median → 50
+      - 2x median → 75
+      - 3x+ median → 90 (capped)
+   b) Burn efficiency (revenue / monthly_burn ratio):
+      - 0 (no revenue) → 20
+      - 0-0.5 → 30
+      - 0.5-1.0 → 50
+      - 1.0-2.0 → 70
+      - 2.0+ (profitable) → 90
+   c) Runway health:
+      - <3 months → 10
+      - 3-6 months → 30
+      - 6-12 months → 50
+      - 12-18 months → 70
+      - 18+ months → 90
+   d) Unit economics (LTV/CAC):
+      - Not provided or CAC=0 → 50 (neutral)
+      - <1x → 20
+      - 1-2x → 40
+      - 2-3x → 60
+      - 3-5x → 80
+      - 5x+ → 95
 
 3. MARKET POSITION (15% weight)
-   - TAM reasonableness check (vs industry data)
-   - SAM/SOM as % of TAM (sanity check)
-   - Competition level adjustment
-   - Barrier to entry / moat strength
+   Sub-scores (weighted, each 0-100):
+   a) TAM reasonableness (30% of component):
+      - TAM not provided → 40 (neutral)
+      - TAM < Rs 100 Cr → 20 (too small for VC)
+      - Rs 100-1,000 Cr → 50
+      - Rs 1,000-10,000 Cr → 70
+      - Rs 10,000+ Cr → 85
+      - TAM > Rs 1,00,000 Cr → 60 (likely unrealistic, penalty)
+   b) SAM/TAM ratio sanity (20% of component):
+      - SAM not provided → 50
+      - SAM/TAM < 1% → 30 (too ambitious gap)
+      - SAM/TAM 1-10% → 60
+      - SAM/TAM 10-30% → 80
+      - SAM/TAM > 50% → 50 (likely confused with TAM)
+   c) Competition level (25% of component):
+      - competition_level from wizard (1-5, where 1=no competition, 5=intense)
+      - Score = 100 - (competition_level × 15) → range 85 to 25
+   d) Barrier to entry / moat (25% of component):
+      - competitive_advantage from wizard mapped:
+        "network_effects" → 90, "proprietary_tech" → 85, "brand" → 75,
+        "cost_advantage" → 70, "switching_costs" → 80, "regulatory" → 65,
+        "none" → 30
 
 4. TEAM QUALITY (15% weight)
-   - Founder experience score (1-5)
-   - Domain expertise (1-5)
-   - Previous exits bonus
-   - Team completeness (CTO + CMO + CFO coverage)
+   Formula: (founder_experience × 25 + domain_expertise × 25
+            + exits_bonus + completeness_score) / total_possible × 100
+   Where:
+   - founder_experience: wizard input 1-5, scaled to 0-25
+   - domain_expertise: wizard input 1-5, scaled to 0-25
+   - exits_bonus: 0 (no exits) or 15 (yes exits)
+   - completeness: team_size >= 3 → 15, team_size 2 → 10, solo → 5
+   - total_possible = 80
+   - Minimum score: 15 (solo founder, no experience, no exits)
 
 5. PRODUCT READINESS (10% weight)
-   - Development stage: idea (20) → MVP (40) → beta (60) → production (80) → scaling (100)
-   - Product-market fit signals
-   - Tech differentiation score (1-5)
-   - IP / patent bonus
+   Formula: (dev_stage_score + pmf_score + tech_diff_score + ip_bonus) / 100 × 100
+   Where:
+   - dev_stage_score (0-40):
+     idea=5, prototype=15, mvp=25, beta=30, production=35, scaling=40
+   - pmf_score (0-30):
+     none=5, early_signals=15, moderate=22, strong=30
+   - tech_diff_score (0-20):
+     wizard input 1-5, scaled: 1→4, 2→8, 3→12, 4→16, 5→20
+   - ip_bonus (0-10):
+     no_ip=0, trade_secret=4, patent_pending=7, patent_granted=10
 ```
 
 ### Probabilistic Valuation Range (Monte Carlo):
 
+**Performance:** Run in a Web Worker to avoid blocking the UI thread. On low-end mobile devices, reduce to 2,000 iterations (detect via `navigator.hardwareConcurrency <= 2`). Show a brief "Computing your range..." animation during calculation.
+
 ```
-For each of 10,000 iterations:
+For each of 10,000 iterations (or 2,000 on mobile):
   1. Sample growth rate from Normal(stated_growth, stated_growth × 0.3)
   2. Sample margin from Normal(stated_margin, stated_margin × 0.2)
      → Mean-reverts toward Damodaran India sector median over 5 years
@@ -171,7 +298,7 @@ Sector-to-Damodaran mapping table:
 
 ### Method 1: Scorecard (Bill Payne)
 
-**Inputs:** 7 factor scores (from wizard steps 2-6)
+**Inputs:** 7 factor scores derived from wizard data
 **Weights:**
 - Management team: 30%
 - Market opportunity: 25%
@@ -181,15 +308,25 @@ Sector-to-Damodaran mapping table:
 - Need for funding: 5%
 - Other factors: 5%
 
+**Wizard-to-Factor Mapping (each factor scored 50-150%, where 100% = average):**
+- Management team → (founder_experience + domain_expertise) / 10 × 100 + exits_bonus(+25%)
+- Market opportunity → TAM bucket score: <100Cr=60%, 100-1000Cr=90%, 1000-10000Cr=120%, >10000Cr=140%
+- Product/technology → dev_stage mapped: idea=50%, prototype=70%, mvp=90%, beta=110%, production=130%, scaling=150%
+- Competition → inverse of competition_level: 1=140%, 2=120%, 3=100%, 4=80%, 5=60%
+- Sales/marketing → revenue_growth mapped: 0%=60%, <50%=80%, 50-100%=100%, 100-200%=120%, >200%=140%
+- Need for funding → runway mapped: <6mo=60%, 6-12mo=80%, 12-18mo=100%, >18mo=130%
+- Other factors → city_tier mapped: metro(Bengaluru/Delhi/Mumbai)=120%, tier1=100%, tier2=80%, other=70%
+
 **Calculation:**
-1. Get typical pre-money valuation for stage from benchmark table
-2. Score each factor as 0% to 150% of its weight
-3. Sum adjustments → apply to base valuation
-4. Confidence: 0.7 for pre-revenue, 0.5 for idea stage
+1. Get typical pre-money valuation for stage from Stage-Based Benchmark table (see Enumerations section)
+2. Score each factor as 50% to 150% of its weight using mappings above
+3. Sum all weighted factor percentages → total adjustment multiplier
+4. Valuation = base_pre_money × total_adjustment_multiplier
+5. Confidence: 0.7 for pre-revenue, 0.5 for idea stage, 0.6 otherwise
 
 ### Method 2: Berkus
 
-**Inputs:** 5 factor assessments (from wizard)
+**Inputs:** 5 factor assessments derived from wizard data
 **Factors (each Rs 0-4 Cr):**
 1. Sound idea / business model strength
 2. Working prototype / product stage
@@ -197,9 +334,16 @@ Sector-to-Damodaran mapping table:
 4. Strategic relationships
 5. Product rollout / early sales traction
 
+**Wizard-to-Factor Mapping (each 0-4 Cr):**
+- Sound idea → business_model mapped: SaaS/Marketplace=3.5Cr, Transaction=3Cr, Freemium=2.5Cr, Services=1.5Cr, Other=2Cr
+- Working prototype → dev_stage mapped: idea=0, prototype=1Cr, mvp=2Cr, beta=3Cr, production=3.5Cr, scaling=4Cr
+- Quality management → (founder_experience × 0.5 + domain_expertise × 0.3) Cr, capped at 4Cr
+- Strategic relationships → derived: if notable_investors or partnerships mentioned in team_assessment=3Cr, else team_size>5=2Cr, else 1Cr
+- Product rollout → revenue mapped: 0=0, <10L=1Cr, 10L-1Cr=2Cr, 1-5Cr=3Cr, >5Cr=4Cr
+
 **Calculation:**
 - Sum of 5 factors, capped at Rs 20 Cr
-- Confidence: 0.8 for pre-seed, 0.6 for seed+
+- Confidence: 0.8 for pre-seed, 0.6 for seed+, 0.4 for Series A+ (method less relevant at scale)
 
 ### Method 3: Revenue Multiple
 
@@ -215,25 +359,29 @@ Sector-to-Damodaran mapping table:
 
 ### Method 4: Risk Factor Summation
 
-**Inputs:** 12 risk dimensions (auto-assessed from wizard data)
+**Inputs:** 12 risk dimensions auto-assessed from wizard data
 **Dimensions (each rated -2 to +2):**
-1. Management risk
-2. Stage of business
-3. Legislation/regulatory risk
-4. Manufacturing/supply risk
-5. Sales and marketing risk
-6. Funding/capital risk
-7. Competition risk
-8. Technology risk
-9. Litigation risk
-10. International risk
-11. Reputation risk
-12. Potential exit
+
+**Wizard-to-Risk Mapping:**
+1. Management risk → founder_experience: 5=+2, 4=+1, 3=0, 2=-1, 1=-2
+2. Stage of business → dev_stage: scaling=+2, production=+1, beta=0, mvp=-1, prototype/idea=-2
+3. Legislation/regulatory risk → sector-based default: Fintech/HealthTech=-1, SaaS/EdTech=+1, Other=0
+4. Manufacturing/supply risk → business_model: SaaS/Marketplace=+1, Hardware=-2, E-commerce=-1, Other=0
+5. Sales and marketing risk → revenue_growth: >200%=+2, 100-200%=+1, 50-100%=0, <50%=-1, 0%=-2
+6. Funding/capital risk → runway: >18mo=+2, 12-18=+1, 6-12=0, 3-6=-1, <3=-2
+7. Competition risk → competition_level: 1=+2, 2=+1, 3=0, 4=-1, 5=-2
+8. Technology risk → tech_differentiation: 5=+2, 4=+1, 3=0, 2=-1, 1=-2
+9. Litigation risk → default 0 (neutral — no wizard input for this, safe assumption)
+10. International risk → default 0 (neutral — domestic focus assumed)
+11. Reputation risk → default 0 (neutral — new companies have no reputation risk)
+12. Potential exit → sector-based: SaaS/Fintech=+1, HealthTech/CleanTech=0, AgriTech/Logistics=-1
 
 **Calculation:**
-1. Per-factor adjustment: Rs 25L (pre-seed) to Rs 5 Cr (Series A+)
-2. Sum adjustments → apply to stage-based starting valuation
-3. Confidence: 0.75
+1. Starting valuation = stage-based benchmark from Enumerations table (Typical Pre-Money)
+2. Per-factor adjustment amount from Risk Factor Per-Adjustment table (see Enumerations)
+3. Final = starting_valuation + sum(rating × per_factor_adjustment for each dimension)
+4. Floor at Rs 0 (valuation cannot go negative)
+5. Confidence: 0.75
 
 ### Method 5: DCF (Discounted Cash Flow)
 
@@ -303,7 +451,7 @@ Sector-to-Damodaran mapping table:
 
 ## AI Narrative Analysis
 
-**Provider:** Claude API (claude-sonnet-4-6)
+**Provider:** Claude API (claude-haiku-4-5 for cost efficiency, ~$0.002/call)
 
 **Trigger:** Runs server-side (Supabase Edge Function) after email is captured. Results cached and displayed in the unlocked report.
 
@@ -332,9 +480,9 @@ Use INR throughout. Reference Indian market context.
 
 **Cost Control:**
 - Only runs when email is captured (not for every wizard completion)
-- Use claude-haiku-4-5 for cost efficiency (~$0.002 per analysis)
 - Cache result in Supabase — don't re-run for same valuation
 - Rate limit: max 100 AI calls/day initially
+- Fallback: If Claude API fails or rate limit hit, show "AI analysis will be available shortly" and retry via background job
 
 ---
 
@@ -644,6 +792,117 @@ Wizard Steps → Zustand Store (all inputs)
 - Razorpay account (for certified report payments)
 - Domain: firstunicornstartup.com (already owned)
 - Damodaran India Excel files (publicly available, processed to JSON)
+
+---
+
+## Input Validation Rules
+
+### Financial Inputs:
+- `annual_revenue`: >= 0. If 0, mark as pre-revenue. Max Rs 10,000 Cr (sanity cap).
+- `revenue_growth_pct`: -100% to 1000%. Negative growth is valid (declining business).
+- `gross_margin_pct`: 0% to 100%. Required if revenue > 0.
+- `monthly_burn`: >= 0. If 0, company is profitable/bootstrapped.
+- `cash_in_bank`: >= 0.
+- `runway_months`: Auto-calculated as cash_in_bank / (monthly_burn - monthly_revenue/12). If burn=0, runway=999.
+- `cac`: >= 0. Optional field — if empty, unit economics component scores neutral (50).
+- `ltv`: >= 0. Optional. If CAC=0 and LTV provided, LTV/CAC treated as infinity → score 95.
+- `tam`: >= 0. If tam < sam or sam < som, show warning but allow submission (founders often confuse these).
+
+### Qualitative Inputs:
+- All 1-5 scales: integer only, enforce min/max.
+- `competition_level`: required (no default — forces founder to think).
+- `competitive_advantage`: single-select dropdown, required.
+- `dev_stage`: required, single-select.
+- `pmf_signals`: single-select: "none", "early_signals", "moderate", "strong".
+- `ip_status`: single-select: "none", "trade_secret", "patent_pending", "patent_granted".
+
+### Edge Case Handling:
+- Pre-revenue company: Revenue Multiple method excluded (confidence < 0.3). DCF uses sector-median revenue as proxy with confidence 0.4.
+- All financials zero: Only Scorecard, Berkus, and Risk Factor methods run. Score weights redistribute (valuation strength component uses only these 3 methods).
+- Very early stage (Idea + no team): Minimum Unicorn Score floor of 10 (never show 0 — discouraging).
+
+---
+
+## Error Handling
+
+| Scenario | Handling |
+|----------|----------|
+| Supabase API down during email capture | Show "Saved locally — we'll sync when connection restores." Store in localStorage. Retry on next page load. |
+| Claude API error/timeout | Show "AI analysis will be ready shortly" placeholder. Background retry up to 3 times with exponential backoff. If all fail, display "AI analysis unavailable for this session." |
+| Razorpay payment fails | Show Razorpay's built-in error. Keep CTA visible for retry. Do not create certified_request until payment confirmed via webhook. |
+| Direct navigation to `/report/[id]` without wizard | Check if valuation ID exists in Supabase. If yes, render report. If no, redirect to `/score` with message "Complete the assessment first." |
+| Browser tab closed mid-wizard | Zustand store persisted to localStorage via `zustand/middleware/persist`. Resume from last completed step on return. |
+| Monte Carlo produces NaN/Infinity | Clamp DCF inputs: if WACC <= growth rate, set WACC = growth + 0.02. If any FCF calculation produces NaN, exclude that iteration. Require at least 1,000 valid iterations for output. |
+
+---
+
+## Security
+
+### Data Protection:
+- Report URLs use UUID v4 (122 bits of randomness) — computationally infeasible to guess.
+- No financial data is ever exposed in URLs or query parameters.
+- All Supabase queries use Row Level Security (RLS): users can only read their own valuations (matched by email).
+
+### API Key Safety:
+- ANTHROPIC_API_KEY is ONLY used in `/api/ai-analysis` route (server-side Next.js API route) or Supabase Edge Function. NEVER exposed to client bundle.
+- SUPABASE_ANON_KEY is safe for client-side (Supabase designed for this with RLS).
+
+### Rate Limiting:
+- `/api/capture`: Max 10 requests per IP per hour (prevents spam/data pollution). Implement via Vercel Edge Middleware or Supabase RLS.
+- `/api/ai-analysis`: Max 100 calls/day total (budget control). Track in Supabase counter table.
+
+### Input Sanitization:
+- All text inputs (company_name, city) sanitized for XSS before storage.
+- JSONB fields validated against expected schema before Supabase insert.
+
+---
+
+## PDF Report Specification
+
+**Library:** jsPDF (client-side generation)
+
+**Sections included in PDF:**
+1. Title page: "Unicorn Score Report — {company_name}" with score badge
+2. Score summary: Score number + 5 component radar chart (rendered as static image via html2canvas)
+3. Valuation summary: P10/P50/P90 range with method breakdown table
+4. Damodaran benchmarks used (beta, WACC, multiples — table format)
+5. Top 5 comparable companies (table)
+6. Recommendations (text)
+7. Disclaimer: "This is an indicative estimate, not a certified valuation report."
+
+**Excluded from PDF (requires email unlock but not in downloadable):**
+- AI narrative (async, may not be ready)
+- Cap table simulator (interactive)
+- Investor matching (interactive)
+
+**Score Badge (for social sharing):**
+- Generated via HTML-to-canvas (`html2canvas` library)
+- 1200×630px image (optimal for LinkedIn/Twitter OG)
+- Contains: Score number (large), company name, valuation range, firstunicornstartup.com branding
+- Stored as data URL, downloadable, and used as og:image for share links
+
+---
+
+## Currency & Formatting
+
+- All monetary values displayed in Indian notation: Rs X L (lakhs) or Rs X Cr (crores)
+- Threshold: < Rs 1 Cr → show in lakhs. >= Rs 1 Cr → show in crores with 1 decimal.
+- Input fields accept plain numbers (in INR). Formatter converts on display.
+- No INR symbol — use "Rs" prefix consistently (easier to type and universally understood).
+
+---
+
+## Data Freshness & Maintenance
+
+| Data Source | Vintage | Update Cadence | Update Process |
+|-------------|---------|----------------|---------------|
+| Damodaran India datasets | January 2026 | Annual (January) | Download Excel → run Python script → output JSON → commit to repo |
+| Sector benchmarks | 2024 compiled | Every 6 months | Manual research from Tracxn, VCCEdge, public announcements |
+| Comparable companies | 2024-2025 | Quarterly | Add notable funding rounds as they happen |
+| Investor database | 2025 | Every 6 months | Verify fund sizes, active status, sector focus |
+| Percentile tables | Pre-computed | Monthly (after 500+ users) | Recompute from accumulated valuation data in Supabase |
+
+Damodaran data vintage must be displayed in the report footer: "Industry benchmarks: Damodaran Online, January 2026 update."
 
 ---
 
