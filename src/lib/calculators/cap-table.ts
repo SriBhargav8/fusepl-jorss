@@ -15,7 +15,7 @@ export function simulateRound(
   const postMoney = round.pre_money + round.raise_amount
   const newInvestorPct = (round.raise_amount / postMoney) * 100
 
-  let shareholders = currentCapTable.map(s => ({ ...s }))
+  let shareholders = currentCapTable.map(s => ({ ...s } as CapTableEntry))
 
   if (round.esop_timing === 'pre_round' && round.esop_expansion_pct > 0) {
     // Step 1: Carve ESOP from existing shareholders before investor
@@ -23,7 +23,7 @@ export function simulateRound(
     shareholders = shareholders.map(s => ({
       ...s,
       percentage: s.percentage * esopFactor,
-    }))
+    } as CapTableEntry))
     // Add/expand ESOP pool
     const existingEsop = shareholders.find(s => s.share_class === 'esop')
     if (existingEsop) {
@@ -42,7 +42,7 @@ export function simulateRound(
   shareholders = shareholders.map(s => ({
     ...s,
     percentage: s.percentage * investorDilution,
-  }))
+  } as CapTableEntry))
 
   // Add new investor
   shareholders.push({
@@ -57,7 +57,7 @@ export function simulateRound(
     shareholders = shareholders.map(s => ({
       ...s,
       percentage: s.percentage * esopFactor,
-    }))
+    } as CapTableEntry))
     const existingEsop = shareholders.find(s => s.share_class === 'esop')
     if (existingEsop) {
       existingEsop.percentage += round.esop_expansion_pct

@@ -195,7 +195,7 @@ export interface CapTableRound {
 }
 
 export interface CapTableResult {
-  shareholders: { name: string; percentage: number; share_class: string }[]
+  shareholders: CapTableEntry[]
   post_money: number
   new_investor_pct: number
   founder_pct_after: number
