@@ -33,19 +33,23 @@ Create `index.ts` in each lib/ subdirectory for clean re-exports:
 
 ```
 src/lib/data/index.ts
-  → re-exports: getDamodaranBenchmark, getSectorLabel, SECTOR_MAPPING,
-    COMPARABLE_COMPANIES, findComparables, STAGE_BENCHMARKS, getSectorBenchmarks,
-    getIBCRecovery, IBC_SECTORS, INVESTORS
+  → getDamodaranBenchmark, getSectorLabel, SECTOR_MAPPING  (from sector-mapping.ts)
+  → COMPARABLE_COMPANIES, findComparables                   (from comparable-companies.ts)
+  → STAGE_BENCHMARKS, getSectorBenchmarks                   (from sector-benchmarks.ts)
+  → getIBCRecovery, IBC_SECTORS                             (from ibc-recovery.ts)
+  → INVESTORS                                                (from investors.ts)
 
 src/lib/calculators/index.ts
-  → re-exports: computeDerivedFields, calculateESOPValue, simulateRound,
-    simulateMultiRound
+  → computeDerivedFields       (from burn-rate.ts)
+  → calculateESOPValue         (from esop-valuation.ts — takes ESOPParams, returns ESOPResult)
+  → simulateRound              (from cap-table.ts)
+  → simulateMultiRound         (from cap-table.ts)
 
 src/lib/matching/index.ts
-  → re-exports: matchInvestors
+  → matchInvestors             (from investor-match.ts)
 
 src/lib/export/index.ts
-  → re-exports: generateValuationPDF
+  → generateValuationPDF       (from pdf-generator.ts)
 ```
 
 ### 2. Centralized Constants
@@ -56,6 +60,8 @@ Move to `src/lib/constants.ts`:
 // Already exists: MARKET_CONSTANTS, DEFAULT_ESOP_PCT, ILLIQUIDITY_DISCOUNT, MC_ITERATIONS
 
 // ADD:
+// Short-form labels for UI display. The PDF generator (pdf-generator.ts) has its own
+// long-form labels (e.g. "Discounted Cash Flow (DCF)") — keep those separate for PDF.
 export const METHOD_LABELS: Record<string, string> = {
   dcf: 'DCF Analysis',
   pwerm: 'PWERM',
@@ -79,10 +85,16 @@ export const WIZARD_STEPS = [
 ]
 ```
 
+**Migration note for `wizard-container.tsx`:** Delete the local `STEP_LABELS` constant at line 44 and replace all 3 references with the imported `WIZARD_STEPS` from `@/lib/constants`. Also delete the local `METHOD_LABELS` in `method-cards.tsx` and import from `@/lib/constants`.
+
+**Note on `pdf-generator.ts`:** The PDF generator has its own `METHOD_LABELS` with longer-form names suitable for PDF output. Keep those as a local constant in `pdf-generator.ts` — do NOT replace them with the shorter UI labels.
+
 Move to `src/lib/utils.ts`:
 ```typescript
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 ```
+
+Update `email-gate.tsx` (line 30) and `capture/route.ts` (line 28) to import and use `EMAIL_REGEX` from `@/lib/utils` instead of inline regex.
 
 ### 3. CSS Theme Wiring
 
@@ -119,6 +131,8 @@ Components should then use semantic classes:
 
 **Migration strategy:** Don't change all 50+ component files at once. Change CSS vars first, then migrate components incrementally. Both hardcoded and semantic classes will work simultaneously.
 
+**Note on `:root` block:** Leave the `:root` (light theme) block unchanged. The `html` element has `className="dark"` set statically in `layout.tsx`, so `:root` values are never applied at runtime. No SSR flash risk.
+
 ### 4. Shared Navigation Header
 
 Create `src/components/layout/header.tsx`:
@@ -131,8 +145,8 @@ Create `src/components/layout/header.tsx`:
 
 - Sticky top, `backdrop-blur-xl bg-slate-950/80`
 - Logo with gradient text (amber → orange)
-- Nav links with active state indicator
-- "Get Valuation" CTA button (amber)
+- Nav links with active state indicator: Valuation (`/valuation`), Cap Table (`/cap-table`), ESOP (`/esop-calculator`)
+- "Get Valuation" CTA button (amber) → `/valuation`
 - Mobile: hamburger menu with slide-out sheet
 - Wrap in root layout
 
@@ -169,10 +183,13 @@ Create `src/components/layout/header.tsx`:
 
 Using Framer Motion `AnimatePresence`:
 
+Add `const [direction, setDirection] = useState(1)` to `WizardContainer`. Call `setDirection(1)` before `nextStep()`, `setDirection(-1)` before `prevStep()`. For `handleStepClick`, set `setDirection(step > currentStep ? 1 : -1)` before `goToStep(step)`.
+
 ```tsx
-<AnimatePresence mode="wait">
+<AnimatePresence mode="wait" custom={direction}>
   <motion.div
     key={currentStep}
+    custom={direction}
     initial={{ opacity: 0, x: direction > 0 ? 30 : -30 }}
     animate={{ opacity: 1, x: 0 }}
     exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
@@ -201,23 +218,25 @@ Current: hardcoded `setError(true)`, never loads real data.
 Fix:
 1. Try Supabase fetch by `[id]` param
 2. If Supabase env vars missing or fetch fails, fall back to `useValuationStore` data
-3. If store also empty, show "Report not found" with CTA to create new valuation
-4. Add proper loading skeleton (pulsing card placeholders)
-5. Add retry button on error
+3. **Data integrity guard:** When using local store fallback and the URL ID is not `'local'`, display a disclaimer: "Showing your last locally computed valuation — this may not correspond to the shared report."
+4. If store also empty, show "Report not found" with CTA to create new valuation
+5. Add proper loading skeleton (pulsing card placeholders)
+6. Add retry button on error
 
 ### 9. Error Boundaries
 
 Create `src/components/error-boundary.tsx`:
+- **Must be a React class component** (React requires `static getDerivedStateFromError` and `componentDidCatch` for error boundaries — functional components cannot catch render errors)
 - Wraps valuation engine calls
 - Shows friendly error message with "Try Again" button
 - Logs error to console (future: Sentry)
 
 ### 10. Loading Skeletons
 
-Create `src/components/ui/skeleton.tsx` (if not already from shadcn):
-- `ValuationSkeleton` — card with pulsing lines
-- `WizardSkeleton` — form field placeholders
-- `ReportSkeleton` — section headers with pulsing content blocks
+Add base skeleton via `npx shadcn@latest add skeleton`, then build three named skeleton components on top of it:
+- `ValuationSkeleton` — card with pulsing lines for results page
+- `WizardSkeleton` — form field placeholders for wizard loading
+- `ReportSkeleton` — section headers with pulsing content blocks for report page
 
 ## File Changes Summary
 
