@@ -26,7 +26,7 @@ export function StrategicStep() {
             </SelectTrigger>
             <SelectContent className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)]">
               {PARTNERSHIP_LEVELS.map(key => (
-                <SelectItem key={key} value={key} className="text-[oklch(0.95_0.002_250)] hover:bg-[oklch(0.15_0.008_260)]">
+                <SelectItem key={key} value={key} className="text-[oklch(0.95_0.002_250)] hover:bg-[oklch(0.20_0.015_250)]">
                   {PARTNERSHIP_LABELS[key]}
                 </SelectItem>
               ))}

@@ -46,7 +46,7 @@ export function MonteCarloChart({ monteCarlo }: Props) {
       transition={{ duration: 0.5 }}
     >
       <div className="rounded-xl bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.15_0.008_260)]">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.20_0.015_250)]">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg bg-[oklch(0.65_0.16_155/0.1)] flex items-center justify-center">
               <Activity className="w-3.5 h-3.5 text-[oklch(0.65_0.16_155)]" />

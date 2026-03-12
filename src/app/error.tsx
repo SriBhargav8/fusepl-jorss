@@ -20,7 +20,7 @@ export default function Error({
           An unexpected error occurred. Please try again.
         </p>
         {error.digest && (
-          <p className="text-[10px] text-[oklch(0.35_0.01_260)] mb-6 font-mono">
+          <p className="text-[10px] text-[oklch(0.40_0.01_250)] mb-6 font-mono">
             Error ID: {error.digest}
           </p>
         )}

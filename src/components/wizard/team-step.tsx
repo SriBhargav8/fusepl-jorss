@@ -111,7 +111,7 @@ export function TeamStep() {
                 key={option.value}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
                   inputs.key_hires.includes(option.value)
-                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.80_0.14_162)]'
+                    ? 'border-[oklch(0.72_0.17_162/0.5)] bg-[oklch(0.72_0.17_162/0.08)] text-[oklch(0.80_0.14_162)]'
                     : 'border-[oklch(0.26_0.018_250)] bg-[oklch(0.14_0.015_250)] text-[oklch(0.55_0.01_250)] hover:border-[oklch(0.30_0.008_260)]'
                 }`}
               >

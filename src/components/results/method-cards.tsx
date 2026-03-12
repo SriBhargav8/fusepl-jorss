@@ -26,10 +26,10 @@ function confidenceBar(confidence: number) {
   const color =
     confidence >= 0.7 ? 'bg-[oklch(0.65_0.16_155)]' :
     confidence >= 0.4 ? 'bg-[oklch(0.72_0.17_162)]' :
-    'bg-[oklch(0.40_0.01_260)]'
+    'bg-[oklch(0.45_0.01_250)]'
   return (
     <div className="flex items-center gap-2">
-      <div className="w-12 h-1 rounded-full bg-[oklch(0.15_0.008_260)] overflow-hidden">
+      <div className="w-12 h-1 rounded-full bg-[oklch(0.20_0.015_250)] overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
       <span className="text-[10px] text-[oklch(0.55_0.01_250)] tabular-nums">{pct}%</span>
@@ -70,7 +70,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
           >
             <div className="group rounded-xl bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] overflow-hidden transition-all duration-300 hover:border-[oklch(0.25_0.008_260)] hover:shadow-[0_4px_24px_oklch(0_0_0/0.3)]">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.15_0.008_260)]">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.20_0.015_250)]">
                 <div className="flex items-center gap-2.5">
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center"
@@ -95,7 +95,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                     className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-[oklch(0.18_0.018_250)]"
                   >
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm text-[oklch(0.80_0.005_80)]">
+                      <span className="text-sm text-[oklch(0.82_0.005_250)]">
                         {METHOD_LABELS[m.method] ?? m.method}
                       </span>
                       {confidenceBar(m.confidence)}

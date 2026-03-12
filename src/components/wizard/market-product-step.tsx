@@ -50,7 +50,7 @@ export function MarketProductStep() {
             </SelectTrigger>
             <SelectContent className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)]">
               {DEV_STAGES.map(key => (
-                <SelectItem key={key} value={key} className="text-[oklch(0.95_0.002_250)] hover:bg-[oklch(0.15_0.008_260)]">
+                <SelectItem key={key} value={key} className="text-[oklch(0.95_0.002_250)] hover:bg-[oklch(0.20_0.015_250)]">
                   {DEV_STAGE_LABELS[key]}
                 </SelectItem>
               ))}
@@ -80,7 +80,7 @@ export function MarketProductStep() {
                 key={key}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-colors text-sm ${
                   inputs.competitive_advantages.includes(key)
-                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.80_0.14_162)]'
+                    ? 'border-[oklch(0.72_0.17_162/0.5)] bg-[oklch(0.72_0.17_162/0.08)] text-[oklch(0.80_0.14_162)]'
                     : 'border-[oklch(0.26_0.018_250)] bg-[oklch(0.14_0.015_250)] text-[oklch(0.60_0.01_250)] hover:border-[oklch(0.30_0.008_260)]'
                 }`}
               >

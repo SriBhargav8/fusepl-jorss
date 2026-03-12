@@ -73,7 +73,7 @@ export function EmailGate({ onUnlocked }: Props) {
         <div className="blur-md opacity-30 pointer-events-none p-6 bg-[oklch(0.18_0.018_250)] border border-[oklch(0.26_0.018_250)] rounded-xl space-y-3">
           <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-3/4" />
           <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-1/2" />
-          <div className="h-20 bg-[oklch(0.15_0.008_260)] rounded" />
+          <div className="h-20 bg-[oklch(0.20_0.015_250)] rounded" />
           <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-2/3" />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">

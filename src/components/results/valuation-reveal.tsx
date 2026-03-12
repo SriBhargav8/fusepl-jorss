@@ -30,21 +30,21 @@ export function ValuationReveal({ result, companyName }: Props) {
     >
       <div className="relative rounded-2xl overflow-hidden">
         {/* Animated border glow */}
-        <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[oklch(0.78_0.14_80/0.4)] via-[oklch(0.78_0.14_80/0.1)] to-[oklch(0.78_0.14_80/0.2)]" />
+        <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[oklch(0.72_0.17_162/0.4)] via-[oklch(0.72_0.17_162/0.1)] to-[oklch(0.72_0.17_162/0.2)]" />
 
         {/* Inner content */}
         <div className="relative rounded-2xl bg-[oklch(0.09_0.008_260)] m-px">
           {/* Top shimmer line */}
           <div className="absolute top-0 inset-x-0 h-px">
             <motion.div
-              className="h-full bg-gradient-to-r from-transparent via-[oklch(0.78_0.14_80/0.8)] to-transparent"
+              className="h-full bg-gradient-to-r from-transparent via-[oklch(0.72_0.17_162/0.8)] to-transparent"
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
             />
           </div>
 
           {/* Ambient glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] bg-[oklch(0.78_0.14_80/0.05)] blur-[80px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[200px] bg-[oklch(0.72_0.17_162/0.05)] blur-[80px] pointer-events-none" />
 
           <div className="relative p-8 sm:p-10 text-center">
             {/* Pre-label */}
@@ -54,11 +54,11 @@ export function ValuationReveal({ result, companyName }: Props) {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="flex items-center justify-center gap-2 mb-2"
             >
-              <div className="h-px w-8 bg-gradient-to-r from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
+              <div className="h-px w-8 bg-gradient-to-r from-transparent to-[oklch(0.72_0.17_162/0.4)]" />
               <span className="text-[10px] font-semibold text-[oklch(0.72_0.17_162)] uppercase tracking-[0.25em]">
                 Estimated Valuation
               </span>
-              <div className="h-px w-8 bg-gradient-to-l from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
+              <div className="h-px w-8 bg-gradient-to-l from-transparent to-[oklch(0.72_0.17_162/0.4)]" />
             </motion.div>
 
             {/* Company name */}
@@ -105,10 +105,10 @@ export function ValuationReveal({ result, companyName }: Props) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1, duration: 0.5 }}
-              className="grid grid-cols-3 gap-4 pt-6 border-t border-[oklch(0.15_0.008_260)]"
+              className="grid grid-cols-3 gap-4 pt-6 border-t border-[oklch(0.20_0.015_250)]"
             >
               <div className="flex flex-col items-center gap-1.5">
-                <div className="w-8 h-8 rounded-lg bg-[oklch(0.78_0.14_80/0.08)] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-[oklch(0.72_0.17_162/0.08)] flex items-center justify-center">
                   <Shield className="w-4 h-4 text-[oklch(0.72_0.17_162)]" />
                 </div>
                 <span
@@ -126,7 +126,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 <div className="w-8 h-8 rounded-lg bg-[oklch(0.65_0.16_250/0.08)] flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-[oklch(0.65_0.16_250)]" />
                 </div>
-                <span className="text-lg font-bold text-[oklch(0.85_0.005_80)]">
+                <span className="text-lg font-bold text-[oklch(0.88_0.005_250)]">
                   {applicableMethods}
                 </span>
                 <span className="text-[10px] text-[oklch(0.55_0.01_250)] uppercase tracking-wider">
@@ -138,7 +138,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 <div className="w-8 h-8 rounded-lg bg-[oklch(0.65_0.16_155/0.08)] flex items-center justify-center">
                   <Target className="w-4 h-4 text-[oklch(0.65_0.16_155)]" />
                 </div>
-                <span className="text-lg font-bold text-[oklch(0.85_0.005_80)]">
+                <span className="text-lg font-bold text-[oklch(0.88_0.005_250)]">
                   {result.monte_carlo ? '10K' : '—'}
                 </span>
                 <span className="text-[10px] text-[oklch(0.55_0.01_250)] uppercase tracking-wider">

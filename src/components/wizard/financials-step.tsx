@@ -27,7 +27,7 @@ function CurrencyInput({ label, value, onChange, placeholder, help }: {
         />
       </div>
       {value !== null && value > 0 && (
-        <p className="text-xs text-[oklch(0.78_0.14_80/0.7)] mt-1">{formatINR(value)}</p>
+        <p className="text-xs text-[oklch(0.72_0.17_162/0.7)] mt-1">{formatINR(value)}</p>
       )}
     </div>
   )
@@ -84,13 +84,37 @@ export function FinancialsStep() {
             label="Monthly Burn Rate"
             value={inputs.monthly_burn}
             onChange={(v) => setField('monthly_burn', v ?? 0)}
+            help="Total monthly expenses including salaries, rent, and operations"
           />
           <CurrencyInput
             label="Cash in Bank"
             value={inputs.cash_in_bank}
             onChange={(v) => setField('cash_in_bank', v ?? 0)}
+            help="Current bank balance — used to calculate your runway"
           />
         </div>
+
+        {/* Live runway indicator */}
+        {inputs.monthly_burn > 0 && inputs.cash_in_bank > 0 && (
+          <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
+            inputs.cash_in_bank / inputs.monthly_burn >= 18
+              ? 'bg-[oklch(0.72_0.17_162/0.08)] text-[oklch(0.72_0.17_162)]'
+              : inputs.cash_in_bank / inputs.monthly_burn >= 6
+              ? 'bg-[oklch(0.72_0.14_80/0.08)] text-[oklch(0.72_0.14_80)]'
+              : 'bg-[oklch(0.62_0.18_25/0.08)] text-[oklch(0.62_0.18_25)]'
+          }`}>
+            <span className="font-semibold">
+              Runway: {Math.round(inputs.cash_in_bank / inputs.monthly_burn)} months
+            </span>
+            <span className="text-[oklch(0.55_0.01_250)]">
+              {inputs.cash_in_bank / inputs.monthly_burn >= 18
+                ? '— Comfortable'
+                : inputs.cash_in_bank / inputs.monthly_burn >= 6
+                ? '— Start planning next raise'
+                : '— Urgent: fundraise now'}
+            </span>
+          </div>
+        )}
 
         <div className="border-t border-[oklch(0.26_0.018_250)] pt-4">
           <p className="text-sm text-[oklch(0.60_0.01_250)] mb-1">Unit Economics (optional — improves accuracy)</p>
@@ -107,6 +131,24 @@ export function FinancialsStep() {
               onChange={(v) => setField('ltv', v)}
             />
           </div>
+          {inputs.cac && inputs.ltv && inputs.cac > 0 && (
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs mt-2 ${
+              inputs.ltv / inputs.cac >= 3
+                ? 'bg-[oklch(0.72_0.17_162/0.08)] text-[oklch(0.72_0.17_162)]'
+                : inputs.ltv / inputs.cac >= 1
+                ? 'bg-[oklch(0.72_0.14_80/0.08)] text-[oklch(0.72_0.14_80)]'
+                : 'bg-[oklch(0.62_0.18_25/0.08)] text-[oklch(0.62_0.18_25)]'
+            }`}>
+              <span className="font-semibold">LTV/CAC: {(inputs.ltv / inputs.cac).toFixed(1)}x</span>
+              <span className="text-[oklch(0.55_0.01_250)]">
+                {inputs.ltv / inputs.cac >= 3
+                  ? '— Excellent unit economics'
+                  : inputs.ltv / inputs.cac >= 1
+                  ? '— Needs improvement (target 3x+)'
+                  : '— Losing money per customer'}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="border-t border-[oklch(0.26_0.018_250)] pt-4">

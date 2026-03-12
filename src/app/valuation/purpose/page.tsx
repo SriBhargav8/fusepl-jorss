@@ -105,7 +105,7 @@ export default function PurposeSelectorPage() {
   return (
     <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.14_0.015_250)] py-16 px-6">
       {/* Background glow */}
-      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.72_0.17_162/0.04)] blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto">
         {/* Header */}
@@ -148,16 +148,16 @@ export default function PurposeSelectorPage() {
                 className={`
                   relative text-left rounded-lg p-5 transition-all duration-300
                   ${isFree
-                    ? 'bg-[oklch(0.14_0.02_80)] border-2 border-[oklch(0.78_0.14_80/0.5)] shadow-[0_0_24px_oklch(0.78_0.14_80/0.08)] cursor-pointer'
-                    : 'bg-[oklch(0.16_0.015_250)] border border-[oklch(0.15_0.008_260)] opacity-50 cursor-not-allowed'
+                    ? 'bg-[oklch(0.14_0.02_80)] border-2 border-[oklch(0.72_0.17_162/0.5)] shadow-[0_0_24px_oklch(0.72_0.17_162/0.08)] cursor-pointer'
+                    : 'bg-[oklch(0.16_0.015_250)] border border-[oklch(0.20_0.015_250)] opacity-50 cursor-not-allowed'
                   }
                 `}
               >
                 {/* Coming Soon badge for paid */}
                 {!isFree && (
-                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[oklch(0.15_0.008_260)] border border-[oklch(0.26_0.018_250)]">
-                    <Lock className="w-2.5 h-2.5 text-[oklch(0.40_0.01_260)]" />
-                    <span className="text-[9px] font-medium text-[oklch(0.40_0.01_260)] uppercase tracking-wider">Coming Soon</span>
+                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[oklch(0.20_0.015_250)] border border-[oklch(0.26_0.018_250)]">
+                    <Lock className="w-2.5 h-2.5 text-[oklch(0.45_0.01_250)]" />
+                    <span className="text-[9px] font-medium text-[oklch(0.45_0.01_250)] uppercase tracking-wider">Coming Soon</span>
                   </div>
                 )}
 
@@ -167,7 +167,7 @@ export default function PurposeSelectorPage() {
                     <h3 className="font-heading text-base text-[oklch(0.95_0.002_250)]">
                       {PURPOSE_LABELS[p]}
                     </h3>
-                    <p className={`font-semibold text-lg mt-0.5 ${isFree ? 'text-[oklch(0.72_0.17_162)]' : 'text-[oklch(0.35_0.01_260)]'}`}>
+                    <p className={`font-semibold text-lg mt-0.5 ${isFree ? 'text-[oklch(0.72_0.17_162)]' : 'text-[oklch(0.40_0.01_250)]'}`}>
                       {formatPrice(price)}
                     </p>
                   </div>
@@ -208,14 +208,14 @@ export default function PurposeSelectorPage() {
         >
           <button
             onClick={handleContinue}
-            className="group relative inline-flex items-center justify-center h-12 px-8 text-sm font-semibold tracking-wide bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] rounded-lg transition-all duration-300 hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_40px_oklch(0.78_0.14_80/0.25)] active:scale-[0.97]"
+            className="group relative inline-flex items-center justify-center h-12 px-8 text-sm font-semibold tracking-wide bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] rounded-lg transition-all duration-300 hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_40px_oklch(0.72_0.17_162/0.25)] active:scale-[0.97]"
           >
             Start Free Valuation
             <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </button>
-          <p className="text-[11px] text-[oklch(0.40_0.01_260)] mt-3">
+          <p className="text-[11px] text-[oklch(0.45_0.01_250)] mt-3">
             No signup required. Free during beta.
           </p>
         </motion.div>

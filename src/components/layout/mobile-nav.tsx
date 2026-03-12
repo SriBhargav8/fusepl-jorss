@@ -31,7 +31,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="text-[oklch(0.55_0.01_250)] hover:text-[oklch(0.85_0.005_80)]"
+            className="text-[oklch(0.55_0.01_250)] hover:text-[oklch(0.88_0.005_250)]"
           />
         }
       >
@@ -69,8 +69,8 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                     relative rounded-lg px-4 py-3 text-sm font-medium transition-colors
                     ${
                       isActive
-                        ? 'bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.72_0.17_162)] border-l-2 border-[oklch(0.72_0.17_162)]'
-                        : 'text-[oklch(0.55_0.01_250)] hover:text-[oklch(0.85_0.005_80)] hover:bg-[oklch(0.18_0.018_250)]'
+                        ? 'bg-[oklch(0.72_0.17_162/0.08)] text-[oklch(0.72_0.17_162)] border-l-2 border-[oklch(0.72_0.17_162)]'
+                        : 'text-[oklch(0.55_0.01_250)] hover:text-[oklch(0.88_0.005_250)] hover:bg-[oklch(0.18_0.018_250)]'
                     }
                   `}
                 >

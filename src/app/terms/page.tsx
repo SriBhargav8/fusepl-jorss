@@ -15,7 +15,7 @@ export default function TermsPage() {
         <h1 className="font-heading text-3xl text-[oklch(0.95_0.002_250)] mb-8">
           Terms of Service
         </h1>
-        <p className="text-[11px] text-[oklch(0.40_0.01_260)] mb-10">
+        <p className="text-[11px] text-[oklch(0.45_0.01_250)] mb-10">
           Last updated: March 12, 2026
         </p>
 

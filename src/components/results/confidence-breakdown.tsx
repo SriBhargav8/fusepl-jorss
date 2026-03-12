@@ -41,8 +41,8 @@ export function ConfidenceBreakdown({ result }: Props) {
       transition={{ duration: 0.5 }}
     >
       <div className="rounded-xl bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] overflow-hidden h-full">
-        <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-[oklch(0.15_0.008_260)]">
-          <div className="w-7 h-7 rounded-lg bg-[oklch(0.78_0.14_80/0.08)] flex items-center justify-center">
+        <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-[oklch(0.20_0.015_250)]">
+          <div className="w-7 h-7 rounded-lg bg-[oklch(0.72_0.17_162/0.08)] flex items-center justify-center">
             <ShieldCheck className="w-3.5 h-3.5 text-[oklch(0.72_0.17_162)]" />
           </div>
           <h3 className="text-sm font-semibold text-[oklch(0.72_0.17_162)]">Confidence Breakdown</h3>

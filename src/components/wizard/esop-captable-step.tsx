@@ -63,7 +63,7 @@ export function ESOPCapTableStep() {
                   ])
                 }
               }}
-              className="text-sm text-[oklch(0.72_0.17_162)] hover:text-[oklch(0.80_0.14_162)] px-3 py-1 rounded border border-[oklch(0.78_0.14_80/0.3)] hover:border-[oklch(0.78_0.14_80/0.5)] transition-colors"
+              className="text-sm text-[oklch(0.72_0.17_162)] hover:text-[oklch(0.80_0.14_162)] px-3 py-1 rounded border border-[oklch(0.72_0.17_162/0.3)] hover:border-[oklch(0.72_0.17_162/0.5)] transition-colors"
             >
               + Add Row
             </button>

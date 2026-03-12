@@ -71,7 +71,7 @@ export default function ValuationPage() {
   if (mode === 'interstitial' && result) {
     return (
       <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.14_0.015_250)] flex items-center justify-center px-6">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.72_0.17_162/0.04)] blur-[120px] pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -95,14 +95,14 @@ export default function ValuationPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={handleViewResults}
-              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg border border-[oklch(0.78_0.14_80/0.3)] text-[oklch(0.72_0.17_162)] transition-all hover:bg-[oklch(0.78_0.14_80/0.06)] hover:border-[oklch(0.78_0.14_80/0.5)]"
+              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg border border-[oklch(0.72_0.17_162/0.3)] text-[oklch(0.72_0.17_162)] transition-all hover:bg-[oklch(0.72_0.17_162/0.06)] hover:border-[oklch(0.72_0.17_162/0.5)]"
             >
               <BarChart3 className="w-4 h-4" />
               View Previous Results
             </button>
             <button
               onClick={handleStartNew}
-              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_24px_oklch(0.72_0.17_162/0.2)] active:scale-[0.98]"
             >
               <Plus className="w-4 h-4" />
               Start New Valuation
@@ -117,7 +117,7 @@ export default function ValuationPage() {
   if (mode === 'wizard' || !result) {
     return (
       <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.14_0.015_250)] py-10">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[120px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.72_0.17_162/0.04)] blur-[120px] pointer-events-none" />
         <div className="relative container mx-auto px-4">
           <WizardContainer />
         </div>
@@ -128,7 +128,7 @@ export default function ValuationPage() {
   // Results mode
   return (
     <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.14_0.015_250)] py-10">
-      <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[140px] pointer-events-none" />
+      <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[oklch(0.72_0.17_162/0.04)] blur-[140px] pointer-events-none" />
 
       <div className="relative container mx-auto px-4 max-w-3xl space-y-6">
         <AnimatePresence>
