@@ -82,6 +82,29 @@ export function Hero() {
         />
       </div>
 
+      {/* ---- Shark silhouette — authority visual ---- */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+        className="absolute top-[8%] right-[5%] w-[280px] sm:w-[380px] lg:w-[460px] opacity-[0.04] pointer-events-none select-none"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M750 300c0-30-20-80-60-120-40-40-100-70-170-85l-30-80c-5-15-25-15-30 0l-25 65c-30-5-60-8-95-8-150 0-260 70-290 140-10 20-15 45-15 70 0 25 5 48 15 68 30 65 130 130 280 140l20 2c20 2 40 3 60 3 200 0 340-90 340-195zM380 180c-15 0-25-12-25-25s10-25 25-25 25 12 25 25-10 25-25 25zm-80 120l-90 50c-5 3-10-3-8-8l30-90c2-5 8-6 12-3l60 40c4 3 3 9-4 11z"
+            fill="oklch(0.78 0.14 80)"
+          />
+          <path
+            d="M500 250c60-15 110 5 140 30s45 55 45 80c0 40-30 80-85 110"
+            stroke="oklch(0.78 0.14 80)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.5"
+          />
+        </svg>
+      </motion.div>
+
       {/* ---- Authority Badge ---- */}
       <motion.div
         custom={0}

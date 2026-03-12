@@ -13,14 +13,14 @@ export function ESOPCapTableStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">ESOP & Cap Table</h2>
-        <p className="text-[oklch(0.50_0.01_260)] text-sm">Employee stock options and ownership structure (all fields optional)</p>
+        <p className="text-[oklch(0.55_0.01_260)] text-sm">Optional but powerful. ESOP pools and cap tables help us calculate per-share value and dilution impact. Skip if unsure.</p>
       </div>
 
       <div className="space-y-5">
         <div>
           <Label className="text-[oklch(0.65_0.005_80)]">ESOP Pool (%)</Label>
-          <p className="text-xs text-[oklch(0.38_0.01_260)] mb-1">
-            Default for {inputs.stage.replace('_', ' ')} stage: {defaultEsop}%
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">
+            Percentage of equity reserved for employee stock options. Typical for {inputs.stage.replace('_', ' ')} stage: {defaultEsop}%
           </p>
           <Input
             type="number"
@@ -35,7 +35,7 @@ export function ESOPCapTableStep() {
 
         <div>
           <Label className="text-[oklch(0.65_0.005_80)]">Time to Liquidity (years)</Label>
-          <p className="text-xs text-[oklch(0.38_0.01_260)] mb-1">Expected years until exit/IPO</p>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">How many years until a potential exit (acquisition/IPO)? Used for Black-Scholes ESOP valuation. Typical: 3-7 years.</p>
           <Input
             type="number"
             value={inputs.time_to_liquidity_years ?? ''}
@@ -63,7 +63,7 @@ export function ESOPCapTableStep() {
                   ])
                 }
               }}
-              className="text-sm text-amber-400 hover:text-amber-300 px-3 py-1 rounded border border-amber-400/30 hover:border-amber-400/50 transition-colors"
+              className="text-sm text-[oklch(0.78_0.14_80)] hover:text-[oklch(0.85_0.12_80)] px-3 py-1 rounded border border-[oklch(0.78_0.14_80/0.3)] hover:border-[oklch(0.78_0.14_80/0.5)] transition-colors"
             >
               + Add Row
             </button>

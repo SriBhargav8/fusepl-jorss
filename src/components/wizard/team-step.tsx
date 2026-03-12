@@ -30,12 +30,13 @@ export function TeamStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">Team</h2>
-        <p className="text-[oklch(0.50_0.01_260)] text-sm">Tell us about your founding team</p>
+        <p className="text-[oklch(0.55_0.01_260)] text-sm">Investors bet on people first. A strong team can add 2-3x to your valuation.</p>
       </div>
 
       <div className="space-y-6">
         <div>
           <Label htmlFor="team_size" className="text-[oklch(0.65_0.005_80)]">Team Size *</Label>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">Total number of people (founders + employees + contractors)</p>
           <Input
             id="team_size"
             type="number"
@@ -79,9 +80,12 @@ export function TeamStep() {
             checked={inputs.previous_exits}
             onCheckedChange={(checked) => setField('previous_exits', !!checked)}
           />
-          <Label htmlFor="previous_exits" className="text-[oklch(0.65_0.005_80)] cursor-pointer">
-            Founders have previous exits
-          </Label>
+          <div>
+            <Label htmlFor="previous_exits" className="text-[oklch(0.65_0.005_80)] cursor-pointer">
+              Founders have previous exits
+            </Label>
+            <p className="text-[10px] text-[oklch(0.48_0.01_260)] ml-6">Previously sold or IPO&apos;d a company — this significantly boosts investor confidence</p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -90,21 +94,25 @@ export function TeamStep() {
             checked={inputs.technical_cofounder}
             onCheckedChange={(checked) => setField('technical_cofounder', !!checked)}
           />
-          <Label htmlFor="technical_cofounder" className="text-[oklch(0.65_0.005_80)] cursor-pointer">
-            Has technical co-founder
-          </Label>
+          <div>
+            <Label htmlFor="technical_cofounder" className="text-[oklch(0.65_0.005_80)] cursor-pointer">
+              Has technical co-founder
+            </Label>
+            <p className="text-[10px] text-[oklch(0.48_0.01_260)] ml-6">A tech co-founder reduces execution risk, especially for product-led startups</p>
+          </div>
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)] mb-2 block">Key Hires</Label>
+          <Label className="text-[oklch(0.65_0.005_80)] mb-1 block">Key Hires</Label>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-2">Senior roles that are already filled on your team</p>
           <div className="flex flex-wrap gap-3">
             {KEY_HIRE_OPTIONS.map(option => (
               <label
                 key={option.value}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
                   inputs.key_hires.includes(option.value)
-                    ? 'border-amber-400/50 bg-amber-400/10 text-amber-300'
-                    : 'border-[oklch(0.20_0.008_260)] bg-[oklch(0.08_0.008_260)] text-[oklch(0.50_0.01_260)] hover:border-slate-600'
+                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.85_0.12_80)]'
+                    : 'border-[oklch(0.20_0.008_260)] bg-[oklch(0.08_0.008_260)] text-[oklch(0.50_0.01_260)] hover:border-[oklch(0.30_0.008_260)]'
                 }`}
               >
                 <Checkbox

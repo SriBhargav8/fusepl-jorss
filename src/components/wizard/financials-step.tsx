@@ -27,7 +27,7 @@ function CurrencyInput({ label, value, onChange, placeholder, help }: {
         />
       </div>
       {value !== null && value > 0 && (
-        <p className="text-xs text-amber-400/70 mt-1">{formatINR(value)}</p>
+        <p className="text-xs text-[oklch(0.78_0.14_80/0.7)] mt-1">{formatINR(value)}</p>
       )}
     </div>
   )
@@ -40,7 +40,7 @@ export function FinancialsStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">Financials</h2>
-        <p className="text-[oklch(0.50_0.01_260)] text-sm">Revenue, costs, and unit economics</p>
+        <p className="text-[oklch(0.55_0.01_260)] text-sm">These numbers drive your DCF and market multiple valuations. Pre-revenue? Enter 0 — we still value you using VC methods.</p>
       </div>
 
       <div className="space-y-4">
@@ -54,6 +54,7 @@ export function FinancialsStep() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label className="text-[oklch(0.65_0.005_80)]">Revenue Growth (%)</Label>
+            <p className="text-xs text-[oklch(0.48_0.01_260)]">Year-over-year growth rate. Good SaaS = 100%+, Average = 30-50%</p>
             <Input
               type="number"
               value={inputs.revenue_growth_pct}
@@ -65,6 +66,7 @@ export function FinancialsStep() {
 
           <div>
             <Label className="text-[oklch(0.65_0.005_80)]">Gross Margin (%)</Label>
+            <p className="text-xs text-[oklch(0.48_0.01_260)]">Revenue minus direct costs. SaaS = 70-90%, E-commerce = 30-50%</p>
             <Input
               type="number"
               value={inputs.gross_margin_pct}
@@ -91,7 +93,8 @@ export function FinancialsStep() {
         </div>
 
         <div className="border-t border-[oklch(0.20_0.008_260)] pt-4">
-          <p className="text-sm text-[oklch(0.50_0.01_260)] mb-3">Unit Economics (optional — improves accuracy)</p>
+          <p className="text-sm text-[oklch(0.55_0.01_260)] mb-1">Unit Economics (optional — improves accuracy)</p>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-3">CAC = cost to acquire one customer. LTV = total revenue from that customer. Investors love LTV/CAC &gt; 3x.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <CurrencyInput
               label="Customer Acquisition Cost (CAC)"

@@ -24,13 +24,13 @@ export function MarketProductStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">Market & Product</h2>
-        <p className="text-[oklch(0.50_0.01_260)] text-sm">Market size, product stage, and competitive position</p>
+        <p className="text-[oklch(0.55_0.01_260)] text-sm">Big markets = big valuations. Investors want to know the total opportunity and where your product stands.</p>
       </div>
 
       <div className="space-y-5">
         <div>
           <Label htmlFor="tam" className="text-[oklch(0.65_0.005_80)]">Total Addressable Market (TAM in Cr) *</Label>
-          <p className="text-xs text-[oklch(0.38_0.01_260)] mb-1">Enter in crores (e.g., 5000 = Rs 5,000 Cr)</p>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">The total market size if you captured 100% of your target customers. Enter in crores (e.g., 5000 = ₹5,000 Cr)</p>
           <Input
             id="tam"
             type="number"
@@ -43,6 +43,7 @@ export function MarketProductStep() {
 
         <div>
           <Label className="text-[oklch(0.65_0.005_80)]">Development Stage *</Label>
+          <p className="text-xs text-[oklch(0.48_0.01_260)]">Where your product is in its journey — from idea to scaling</p>
           <Select value={inputs.dev_stage} onValueChange={(v) => setField('dev_stage', v as any)}>
             <SelectTrigger className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1">
               <SelectValue />
@@ -71,7 +72,8 @@ export function MarketProductStep() {
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)] mb-2 block">Competitive Advantages</Label>
+          <Label className="text-[oklch(0.65_0.005_80)] mb-1 block">Competitive Advantages</Label>
+          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-2">What makes you hard to copy? Select all that apply — each one adds to your moat score.</p>
           <div className="flex flex-wrap gap-2">
             {COMPETITIVE_ADVANTAGES.map(key => (
               <label

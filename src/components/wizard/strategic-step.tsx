@@ -14,7 +14,7 @@ export function StrategicStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">Strategic Factors</h2>
-        <p className="text-[oklch(0.50_0.01_260)] text-sm">Partnerships, risk, and market positioning</p>
+        <p className="text-[oklch(0.55_0.01_260)] text-sm">Partnerships reduce risk, regulatory moats protect margins — these factors shape how investors discount your valuation.</p>
       </div>
 
       <div className="space-y-5">
