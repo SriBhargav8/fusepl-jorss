@@ -181,20 +181,32 @@ export const SECTOR_MAPPING: Record<StartupCategory, SectorMapping> = {
   },
 }
 
+const FALLBACK_BENCHMARK: DamodaranBenchmark = damodaranData['Total Market'] ?? {
+  ev_revenue: 3.0,
+  ev_ebitda: 15.0,
+  wacc: 0.12,
+  beta: 1.0,
+  gross_margin: 0.40,
+}
+
 export function getSectorLabel(category: StartupCategory): string {
-  return SECTOR_MAPPING[category].label
+  return SECTOR_MAPPING[category]?.label ?? 'Other'
 }
 
 export function getAdjacentSectors(category: StartupCategory): string[] {
-  return SECTOR_MAPPING[category].adjacent_sectors
+  return SECTOR_MAPPING[category]?.adjacent_sectors ?? []
 }
 
 export function getDamodaranBenchmark(category: StartupCategory): DamodaranBenchmark {
   const mapping = SECTOR_MAPPING[category]
+  if (!mapping) {
+    return FALLBACK_BENCHMARK
+  }
+
   const primary = damodaranData[mapping.primary_damodaran]
 
   if (!primary) {
-    return damodaranData['Total Market']
+    return FALLBACK_BENCHMARK
   }
 
   // If primary has null fields and secondary exists, fill from secondary

@@ -14,12 +14,15 @@ export function BenchmarksSection({ sector }: Props) {
 
   if (!benchmark) return null
 
+  const fmt = (v: number | null, suffix: string, mult = 1) =>
+    v != null ? `${(v * mult).toFixed(1)}${suffix}` : 'N/A'
+
   const rows = [
-    { label: 'Unlevered Beta', value: benchmark.beta.toFixed(2) },
-    { label: 'WACC (India)', value: `${(benchmark.wacc * 100).toFixed(1)}%` },
-    { label: 'EV/Revenue', value: `${benchmark.ev_revenue.toFixed(1)}x` },
-    { label: 'EV/EBITDA', value: benchmark.ev_ebitda !== null ? `${benchmark.ev_ebitda.toFixed(1)}x` : 'N/A' },
-    { label: 'Gross Margin', value: benchmark.gross_margin !== null ? `${(benchmark.gross_margin * 100).toFixed(1)}%` : 'N/A' },
+    { label: 'Unlevered Beta', value: benchmark.beta != null ? benchmark.beta.toFixed(2) : 'N/A' },
+    { label: 'WACC (India)', value: fmt(benchmark.wacc, '%', 100) },
+    { label: 'EV/Revenue', value: fmt(benchmark.ev_revenue, 'x') },
+    { label: 'EV/EBITDA', value: fmt(benchmark.ev_ebitda, 'x') },
+    { label: 'Gross Margin', value: fmt(benchmark.gross_margin, '%', 100) },
   ]
 
   return (
