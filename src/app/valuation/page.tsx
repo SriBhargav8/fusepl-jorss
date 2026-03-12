@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useValuationStore } from '@/stores/valuation-store'
 import { WizardContainer } from '@/components/wizard/wizard-container'
 import { ValuationReveal } from '@/components/results/valuation-reveal'
@@ -14,12 +14,27 @@ import { ShareButtons } from '@/components/results/share-buttons'
 import { EmailGate } from '@/components/results/email-gate'
 import { PDFDownloadButton } from '@/components/report/pdf-download-button'
 import { formatINR } from '@/lib/utils'
-import { BarChart3, Plus } from 'lucide-react'
+import { BarChart3, Plus, Sparkles } from 'lucide-react'
+
+type PageMode = 'loading' | 'interstitial' | 'wizard' | 'results'
 
 export default function ValuationPage() {
   const { result, inputs, email, reset } = useValuationStore()
   const router = useRouter()
-  const [showResults, setShowResults] = useState(false)
+  const [mode, setMode] = useState<PageMode>('loading')
+  const [hydrated, setHydrated] = useState(false)
+
+  // Wait for Zustand hydration from localStorage
+  useEffect(() => {
+    setHydrated(true)
+  }, [])
+
+  // Determine mode after hydration
+  useEffect(() => {
+    if (!hydrated) return
+    if (mode === 'wizard' || mode === 'results') return // user already chose
+    setMode(result ? 'interstitial' : 'wizard')
+  }, [hydrated, result, mode])
 
   const handleUnlocked = (reportId: string) => {
     if (reportId !== 'local') {
@@ -29,11 +44,31 @@ export default function ValuationPage() {
 
   const handleStartNew = () => {
     reset()
-    setShowResults(false)
+    setMode('wizard')
   }
 
-  // Has a previous result but user hasn't chosen to view it yet
-  if (result && !showResults) {
+  const handleViewResults = () => {
+    setMode('results')
+  }
+
+  // Loading state while Zustand hydrates
+  if (mode === 'loading') {
+    return (
+      <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.08_0.008_260)] flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center gap-3"
+        >
+          <Sparkles className="w-6 h-6 text-[oklch(0.78_0.14_80)] animate-pulse" />
+          <p className="text-xs text-[oklch(0.45_0.01_260)]">Loading...</p>
+        </motion.div>
+      </main>
+    )
+  }
+
+  // Interstitial: previous result exists
+  if (mode === 'interstitial' && result) {
     return (
       <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.08_0.008_260)] flex items-center justify-center px-6">
         <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[120px] pointer-events-none" />
@@ -59,7 +94,7 @@ export default function ValuationPage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
-              onClick={() => setShowResults(true)}
+              onClick={handleViewResults}
               className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg border border-[oklch(0.78_0.14_80/0.3)] text-[oklch(0.78_0.14_80)] transition-all hover:bg-[oklch(0.78_0.14_80/0.06)] hover:border-[oklch(0.78_0.14_80/0.5)]"
             >
               <BarChart3 className="w-4 h-4" />
@@ -79,7 +114,7 @@ export default function ValuationPage() {
   }
 
   // Wizard mode
-  if (!result) {
+  if (mode === 'wizard' || !result) {
     return (
       <main className="grain relative min-h-[calc(100vh-3.5rem)] bg-[oklch(0.08_0.008_260)] py-10">
         <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[120px] pointer-events-none" />
@@ -96,59 +131,67 @@ export default function ValuationPage() {
       <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[oklch(0.78_0.14_80/0.04)] blur-[140px] pointer-events-none" />
 
       <div className="relative container mx-auto px-4 max-w-3xl space-y-6">
-        {/* Start new valuation button */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleStartNew}
-            className="text-[11px] font-medium text-[oklch(0.50_0.01_260)] uppercase tracking-[0.15em] transition-colors hover:text-[oklch(0.78_0.14_80)] flex items-center gap-1.5"
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-6"
           >
-            <Plus className="w-3.5 h-3.5" />
-            New Valuation
-          </button>
-        </div>
+            {/* Start new valuation button */}
+            <div className="flex justify-end">
+              <button
+                onClick={handleStartNew}
+                className="text-[11px] font-medium text-[oklch(0.50_0.01_260)] uppercase tracking-[0.15em] transition-colors hover:text-[oklch(0.78_0.14_80)] flex items-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                New Valuation
+              </button>
+            </div>
 
-        <ValuationReveal result={result} companyName={inputs.company_name} />
+            <ValuationReveal result={result} companyName={inputs.company_name} />
 
-        <MethodCards
-          methods={result.methods}
-          monteCarlo={result.monte_carlo}
-        />
-
-        {result.monte_carlo && (
-          <MonteCarloChart monteCarlo={result.monte_carlo} />
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <MethodContribution
-            methods={result.methods}
-            compositeValue={result.composite_value}
-          />
-          <ConfidenceBreakdown result={result} />
-        </div>
-
-        <div className="flex justify-center">
-          <ShareButtons
-            compositeValue={result.composite_value}
-            companyName={inputs.company_name}
-          />
-        </div>
-
-        {/* Email gate — always show if no email captured yet */}
-        {!email ? (
-          <EmailGate onUnlocked={handleUnlocked} />
-        ) : (
-          /* Post-email: show PDF download */
-          <div className="text-center space-y-4 py-4">
-            <PDFDownloadButton
-              valuation={{
-                company_name: inputs.company_name,
-                sector: inputs.sector,
-                stage: inputs.stage,
-              }}
-              result={result}
+            <MethodCards
+              methods={result.methods}
+              monteCarlo={result.monte_carlo}
             />
-          </div>
-        )}
+
+            {result.monte_carlo && (
+              <MonteCarloChart monteCarlo={result.monte_carlo} />
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MethodContribution
+                methods={result.methods}
+                compositeValue={result.composite_value}
+              />
+              <ConfidenceBreakdown result={result} />
+            </div>
+
+            <div className="flex justify-center">
+              <ShareButtons
+                compositeValue={result.composite_value}
+                companyName={inputs.company_name}
+              />
+            </div>
+
+            {/* Email gate — always show if no email captured yet */}
+            {!email ? (
+              <EmailGate onUnlocked={handleUnlocked} />
+            ) : (
+              <div className="text-center space-y-4 py-4">
+                <PDFDownloadButton
+                  valuation={{
+                    company_name: inputs.company_name,
+                    sector: inputs.sector,
+                    stage: inputs.stage,
+                  }}
+                  result={result}
+                />
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </main>
   )
