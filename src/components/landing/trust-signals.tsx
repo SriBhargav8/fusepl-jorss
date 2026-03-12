@@ -5,27 +5,27 @@ import { motion } from 'framer-motion'
 const SIGNALS = [
   {
     label: 'IBBI Registered',
-    text: 'Built by an IBBI-Registered Insolvency Professional & SFA-Licensed Valuer',
-    metric: 'Registration verified',
+    text: 'Built by an IBBI-Registered Insolvency Professional & SFA-Licensed Valuer — the same credentials Shark Tank investors look for.',
+    metric: 'Verified',
   },
   {
-    label: 'Damodaran India',
-    text: 'Industry benchmarks from Aswath Damodaran — the gold standard in valuation data',
-    metric: 'January 2026 data',
+    label: 'Damodaran Data',
+    text: 'Real industry benchmarks from Prof. Aswath Damodaran — the name every serious investor trusts for valuation data.',
+    metric: 'Jan 2026',
   },
   {
     label: 'IVS 105 Aligned',
-    text: '3 valuation approaches, 10 methods — aligned with IBBI, IVS, and Rule 11UA standards',
+    text: '4 approaches, 10 methods — the same framework used in boardroom-level valuations and regulatory filings.',
     metric: '10 methods',
   },
   {
     label: 'Monte Carlo',
-    text: 'Probabilistic valuation ranges from 10,000-iteration Box-Muller simulation',
-    metric: '10K iterations',
+    text: 'Your valuation isn\'t one number — it\'s 10,000 simulated scenarios showing the full range of what you\'re worth.',
+    metric: '10K scenarios',
   },
   {
     label: 'IBC Case Law',
-    text: '190+ IBC landmark cases analyzed for downside recovery benchmarks',
+    text: '190+ landmark IBC cases analyzed so your downside estimates are grounded in real legal outcomes, not guesswork.',
     metric: '3,952 outcomes',
   },
 ]
@@ -60,13 +60,13 @@ export function TrustSignals() {
           className="text-center mb-16"
         >
           <p className="text-[11px] font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-[0.2em] mb-4">
-            Why trust this platform
+            Why founders trust us
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl text-[oklch(0.93_0.005_80)]">
-            Not a Random Calculator
+            Not a Random Number Generator
           </h2>
           <p className="mt-4 text-sm text-[oklch(0.45_0.01_260)] max-w-md mx-auto leading-relaxed">
-            Enterprise-grade methodology meets startup speed. Every number is defensible.
+            When a Shark asks &ldquo;how did you arrive at this valuation?&rdquo; — you&apos;ll have a real answer.
           </p>
         </motion.div>
 

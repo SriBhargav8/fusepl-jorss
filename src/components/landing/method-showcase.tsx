@@ -12,25 +12,25 @@ const APPROACHES: {
 }[] = [
   {
     key: 'income',
-    methods: ['DCF (Discounted Cash Flow)', 'PWERM (Probability Weighted)'],
+    methods: ['DCF — What your future cash flows are worth today', 'PWERM — Weighted across best, base & worst case'],
     color: 'oklch(0.62 0.18 250)',
     borderColor: 'oklch(0.62 0.18 250 / 0.4)',
   },
   {
     key: 'market',
-    methods: ['Revenue Multiple', 'EV/EBITDA Multiple', 'Comparable Transactions'],
+    methods: ['Revenue Multiple — What similar startups sell for', 'EV/EBITDA — Profitability-based comparison', 'Comparable Deals — Real acquisition data'],
     color: 'oklch(0.65 0.16 155)',
     borderColor: 'oklch(0.65 0.16 155 / 0.4)',
   },
   {
     key: 'asset_cost',
-    methods: ['Net Asset Value', 'Replacement Cost'],
+    methods: ['Net Asset Value — What you own minus what you owe', 'Replacement Cost — What it would cost to rebuild'],
     color: 'oklch(0.78 0.14 80)',
     borderColor: 'oklch(0.78 0.14 80 / 0.4)',
   },
   {
     key: 'vc_startup',
-    methods: ['Scorecard (Bill Payne)', 'Berkus Method', 'Risk Factor Summation'],
+    methods: ['Scorecard — How you stack up vs. funded startups', 'Berkus — Value milestones like product, team, traction', 'Risk Factor — 12 risk dimensions investors evaluate'],
     color: 'oklch(0.62 0.20 300)',
     borderColor: 'oklch(0.62 0.20 300 / 0.4)',
   },
@@ -66,13 +66,13 @@ export function MethodShowcase() {
           className="text-center mb-16"
         >
           <p className="text-[11px] font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-[0.2em] mb-4">
-            Methodology
+            The Rigour Behind the Numbers
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl text-[oklch(0.93_0.005_80)]">
             4 Approaches &times; 10 Methods
           </h2>
-          <p className="mt-4 text-sm text-[oklch(0.45_0.01_260)] max-w-md mx-auto">
-            Aligned with IBBI Valuation Standards, IVS 105, and Rule 11UA
+          <p className="mt-4 text-sm text-[oklch(0.45_0.01_260)] max-w-lg mx-auto leading-relaxed">
+            The same valuation framework that institutional investors, IBBI professionals, and Shark Tank panelists rely on — now running for your startup in under 5 minutes.
           </p>
         </motion.div>
 
