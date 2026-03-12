@@ -8,7 +8,7 @@ import { Footer } from '@/components/landing/footer'
 
 export default function LandingPage() {
   return (
-    <main className="bg-[oklch(0.08_0.008_260)] min-h-screen">
+    <main className="bg-[oklch(0.14_0.015_250)] min-h-screen">
       <Hero />
       <AuthorityBrands />
       <TrustSignals />

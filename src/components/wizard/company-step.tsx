@@ -62,12 +62,12 @@ export function CompanyStep() {
       {/* URL Auto-fill */}
       <div className="rounded-xl border border-dashed border-[oklch(0.78_0.14_80/0.25)] bg-[oklch(0.78_0.14_80/0.03)] p-4">
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-3.5 h-3.5 text-[oklch(0.78_0.14_80)]" />
-          <span className="text-xs font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5 text-[oklch(0.72_0.17_162)]" />
+          <span className="text-xs font-semibold text-[oklch(0.72_0.17_162)] uppercase tracking-wider">
             Quick Start
           </span>
         </div>
-        <p className="text-xs text-[oklch(0.50_0.01_260)] mb-3">
+        <p className="text-xs text-[oklch(0.55_0.01_250)] mb-3">
           Paste your startup website and we&apos;ll auto-fill details for you.
         </p>
         <div className="flex gap-2">
@@ -79,13 +79,13 @@ export function CompanyStep() {
               onChange={(e) => setWebsiteUrl(e.target.value)}
               placeholder="yourstarup.com"
               onKeyDown={(e) => e.key === 'Enter' && handleAnalyzeUrl()}
-              className="w-full h-10 pl-10 pr-4 text-sm rounded-lg bg-[oklch(0.08_0.008_260)] border border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.38_0.01_260)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)] transition-colors"
+              className="w-full h-10 pl-10 pr-4 text-sm rounded-lg bg-[oklch(0.14_0.015_250)] border border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)] transition-colors"
             />
           </div>
           <button
             onClick={handleAnalyzeUrl}
             disabled={!websiteUrl.trim() || analyzing}
-            className="h-10 px-4 text-xs font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 whitespace-nowrap"
+            className="h-10 px-4 text-xs font-semibold rounded-lg bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 whitespace-nowrap"
           >
             {analyzing ? (
               <>
@@ -101,27 +101,27 @@ export function CompanyStep() {
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="company_name" className="text-[oklch(0.65_0.005_80)] text-xs font-medium">Company Name *</Label>
+          <Label htmlFor="company_name" className="text-[oklch(0.68_0.005_250)] text-xs font-medium">Company Name *</Label>
           <Input
             id="company_name"
             value={inputs.company_name}
             onChange={(e) => setField('company_name', e.target.value)}
             placeholder="e.g., Acme Technologies"
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.38_0.01_260)] mt-1.5 focus:border-[oklch(0.78_0.14_80/0.4)]"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.45_0.01_250)] mt-1.5 focus:border-[oklch(0.78_0.14_80/0.4)]"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Searchable Sector Dropdown */}
           <div>
-            <Label className="text-[oklch(0.65_0.005_80)] text-xs font-medium">Sector *</Label>
+            <Label className="text-[oklch(0.68_0.005_250)] text-xs font-medium">Sector *</Label>
             <Select value={inputs.sector} onValueChange={(v) => setField('sector', v as any)}>
-              <SelectTrigger className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] mt-1.5">
+              <SelectTrigger className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] mt-1.5">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[oklch(0.12_0.008_260)] border-[oklch(0.20_0.008_260)] max-h-[280px]">
+              <SelectContent className="bg-[oklch(0.18_0.018_250)] border-[oklch(0.26_0.018_250)] max-h-[280px]">
                 {/* Search input inside dropdown */}
-                <div className="px-2 pb-2 pt-1 sticky top-0 bg-[oklch(0.12_0.008_260)] z-10">
+                <div className="px-2 pb-2 pt-1 sticky top-0 bg-[oklch(0.18_0.018_250)] z-10">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[oklch(0.35_0.01_260)]" />
                     <input
@@ -131,7 +131,7 @@ export function CompanyStep() {
                       onChange={(e) => setSectorSearch(e.target.value)}
                       onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => e.stopPropagation()}
-                      className="w-full h-8 pl-8 pr-3 text-xs rounded-md bg-[oklch(0.08_0.008_260)] border border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.38_0.01_260)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)]"
+                      className="w-full h-8 pl-8 pr-3 text-xs rounded-md bg-[oklch(0.14_0.015_250)] border border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)]"
                     />
                   </div>
                 </div>
@@ -152,12 +152,12 @@ export function CompanyStep() {
           </div>
 
           <div>
-            <Label className="text-[oklch(0.65_0.005_80)] text-xs font-medium">Stage *</Label>
+            <Label className="text-[oklch(0.68_0.005_250)] text-xs font-medium">Stage *</Label>
             <Select value={inputs.stage} onValueChange={(v) => setField('stage', v as any)}>
-              <SelectTrigger className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] mt-1.5">
+              <SelectTrigger className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] mt-1.5">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[oklch(0.12_0.008_260)] border-[oklch(0.20_0.008_260)]">
+              <SelectContent className="bg-[oklch(0.18_0.018_250)] border-[oklch(0.26_0.018_250)]">
                 {STAGES.map(key => (
                   <SelectItem key={key} value={key} className="text-[oklch(0.80_0.005_80)] hover:bg-[oklch(0.15_0.008_260)] text-xs">
                     {STAGE_LABELS[key]}
@@ -170,12 +170,12 @@ export function CompanyStep() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label className="text-[oklch(0.65_0.005_80)] text-xs font-medium">Business Model *</Label>
+            <Label className="text-[oklch(0.68_0.005_250)] text-xs font-medium">Business Model *</Label>
             <Select value={inputs.business_model} onValueChange={(v) => setField('business_model', v as any)}>
-              <SelectTrigger className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] mt-1.5">
+              <SelectTrigger className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] mt-1.5">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[oklch(0.12_0.008_260)] border-[oklch(0.20_0.008_260)]">
+              <SelectContent className="bg-[oklch(0.18_0.018_250)] border-[oklch(0.26_0.018_250)]">
                 {BUSINESS_MODELS.map(key => (
                   <SelectItem key={key} value={key} className="text-[oklch(0.80_0.005_80)] hover:bg-[oklch(0.15_0.008_260)] text-xs">
                     {BUSINESS_MODEL_LABELS[key]}
@@ -186,19 +186,19 @@ export function CompanyStep() {
           </div>
 
           <div>
-            <Label htmlFor="city" className="text-[oklch(0.65_0.005_80)] text-xs font-medium">City</Label>
+            <Label htmlFor="city" className="text-[oklch(0.68_0.005_250)] text-xs font-medium">City</Label>
             <Input
               id="city"
               value={inputs.city}
               onChange={(e) => setField('city', e.target.value)}
               placeholder="e.g., Bangalore"
-              className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.38_0.01_260)] mt-1.5"
+              className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.45_0.01_250)] mt-1.5"
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="founding_year" className="text-[oklch(0.65_0.005_80)] text-xs font-medium">Founding Year</Label>
+          <Label htmlFor="founding_year" className="text-[oklch(0.68_0.005_250)] text-xs font-medium">Founding Year</Label>
           <Input
             id="founding_year"
             type="number"
@@ -206,7 +206,7 @@ export function CompanyStep() {
             onChange={(e) => setField('founding_year', parseInt(e.target.value) || 2020)}
             min={2000}
             max={new Date().getFullYear()}
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] mt-1.5 w-40"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] mt-1.5 w-40"
           />
         </div>
       </div>

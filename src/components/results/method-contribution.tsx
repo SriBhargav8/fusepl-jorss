@@ -10,7 +10,7 @@ import { PieChartIcon } from 'lucide-react'
 const APPROACH_COLORS: Record<ValuationApproach, string> = {
   income: 'oklch(0.65 0.16 250)',
   market: 'oklch(0.65 0.16 155)',
-  asset_cost: 'oklch(0.78 0.14 80)',
+  asset_cost: 'oklch(0.72 0.17 162)',
   vc_startup: 'oklch(0.65 0.16 310)',
 }
 
@@ -46,12 +46,12 @@ export function MethodContribution({ methods, compositeValue }: Props) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <div className="rounded-xl bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] overflow-hidden h-full">
+      <div className="rounded-xl bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] overflow-hidden h-full">
         <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-[oklch(0.15_0.008_260)]">
           <div className="w-7 h-7 rounded-lg bg-[oklch(0.65_0.16_310/0.1)] flex items-center justify-center">
             <PieChartIcon className="w-3.5 h-3.5 text-[oklch(0.65_0.16_310)]" />
           </div>
-          <h3 className="text-sm font-semibold text-[oklch(0.78_0.14_80)]">Method Contribution</h3>
+          <h3 className="text-sm font-semibold text-[oklch(0.72_0.17_162)]">Method Contribution</h3>
         </div>
         <div className="p-5">
           <div className="h-[200px]">
@@ -97,15 +97,15 @@ export function MethodContribution({ methods, compositeValue }: Props) {
                   className="w-2 h-2 rounded-full shrink-0"
                   style={{ backgroundColor: d.fill }}
                 />
-                <span className="text-[10px] text-[oklch(0.55_0.01_260)] truncate">{d.name}</span>
+                <span className="text-[10px] text-[oklch(0.60_0.01_250)] truncate">{d.name}</span>
                 <span className="text-[10px] font-medium text-[oklch(0.70_0.005_80)] ml-auto tabular-nums">{d.value}%</span>
               </div>
             ))}
           </div>
 
           <div className="mt-4 pt-3 border-t border-[oklch(0.15_0.008_260)] text-center">
-            <span className="text-[10px] text-[oklch(0.48_0.01_260)] uppercase tracking-wider">Composite</span>
-            <p className="text-sm font-bold text-[oklch(0.78_0.14_80)] tabular-nums">{formatINR(compositeValue)}</p>
+            <span className="text-[10px] text-[oklch(0.52_0.01_250)] uppercase tracking-wider">Composite</span>
+            <p className="text-sm font-bold text-[oklch(0.72_0.17_162)] tabular-nums">{formatINR(compositeValue)}</p>
           </div>
         </div>
       </div>

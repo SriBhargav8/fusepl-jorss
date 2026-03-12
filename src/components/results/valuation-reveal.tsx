@@ -18,7 +18,7 @@ export function ValuationReveal({ result, companyName }: Props) {
 
   const confidenceColor =
     result.confidence_score >= 70 ? 'oklch(0.65 0.16 155)' :
-    result.confidence_score >= 40 ? 'oklch(0.78 0.14 80)' : 'oklch(0.62 0.18 25)'
+    result.confidence_score >= 40 ? 'oklch(0.72 0.17 162)' : 'oklch(0.62 0.18 25)'
 
   const applicableMethods = result.methods.filter(m => m.applicable).length
 
@@ -55,7 +55,7 @@ export function ValuationReveal({ result, companyName }: Props) {
               className="flex items-center justify-center gap-2 mb-2"
             >
               <div className="h-px w-8 bg-gradient-to-r from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
-              <span className="text-[10px] font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-[0.25em]">
+              <span className="text-[10px] font-semibold text-[oklch(0.72_0.17_162)] uppercase tracking-[0.25em]">
                 Estimated Valuation
               </span>
               <div className="h-px w-8 bg-gradient-to-l from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
@@ -66,7 +66,7 @@ export function ValuationReveal({ result, companyName }: Props) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="font-heading text-xl sm:text-2xl text-[oklch(0.93_0.005_80)] mb-8"
+              className="font-heading text-xl sm:text-2xl text-[oklch(0.95_0.002_250)] mb-8"
             >
               {companyName || 'Your Startup'}
             </motion.h2>
@@ -78,7 +78,7 @@ export function ValuationReveal({ result, companyName }: Props) {
               transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
               className="mb-3"
             >
-              <p className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[oklch(0.93_0.005_80)]">
+              <p className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[oklch(0.95_0.002_250)]">
                 <AnimatedCounter value={result.composite_value} formatter={formatINR} duration={1800} />
               </p>
             </motion.div>
@@ -88,14 +88,14 @@ export function ValuationReveal({ result, companyName }: Props) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9, duration: 0.5 }}
-              className="text-sm text-[oklch(0.55_0.01_260)] mb-8"
+              className="text-sm text-[oklch(0.60_0.01_250)] mb-8"
             >
               Range:{' '}
-              <span className="text-[oklch(0.65_0.005_80)]">
+              <span className="text-[oklch(0.68_0.005_250)]">
                 <AnimatedCounter value={result.composite_low} formatter={formatINR} duration={1400} />
               </span>
               <span className="mx-1.5">—</span>
-              <span className="text-[oklch(0.65_0.005_80)]">
+              <span className="text-[oklch(0.68_0.005_250)]">
                 <AnimatedCounter value={result.composite_high} formatter={formatINR} duration={1600} />
               </span>
             </motion.p>
@@ -109,7 +109,7 @@ export function ValuationReveal({ result, companyName }: Props) {
             >
               <div className="flex flex-col items-center gap-1.5">
                 <div className="w-8 h-8 rounded-lg bg-[oklch(0.78_0.14_80/0.08)] flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-[oklch(0.78_0.14_80)]" />
+                  <Shield className="w-4 h-4 text-[oklch(0.72_0.17_162)]" />
                 </div>
                 <span
                   className="text-lg font-bold"
@@ -117,7 +117,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 >
                   {result.confidence_score}
                 </span>
-                <span className="text-[10px] text-[oklch(0.50_0.01_260)] uppercase tracking-wider">
+                <span className="text-[10px] text-[oklch(0.55_0.01_250)] uppercase tracking-wider">
                   Confidence ({confidenceLabel})
                 </span>
               </div>
@@ -129,7 +129,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 <span className="text-lg font-bold text-[oklch(0.85_0.005_80)]">
                   {applicableMethods}
                 </span>
-                <span className="text-[10px] text-[oklch(0.50_0.01_260)] uppercase tracking-wider">
+                <span className="text-[10px] text-[oklch(0.55_0.01_250)] uppercase tracking-wider">
                   Methods Used
                 </span>
               </div>
@@ -141,7 +141,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 <span className="text-lg font-bold text-[oklch(0.85_0.005_80)]">
                   {result.monte_carlo ? '10K' : '—'}
                 </span>
-                <span className="text-[10px] text-[oklch(0.50_0.01_260)] uppercase tracking-wider">
+                <span className="text-[10px] text-[oklch(0.55_0.01_250)] uppercase tracking-wider">
                   Simulations
                 </span>
               </div>
@@ -152,7 +152,7 @@ export function ValuationReveal({ result, companyName }: Props) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.3, duration: 0.4 }}
-                className="text-xs text-[oklch(0.48_0.01_260)] border-t border-[oklch(0.13_0.008_260)] pt-4 mt-6"
+                className="text-xs text-[oklch(0.52_0.01_250)] border-t border-[oklch(0.13_0.008_260)] pt-4 mt-6"
               >
                 Downside: In insolvency, similar {result.ibc_recovery_range.sector} companies
                 recovered {result.ibc_recovery_range.low}–{result.ibc_recovery_range.high}% of claims.

@@ -12,14 +12,14 @@ export function ESOPCapTableStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">ESOP & Cap Table</h2>
-        <p className="text-[oklch(0.55_0.01_260)] text-sm">Optional but powerful. ESOP pools and cap tables help us calculate per-share value and dilution impact. Skip if unsure.</p>
+        <h2 className="text-2xl font-bold text-[oklch(0.95_0.002_250)] mb-1">ESOP & Cap Table</h2>
+        <p className="text-[oklch(0.60_0.01_250)] text-sm">Optional but powerful. ESOP pools and cap tables help us calculate per-share value and dilution impact. Skip if unsure.</p>
       </div>
 
       <div className="space-y-5">
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)]">ESOP Pool (%)</Label>
-          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">
+          <Label className="text-[oklch(0.68_0.005_250)]">ESOP Pool (%)</Label>
+          <p className="text-xs text-[oklch(0.52_0.01_250)] mb-1">
             Percentage of equity reserved for employee stock options. Typical for {inputs.stage.replace('_', ' ')} stage: {defaultEsop}%
           </p>
           <Input
@@ -29,13 +29,13 @@ export function ESOPCapTableStep() {
             min={0}
             max={30}
             placeholder={String(defaultEsop)}
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1 w-32"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] mt-1 w-32"
           />
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)]">Time to Liquidity (years)</Label>
-          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">How many years until a potential exit (acquisition/IPO)? Used for Black-Scholes ESOP valuation. Typical: 3-7 years.</p>
+          <Label className="text-[oklch(0.68_0.005_250)]">Time to Liquidity (years)</Label>
+          <p className="text-xs text-[oklch(0.52_0.01_250)] mb-1">How many years until a potential exit (acquisition/IPO)? Used for Black-Scholes ESOP valuation. Typical: 3-7 years.</p>
           <Input
             type="number"
             value={inputs.time_to_liquidity_years ?? ''}
@@ -43,15 +43,15 @@ export function ESOPCapTableStep() {
             min={1}
             max={15}
             placeholder="4"
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1 w-32"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] mt-1 w-32"
           />
         </div>
 
-        <div className="border-t border-[oklch(0.20_0.008_260)] pt-4">
+        <div className="border-t border-[oklch(0.26_0.018_250)] pt-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm text-[oklch(0.50_0.01_260)]">Current Cap Table (optional)</p>
-              <p className="text-xs text-[oklch(0.38_0.01_260)]">Add up to 10 shareholders. Total should equal 100%.</p>
+              <p className="text-sm text-[oklch(0.55_0.01_250)]">Current Cap Table (optional)</p>
+              <p className="text-xs text-[oklch(0.45_0.01_250)]">Add up to 10 shareholders. Total should equal 100%.</p>
             </div>
             <button
               onClick={() => {
@@ -63,7 +63,7 @@ export function ESOPCapTableStep() {
                   ])
                 }
               }}
-              className="text-sm text-[oklch(0.78_0.14_80)] hover:text-[oklch(0.85_0.12_80)] px-3 py-1 rounded border border-[oklch(0.78_0.14_80/0.3)] hover:border-[oklch(0.78_0.14_80/0.5)] transition-colors"
+              className="text-sm text-[oklch(0.72_0.17_162)] hover:text-[oklch(0.80_0.14_162)] px-3 py-1 rounded border border-[oklch(0.78_0.14_80/0.3)] hover:border-[oklch(0.78_0.14_80/0.5)] transition-colors"
             >
               + Add Row
             </button>
@@ -71,7 +71,7 @@ export function ESOPCapTableStep() {
 
           {inputs.current_cap_table && inputs.current_cap_table.length > 0 ? (
             <div className="space-y-2">
-              <div className="grid grid-cols-12 gap-2 text-xs text-[oklch(0.38_0.01_260)] font-medium px-1">
+              <div className="grid grid-cols-12 gap-2 text-xs text-[oklch(0.45_0.01_250)] font-medium px-1">
                 <span className="col-span-5">Name</span>
                 <span className="col-span-3">Ownership %</span>
                 <span className="col-span-3">Class</span>
@@ -87,7 +87,7 @@ export function ESOPCapTableStep() {
                       setField('current_cap_table', updated)
                     }}
                     placeholder="Shareholder name"
-                    className="col-span-5 bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] text-sm h-9"
+                    className="col-span-5 bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] text-sm h-9"
                   />
                   <Input
                     type="number"
@@ -99,7 +99,7 @@ export function ESOPCapTableStep() {
                     }}
                     min={0}
                     max={100}
-                    className="col-span-3 bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] text-sm h-9"
+                    className="col-span-3 bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] text-sm h-9"
                   />
                   <select
                     value={entry.share_class}
@@ -108,7 +108,7 @@ export function ESOPCapTableStep() {
                       updated[idx] = { ...updated[idx], share_class: e.target.value as any }
                       setField('current_cap_table', updated)
                     }}
-                    className="col-span-3 bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] text-sm h-9 rounded-md px-2"
+                    className="col-span-3 bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] text-sm h-9 rounded-md px-2"
                   >
                     <option value="common">Common</option>
                     <option value="preference">Preference</option>
@@ -125,12 +125,12 @@ export function ESOPCapTableStep() {
                   </button>
                 </div>
               ))}
-              <p className="text-xs text-[oklch(0.38_0.01_260)] mt-2">
+              <p className="text-xs text-[oklch(0.45_0.01_250)] mt-2">
                 Total: {inputs.current_cap_table.reduce((s, e) => s + e.percentage, 0).toFixed(1)}%
               </p>
             </div>
           ) : (
-            <p className="text-sm text-[oklch(0.38_0.01_260)] italic">No cap table entries. Click &quot;+ Add Row&quot; to start.</p>
+            <p className="text-sm text-[oklch(0.45_0.01_250)] italic">No cap table entries. Click &quot;+ Add Row&quot; to start.</p>
           )}
         </div>
       </div>

@@ -100,12 +100,12 @@ export function WizardContainer() {
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-2 mb-3">
           <div className="h-px w-8 bg-gradient-to-r from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
-          <span className="text-[10px] font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-[0.25em]">
+          <span className="text-[10px] font-semibold text-[oklch(0.72_0.17_162)] uppercase tracking-[0.25em]">
             Step {currentStep} of 6
           </span>
           <div className="h-px w-8 bg-gradient-to-l from-transparent to-[oklch(0.78_0.14_80/0.4)]" />
         </div>
-        <h1 className="font-heading text-2xl sm:text-3xl text-[oklch(0.93_0.005_80)]">
+        <h1 className="font-heading text-2xl sm:text-3xl text-[oklch(0.95_0.002_250)]">
           {WIZARD_STEPS[currentStep - 1]}
         </h1>
       </div>
@@ -116,7 +116,7 @@ export function WizardContainer() {
           <motion.div
             className="absolute inset-y-0 left-0 rounded-full"
             style={{
-              background: 'linear-gradient(90deg, oklch(0.78 0.14 80), oklch(0.82 0.14 80))',
+              background: 'linear-gradient(90deg, oklch(0.72 0.17 162), oklch(0.82 0.14 80))',
             }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
@@ -149,12 +149,12 @@ export function WizardContainer() {
                   className={`
                     inline-flex items-center justify-center w-8 h-8 rounded-full text-[11px] font-semibold transition-all duration-300
                     ${isActive
-                      ? 'bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] shadow-[0_0_16px_oklch(0.78_0.14_80/0.3)]'
+                      ? 'bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] shadow-[0_0_16px_oklch(0.78_0.14_80/0.3)]'
                       : isCompleted
                       ? 'bg-[oklch(0.65_0.16_155/0.15)] text-[oklch(0.65_0.16_155)] ring-1 ring-[oklch(0.65_0.16_155/0.3)]'
                       : isClickable
-                      ? 'bg-[oklch(0.15_0.008_260)] text-[oklch(0.50_0.01_260)] group-hover:bg-[oklch(0.18_0.008_260)]'
-                      : 'bg-[oklch(0.12_0.008_260)] text-[oklch(0.28_0.01_260)] cursor-not-allowed'
+                      ? 'bg-[oklch(0.15_0.008_260)] text-[oklch(0.55_0.01_250)] group-hover:bg-[oklch(0.24_0.018_250)]'
+                      : 'bg-[oklch(0.18_0.018_250)] text-[oklch(0.28_0.01_260)] cursor-not-allowed'
                     }
                   `}
                 >
@@ -162,9 +162,9 @@ export function WizardContainer() {
                 </motion.span>
                 <span className={`text-[9px] hidden sm:block uppercase tracking-wider transition-colors ${
                   isActive
-                    ? 'text-[oklch(0.78_0.14_80)]'
+                    ? 'text-[oklch(0.72_0.17_162)]'
                     : isCompleted
-                    ? 'text-[oklch(0.50_0.01_260)]'
+                    ? 'text-[oklch(0.55_0.01_250)]'
                     : 'text-[oklch(0.28_0.01_260)]'
                 }`}>
                   {label}
@@ -176,7 +176,7 @@ export function WizardContainer() {
       </div>
 
       {/* Step content */}
-      <div className="relative bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] rounded-2xl p-6 md:p-8 mb-6 overflow-hidden">
+      <div className="relative bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] rounded-2xl p-6 md:p-8 mb-6 overflow-hidden">
         {/* Subtle top border accent */}
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[oklch(0.78_0.14_80/0.2)] to-transparent" />
 
@@ -199,7 +199,7 @@ export function WizardContainer() {
         <button
           onClick={handlePrev}
           disabled={currentStep === 1}
-          className="btn-press focus-ring group inline-flex items-center gap-1.5 h-11 px-5 text-sm font-medium rounded-lg border border-[oklch(0.20_0.008_260)] text-[oklch(0.55_0.01_260)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.78_0.14_80)] hover:bg-[oklch(0.78_0.14_80/0.04)] disabled:opacity-20 disabled:cursor-not-allowed"
+          className="btn-press focus-ring group inline-flex items-center gap-1.5 h-11 px-5 text-sm font-medium rounded-lg border border-[oklch(0.26_0.018_250)] text-[oklch(0.60_0.01_250)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.72_0.17_162)] hover:bg-[oklch(0.78_0.14_80/0.04)] disabled:opacity-20 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           Back
@@ -207,7 +207,7 @@ export function WizardContainer() {
         <button
           onClick={handleNext}
           disabled={computing}
-          className="btn-press focus-ring group inline-flex items-center gap-2 h-11 px-8 text-sm font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.25)] disabled:opacity-50"
+          className="btn-press focus-ring group inline-flex items-center gap-2 h-11 px-8 text-sm font-semibold rounded-lg bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.25)] disabled:opacity-50"
         >
           {computing ? (
             <>

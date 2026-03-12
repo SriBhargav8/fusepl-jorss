@@ -17,7 +17,7 @@ const APPROACH_ICONS: Record<ValuationApproach, typeof TrendingUp> = {
 const APPROACH_ACCENT: Record<ValuationApproach, string> = {
   income: 'oklch(0.65 0.16 250)',
   market: 'oklch(0.65 0.16 155)',
-  asset_cost: 'oklch(0.78 0.14 80)',
+  asset_cost: 'oklch(0.72 0.17 162)',
   vc_startup: 'oklch(0.65 0.16 310)',
 }
 
@@ -25,14 +25,14 @@ function confidenceBar(confidence: number) {
   const pct = Math.round(confidence * 100)
   const color =
     confidence >= 0.7 ? 'bg-[oklch(0.65_0.16_155)]' :
-    confidence >= 0.4 ? 'bg-[oklch(0.78_0.14_80)]' :
+    confidence >= 0.4 ? 'bg-[oklch(0.72_0.17_162)]' :
     'bg-[oklch(0.40_0.01_260)]'
   return (
     <div className="flex items-center gap-2">
       <div className="w-12 h-1 rounded-full bg-[oklch(0.15_0.008_260)] overflow-hidden">
         <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-[10px] text-[oklch(0.50_0.01_260)] tabular-nums">{pct}%</span>
+      <span className="text-[10px] text-[oklch(0.55_0.01_250)] tabular-nums">{pct}%</span>
     </div>
   )
 }
@@ -68,7 +68,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
             viewport={{ once: true, margin: '-30px' }}
             transition={{ duration: 0.4, delay: i * 0.08 }}
           >
-            <div className="group rounded-xl bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] overflow-hidden transition-all duration-300 hover:border-[oklch(0.25_0.008_260)] hover:shadow-[0_4px_24px_oklch(0_0_0/0.3)]">
+            <div className="group rounded-xl bg-[oklch(0.16_0.015_250)] border border-[oklch(0.24_0.018_250)] overflow-hidden transition-all duration-300 hover:border-[oklch(0.25_0.008_260)] hover:shadow-[0_4px_24px_oklch(0_0_0/0.3)]">
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.15_0.008_260)]">
                 <div className="flex items-center gap-2.5">
@@ -82,7 +82,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                     {group.label}
                   </h3>
                 </div>
-                <span className="text-xs font-medium text-[oklch(0.55_0.01_260)] tabular-nums">
+                <span className="text-xs font-medium text-[oklch(0.60_0.01_250)] tabular-nums">
                   Avg: {formatINR(approachAvg(group.methods))}
                 </span>
               </div>
@@ -92,7 +92,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                 {group.methods.map(m => (
                   <div
                     key={m.method}
-                    className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-[oklch(0.12_0.008_260)]"
+                    className="flex items-center justify-between px-5 py-3 transition-colors hover:bg-[oklch(0.18_0.018_250)]"
                   >
                     <div className="flex flex-col gap-0.5">
                       <span className="text-sm text-[oklch(0.80_0.005_80)]">
@@ -101,11 +101,11 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                       {confidenceBar(m.confidence)}
                     </div>
                     <div className="text-right">
-                      <span className="font-semibold text-sm text-[oklch(0.93_0.005_80)] tabular-nums">
+                      <span className="font-semibold text-sm text-[oklch(0.95_0.002_250)] tabular-nums">
                         {formatINR(m.value)}
                       </span>
                       {m.method === 'dcf' && monteCarlo && (
-                        <p className="text-[10px] text-[oklch(0.48_0.01_260)] tabular-nums">
+                        <p className="text-[10px] text-[oklch(0.52_0.01_250)] tabular-nums">
                           MC: {formatINR(monteCarlo.p10)}–{formatINR(monteCarlo.p90)}
                         </p>
                       )}

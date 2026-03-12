@@ -12,7 +12,7 @@ interface Props {
 
 const UNLOCKS = [
   { icon: BarChart3, text: 'Full 10-method breakdown', color: 'oklch(0.65 0.16 250)' },
-  { icon: FileDown, text: 'PDF report download', color: 'oklch(0.78 0.14 80)' },
+  { icon: FileDown, text: 'PDF report download', color: 'oklch(0.72 0.17 162)' },
   { icon: Users, text: 'Comparable startup matching', color: 'oklch(0.65 0.16 155)' },
   { icon: Brain, text: 'AI investment narrative', color: 'oklch(0.65 0.16 310)' },
 ]
@@ -70,15 +70,15 @@ export function EmailGate({ onUnlocked }: Props) {
     >
       {/* Blurred preview teaser */}
       <div className="relative mb-4 rounded-xl overflow-hidden">
-        <div className="blur-md opacity-30 pointer-events-none p-6 bg-[oklch(0.12_0.008_260)] border border-[oklch(0.20_0.008_260)] rounded-xl space-y-3">
-          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-3/4" />
-          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-1/2" />
+        <div className="blur-md opacity-30 pointer-events-none p-6 bg-[oklch(0.18_0.018_250)] border border-[oklch(0.26_0.018_250)] rounded-xl space-y-3">
+          <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-3/4" />
+          <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-1/2" />
           <div className="h-20 bg-[oklch(0.15_0.008_260)] rounded" />
-          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-2/3" />
+          <div className="h-4 bg-[oklch(0.24_0.018_250)] rounded w-2/3" />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-center gap-2 bg-[oklch(0.08_0.008_260/0.9)] backdrop-blur-sm px-4 py-2 rounded-full border border-[oklch(0.78_0.14_80/0.2)]">
-            <Lock className="h-3.5 w-3.5 text-[oklch(0.78_0.14_80)]" />
+            <Lock className="h-3.5 w-3.5 text-[oklch(0.72_0.17_162)]" />
             <span className="text-xs font-medium text-[oklch(0.70_0.05_80)]">Full report locked</span>
           </div>
         </div>
@@ -95,11 +95,11 @@ export function EmailGate({ onUnlocked }: Props) {
 
           <div className="relative">
             <div className="text-center mb-6">
-              <h3 className="font-heading text-xl text-[oklch(0.93_0.005_80)] mb-2">
+              <h3 className="font-heading text-xl text-[oklch(0.95_0.002_250)] mb-2">
                 Unlock Your Full Report
               </h3>
-              <p className="text-sm text-[oklch(0.52_0.01_260)]">
-                Enter your email to access everything — <span className="text-[oklch(0.78_0.14_80)] font-medium">free during beta</span>.
+              <p className="text-sm text-[oklch(0.58_0.01_250)]">
+                Enter your email to access everything — <span className="text-[oklch(0.72_0.17_162)] font-medium">free during beta</span>.
               </p>
             </div>
 
@@ -120,7 +120,7 @@ export function EmailGate({ onUnlocked }: Props) {
                   >
                     <Icon className="w-3 h-3" style={{ color }} />
                   </div>
-                  <span className="text-xs text-[oklch(0.58_0.01_260)] leading-relaxed">{text}</span>
+                  <span className="text-xs text-[oklch(0.62_0.01_250)] leading-relaxed">{text}</span>
                 </motion.div>
               ))}
             </div>
@@ -134,13 +134,13 @@ export function EmailGate({ onUnlocked }: Props) {
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
                   required
-                  className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.08_0.008_260)] border border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.40_0.01_260)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)] focus:shadow-[0_0_0_3px_oklch(0.78_0.14_80/0.06)] transition-all"
+                  className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.14_0.015_250)] border border-[oklch(0.26_0.018_250)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.40_0.01_260)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)] focus:shadow-[0_0_0_3px_oklch(0.78_0.14_80/0.06)] transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={!isValidEmail || loading}
-                className="group h-12 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
+                className="group h-12 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
               >
                 {loading ? (
                   <>

@@ -23,34 +23,34 @@ export function MarketProductStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[oklch(0.93_0.005_80)] mb-1">Market & Product</h2>
-        <p className="text-[oklch(0.55_0.01_260)] text-sm">Big markets = big valuations. Investors want to know the total opportunity and where your product stands.</p>
+        <h2 className="text-2xl font-bold text-[oklch(0.95_0.002_250)] mb-1">Market & Product</h2>
+        <p className="text-[oklch(0.60_0.01_250)] text-sm">Big markets = big valuations. Investors want to know the total opportunity and where your product stands.</p>
       </div>
 
       <div className="space-y-5">
         <div>
-          <Label htmlFor="tam" className="text-[oklch(0.65_0.005_80)]">Total Addressable Market (TAM in Cr) *</Label>
-          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-1">The total market size if you captured 100% of your target customers. Enter in crores (e.g., 5000 = ₹5,000 Cr)</p>
+          <Label htmlFor="tam" className="text-[oklch(0.68_0.005_250)]">Total Addressable Market (TAM in Cr) *</Label>
+          <p className="text-xs text-[oklch(0.52_0.01_250)] mb-1">The total market size if you captured 100% of your target customers. Enter in crores (e.g., 5000 = ₹5,000 Cr)</p>
           <Input
             id="tam"
             type="number"
             value={inputs.tam}
             onChange={(e) => setField('tam', parseInt(e.target.value) || 0)}
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1 w-48"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] mt-1 w-48"
             placeholder="5000"
           />
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)]">Development Stage *</Label>
-          <p className="text-xs text-[oklch(0.48_0.01_260)]">Where your product is in its journey — from idea to scaling</p>
+          <Label className="text-[oklch(0.68_0.005_250)]">Development Stage *</Label>
+          <p className="text-xs text-[oklch(0.52_0.01_250)]">Where your product is in its journey — from idea to scaling</p>
           <Select value={inputs.dev_stage} onValueChange={(v) => setField('dev_stage', v as any)}>
-            <SelectTrigger className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1">
+            <SelectTrigger className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] mt-1">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)]">
+            <SelectContent className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)]">
               {DEV_STAGES.map(key => (
-                <SelectItem key={key} value={key} className="text-[oklch(0.93_0.005_80)] hover:bg-[oklch(0.15_0.008_260)]">
+                <SelectItem key={key} value={key} className="text-[oklch(0.95_0.002_250)] hover:bg-[oklch(0.15_0.008_260)]">
                   {DEV_STAGE_LABELS[key]}
                 </SelectItem>
               ))}
@@ -59,8 +59,8 @@ export function MarketProductStep() {
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)]">Competition Level (1-5): {inputs.competition_level}</Label>
-          <p className="text-xs text-[oklch(0.38_0.01_260)] mb-2">1 = Blue ocean, 5 = Hypercompetitive market</p>
+          <Label className="text-[oklch(0.68_0.005_250)]">Competition Level (1-5): {inputs.competition_level}</Label>
+          <p className="text-xs text-[oklch(0.45_0.01_250)] mb-2">1 = Blue ocean, 5 = Hypercompetitive market</p>
           <Slider
             value={[inputs.competition_level]}
             onValueChange={(v) => setField('competition_level', Array.isArray(v) ? v[0] : v)}
@@ -72,16 +72,16 @@ export function MarketProductStep() {
         </div>
 
         <div>
-          <Label className="text-[oklch(0.65_0.005_80)] mb-1 block">Competitive Advantages</Label>
-          <p className="text-xs text-[oklch(0.48_0.01_260)] mb-2">What makes you hard to copy? Select all that apply — each one adds to your moat score.</p>
+          <Label className="text-[oklch(0.68_0.005_250)] mb-1 block">Competitive Advantages</Label>
+          <p className="text-xs text-[oklch(0.52_0.01_250)] mb-2">What makes you hard to copy? Select all that apply — each one adds to your moat score.</p>
           <div className="flex flex-wrap gap-2">
             {COMPETITIVE_ADVANTAGES.map(key => (
               <label
                 key={key}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-colors text-sm ${
                   inputs.competitive_advantages.includes(key)
-                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.85_0.12_80)]'
-                    : 'border-[oklch(0.20_0.008_260)] bg-[oklch(0.08_0.008_260)] text-[oklch(0.55_0.01_260)] hover:border-[oklch(0.30_0.008_260)]'
+                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.80_0.14_162)]'
+                    : 'border-[oklch(0.26_0.018_250)] bg-[oklch(0.14_0.015_250)] text-[oklch(0.60_0.01_250)] hover:border-[oklch(0.30_0.008_260)]'
                 }`}
               >
                 <Checkbox
@@ -96,14 +96,14 @@ export function MarketProductStep() {
         </div>
 
         <div>
-          <Label htmlFor="patents_count" className="text-[oklch(0.65_0.005_80)]">Number of Patents</Label>
+          <Label htmlFor="patents_count" className="text-[oklch(0.68_0.005_250)]">Number of Patents</Label>
           <Input
             id="patents_count"
             type="number"
             value={inputs.patents_count}
             onChange={(e) => setField('patents_count', parseInt(e.target.value) || 0)}
             min={0}
-            className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)] text-[oklch(0.93_0.005_80)] mt-1 w-32"
+            className="bg-[oklch(0.14_0.015_250)] border-[oklch(0.26_0.018_250)] text-[oklch(0.95_0.002_250)] mt-1 w-32"
           />
         </div>
       </div>

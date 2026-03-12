@@ -33,7 +33,7 @@ interface PDFData {
 }
 
 // Brand colors (RGB equivalents of OKLCH gold palette)
-const GOLD = [194, 154, 52] as const      // oklch(0.78 0.14 80) approx
+const GOLD = [45, 180, 140] as const      // oklch(0.72 0.17 162) approx
 const DARK_BG = [18, 18, 22] as const     // oklch(0.08 0.008 260) approx
 const GOLD_LIGHT = [210, 178, 90] as const
 const TEXT_DARK = [30, 30, 35] as const

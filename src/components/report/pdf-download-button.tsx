@@ -41,7 +41,7 @@ export function PDFDownloadButton({ valuation, result }: Props) {
     <button
       onClick={handleDownload}
       disabled={generating}
-      className="inline-flex items-center gap-2 h-11 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98] disabled:opacity-50"
+      className="inline-flex items-center gap-2 h-11 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.72_0.17_162)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.68_0.18_162)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98] disabled:opacity-50"
     >
       {generating ? (
         <>
