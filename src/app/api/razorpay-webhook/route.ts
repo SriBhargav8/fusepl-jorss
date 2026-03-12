@@ -37,11 +37,23 @@ export async function POST(req: NextRequest) {
 
       const supabase = createClient(supabaseUrl, serviceKey)
 
+      // Look up user_id by email if available
+      let userId: string | null = null
+      if (notes.email) {
+        const { data: user } = await supabase
+          .from('users')
+          .select('id')
+          .eq('email', notes.email)
+          .single()
+        userId = user?.id ?? null
+      }
+
       // Create certified request record
       const { error } = await supabase
         .from('certified_requests')
         .insert({
           valuation_id: notes.valuation_id,
+          user_id: userId,
           status: 'paid',
           payment_id: payment.id,
           razorpay_order_id: payment.order_id,
