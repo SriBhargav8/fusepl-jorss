@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { PARTNERSHIP_LEVELS } from '@/types'
+import { PARTNERSHIP_LEVELS, PARTNERSHIP_LABELS } from '@/types'
 
 export function StrategicStep() {
   const { inputs, setField } = useValuationStore()
@@ -25,9 +25,9 @@ export function StrategicStep() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)]">
-              {Object.entries(PARTNERSHIP_LEVELS).map(([key, label]) => (
+              {PARTNERSHIP_LEVELS.map(key => (
                 <SelectItem key={key} value={key} className="text-[oklch(0.93_0.005_80)] hover:bg-[oklch(0.15_0.008_260)]">
-                  {label}
+                  {PARTNERSHIP_LABELS[key]}
                 </SelectItem>
               ))}
             </SelectContent>

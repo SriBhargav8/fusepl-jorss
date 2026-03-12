@@ -5,11 +5,12 @@ import { useValuationStore } from '@/stores/valuation-store'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { STARTUP_CATEGORIES, STAGES, BUSINESS_MODELS } from '@/types'
+import { STARTUP_CATEGORIES, CATEGORY_LABELS, STAGES, STAGE_LABELS, BUSINESS_MODELS, BUSINESS_MODEL_LABELS } from '@/types'
+import type { StartupCategory } from '@/types'
 import { Globe, Loader2, Sparkles, Search } from 'lucide-react'
 import { toast } from 'sonner'
 
-const SECTOR_ENTRIES = Object.entries(STARTUP_CATEGORIES) as [string, string][]
+const SECTOR_ENTRIES: [StartupCategory, string][] = STARTUP_CATEGORIES.map(key => [key, CATEGORY_LABELS[key]])
 
 export function CompanyStep() {
   const { inputs, setField } = useValuationStore()
@@ -157,9 +158,9 @@ export function CompanyStep() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-[oklch(0.12_0.008_260)] border-[oklch(0.20_0.008_260)]">
-                {Object.entries(STAGES).map(([key, label]) => (
+                {STAGES.map(key => (
                   <SelectItem key={key} value={key} className="text-[oklch(0.80_0.005_80)] hover:bg-[oklch(0.15_0.008_260)] text-xs">
-                    {label}
+                    {STAGE_LABELS[key]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -175,9 +176,9 @@ export function CompanyStep() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-[oklch(0.12_0.008_260)] border-[oklch(0.20_0.008_260)]">
-                {Object.entries(BUSINESS_MODELS).map(([key, label]) => (
+                {BUSINESS_MODELS.map(key => (
                   <SelectItem key={key} value={key} className="text-[oklch(0.80_0.005_80)] hover:bg-[oklch(0.15_0.008_260)] text-xs">
-                    {label}
+                    {BUSINESS_MODEL_LABELS[key]}
                   </SelectItem>
                 ))}
               </SelectContent>

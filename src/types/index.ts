@@ -13,12 +13,50 @@ export const STARTUP_CATEGORIES = [
 
 export type StartupCategory = typeof STARTUP_CATEGORIES[number]
 
+export const CATEGORY_LABELS: Record<StartupCategory, string> = {
+  saas: 'SaaS',
+  fintech_payments: 'Fintech — Payments',
+  fintech_insurance: 'Fintech — Insurance',
+  fintech_banking: 'Fintech — Banking',
+  d2c: 'D2C / Consumer Brand',
+  edtech: 'EdTech',
+  healthtech_products: 'HealthTech — Products',
+  healthtech_services: 'HealthTech — Services',
+  ecommerce_general: 'E-Commerce',
+  ecommerce_grocery: 'E-Commerce — Grocery',
+  marketplace: 'Marketplace',
+  agritech: 'AgriTech',
+  logistics: 'Logistics & Supply Chain',
+  cleantech: 'CleanTech / EV',
+  deeptech: 'DeepTech / AI',
+  gaming: 'Gaming & Entertainment',
+  real_estate_tech: 'Real Estate Tech',
+  auto_mobility: 'Auto & Mobility',
+  manufacturing: 'Manufacturing / IoT',
+  media_advertising: 'Media & Advertising',
+  telecom: 'Telecom',
+  travel_hospitality: 'Travel & Hospitality',
+  social_impact: 'Social Impact',
+  b2b_services: 'B2B Services',
+  other: 'Other',
+}
+
 export const STAGES = [
   'idea', 'pre_seed', 'seed', 'pre_series_a',
   'series_a', 'series_b', 'series_c_plus',
 ] as const
 
 export type Stage = typeof STAGES[number]
+
+export const STAGE_LABELS: Record<Stage, string> = {
+  idea: 'Idea Stage',
+  pre_seed: 'Pre-Seed',
+  seed: 'Seed',
+  pre_series_a: 'Pre-Series A',
+  series_a: 'Series A',
+  series_b: 'Series B',
+  series_c_plus: 'Series C+',
+}
 
 export const BUSINESS_MODELS = [
   'saas_subscription', 'marketplace_commission', 'ecommerce_product',
@@ -28,11 +66,33 @@ export const BUSINESS_MODELS = [
 
 export type BusinessModel = typeof BUSINESS_MODELS[number]
 
+export const BUSINESS_MODEL_LABELS: Record<BusinessModel, string> = {
+  saas_subscription: 'SaaS / Subscription',
+  marketplace_commission: 'Marketplace / Commission',
+  ecommerce_product: 'E-Commerce / Product',
+  advertising: 'Advertising',
+  freemium: 'Freemium',
+  transaction_based: 'Transaction-Based',
+  licensing: 'Licensing',
+  services: 'Services',
+  hardware_software: 'Hardware + Software',
+  other: 'Other',
+}
+
 export const DEV_STAGES = [
   'idea', 'prototype', 'mvp', 'beta', 'production', 'scaling',
 ] as const
 
 export type DevStage = typeof DEV_STAGES[number]
+
+export const DEV_STAGE_LABELS: Record<DevStage, string> = {
+  idea: 'Idea',
+  prototype: 'Prototype',
+  mvp: 'MVP',
+  beta: 'Beta',
+  production: 'Production',
+  scaling: 'Scaling',
+}
 
 export const COMPETITIVE_ADVANTAGES = [
   'network_effects', 'proprietary_tech', 'brand', 'cost_advantage',
@@ -41,8 +101,25 @@ export const COMPETITIVE_ADVANTAGES = [
 
 export type CompetitiveAdvantage = typeof COMPETITIVE_ADVANTAGES[number]
 
+export const COMPETITIVE_ADVANTAGE_LABELS: Record<CompetitiveAdvantage, string> = {
+  network_effects: 'Network Effects',
+  proprietary_tech: 'Proprietary Technology',
+  brand: 'Strong Brand',
+  cost_advantage: 'Cost Advantage',
+  switching_costs: 'High Switching Costs',
+  regulatory: 'Regulatory Moat',
+  data_moat: 'Data Moat',
+  none: 'None',
+}
+
 export const PARTNERSHIP_LEVELS = ['none', 'one', 'multiple'] as const
 export type PartnershipLevel = typeof PARTNERSHIP_LEVELS[number]
+
+export const PARTNERSHIP_LABELS: Record<PartnershipLevel, string> = {
+  none: 'None',
+  one: 'One Key Partner',
+  multiple: 'Multiple Partners',
+}
 
 export const VALUATION_PURPOSES = [
   'indicative', 'fundraising', 'esop', 'rule_11ua', 'fema', 'ma',

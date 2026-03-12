@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { DEV_STAGES, COMPETITIVE_ADVANTAGES } from '@/types'
+import { DEV_STAGES, DEV_STAGE_LABELS, COMPETITIVE_ADVANTAGES, COMPETITIVE_ADVANTAGE_LABELS } from '@/types'
 import { Checkbox } from '@/components/ui/checkbox'
 
 export function MarketProductStep() {
@@ -48,9 +48,9 @@ export function MarketProductStep() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-[oklch(0.08_0.008_260)] border-[oklch(0.20_0.008_260)]">
-              {Object.entries(DEV_STAGES).map(([key, label]) => (
+              {DEV_STAGES.map(key => (
                 <SelectItem key={key} value={key} className="text-[oklch(0.93_0.005_80)] hover:bg-[oklch(0.15_0.008_260)]">
-                  {label}
+                  {DEV_STAGE_LABELS[key]}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -73,21 +73,21 @@ export function MarketProductStep() {
         <div>
           <Label className="text-[oklch(0.65_0.005_80)] mb-2 block">Competitive Advantages</Label>
           <div className="flex flex-wrap gap-2">
-            {Object.entries(COMPETITIVE_ADVANTAGES).map(([key, label]) => (
+            {COMPETITIVE_ADVANTAGES.map(key => (
               <label
                 key={key}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border cursor-pointer transition-colors text-sm ${
-                  inputs.competitive_advantages.includes(key as any)
-                    ? 'border-amber-400/50 bg-amber-400/10 text-amber-300'
-                    : 'border-[oklch(0.20_0.008_260)] bg-[oklch(0.08_0.008_260)] text-[oklch(0.50_0.01_260)] hover:border-slate-600'
+                  inputs.competitive_advantages.includes(key)
+                    ? 'border-[oklch(0.78_0.14_80/0.5)] bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.85_0.12_80)]'
+                    : 'border-[oklch(0.20_0.008_260)] bg-[oklch(0.08_0.008_260)] text-[oklch(0.55_0.01_260)] hover:border-[oklch(0.30_0.008_260)]'
                 }`}
               >
                 <Checkbox
-                  checked={inputs.competitive_advantages.includes(key as any)}
+                  checked={inputs.competitive_advantages.includes(key)}
                   onCheckedChange={() => toggleAdvantage(key)}
                   className="hidden"
                 />
-                {label}
+                {COMPETITIVE_ADVANTAGE_LABELS[key]}
               </label>
             ))}
           </div>
