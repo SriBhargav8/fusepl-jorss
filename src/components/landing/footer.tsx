@@ -4,7 +4,7 @@ const LINKS: { heading: string; links: { href: string; label: string }[] }[] = [
   {
     heading: 'Tools',
     links: [
-      { href: '/valuation/purpose', label: 'Startup Valuation' },
+      { href: '/valuation', label: 'Startup Valuation' },
       { href: '/deal-check', label: 'Investor Deal Check' },
       { href: '/cap-table', label: 'Cap Table' },
       { href: '/esop-calculator', label: 'ESOP Calculator' },

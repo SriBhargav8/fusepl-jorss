@@ -139,7 +139,7 @@ export function Hero() {
         className="flex flex-wrap justify-center gap-4 mt-11"
       >
         <Link
-          href="/valuation/purpose"
+          href="/valuation"
           className="group relative inline-flex items-center justify-center h-12 px-8 text-sm font-semibold tracking-wide bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] rounded-lg transition-all duration-300 hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_40px_oklch(0.78_0.14_80/0.25)] active:scale-[0.97]"
         >
           Get Your Valuation

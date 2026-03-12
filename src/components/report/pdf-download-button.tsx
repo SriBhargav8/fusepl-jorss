@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { generateValuationPDF } from '@/lib/export/pdf-generator'
 import { getDamodaranBenchmark } from '@/lib/data/sector-mapping'
 import type { ValuationResult, StartupCategory } from '@/types'
+import { Loader2, FileDown } from 'lucide-react'
 
 interface Props {
   valuation: {
@@ -38,15 +38,22 @@ export function PDFDownloadButton({ valuation, result }: Props) {
   }
 
   return (
-    <div className="text-center">
-      <Button
-        size="lg"
-        onClick={handleDownload}
-        disabled={generating}
-        className="bg-amber-500 hover:bg-amber-600 text-black font-semibold"
-      >
-        {generating ? 'Generating PDF...' : 'Download PDF Report'}
-      </Button>
-    </div>
+    <button
+      onClick={handleDownload}
+      disabled={generating}
+      className="inline-flex items-center gap-2 h-11 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98] disabled:opacity-50"
+    >
+      {generating ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Generating PDF...
+        </>
+      ) : (
+        <>
+          <FileDown className="h-4 w-4" />
+          Download PDF Report
+        </>
+      )}
+    </button>
   )
 }

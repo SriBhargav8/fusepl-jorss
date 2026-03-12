@@ -2,33 +2,26 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { useValuationStore } from '@/stores/valuation-store'
 import { EMAIL_REGEX } from '@/lib/utils'
-import { Loader2, Lock } from 'lucide-react'
+import { Loader2, Lock, FileDown, BarChart3, Users, Brain } from 'lucide-react'
 
 interface Props {
   onUnlocked: (reportId: string) => void
 }
 
 const UNLOCKS = [
-  'Full methodology breakdown for all 10 methods across 3 approaches',
-  'Damodaran India benchmarks used',
-  'Comparable Indian startups',
-  'AI-powered insights from a VC perspective',
-  'ESOP valuation (Black-Scholes)',
-  'Cap Table Simulator',
-  'Investor Match suggestions',
-  'IBC downside analysis',
-  'Downloadable PDF report',
+  { icon: BarChart3, text: 'Full methodology breakdown for all 10 methods' },
+  { icon: FileDown, text: 'Downloadable PDF report' },
+  { icon: Users, text: 'Comparable Indian startups & investor matching' },
+  { icon: Brain, text: 'AI-powered investment narrative' },
 ]
 
 export function EmailGate({ onUnlocked }: Props) {
   const { inputs, result, setEmail, purpose } = useValuationStore()
   const [emailInput, setEmailInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const isValidEmail = EMAIL_REGEX.test(emailInput)
 
@@ -37,6 +30,8 @@ export function EmailGate({ onUnlocked }: Props) {
     if (!isValidEmail || !result) return
 
     setLoading(true)
+    setError('')
+
     try {
       const res = await fetch('/api/capture', {
         method: 'POST',
@@ -49,17 +44,20 @@ export function EmailGate({ onUnlocked }: Props) {
         }),
       })
 
-      if (!res.ok) throw new Error('Failed to save')
-
-      const data = await res.json()
-      setEmail(emailInput)
-      onUnlocked(data.report_id)
+      if (res.ok) {
+        const data = await res.json()
+        setEmail(emailInput)
+        onUnlocked(data.report_id)
+        return
+      }
     } catch {
-      setEmail(emailInput)
-      onUnlocked('local')
-    } finally {
-      setLoading(false)
+      // Supabase not configured — that's fine for beta
     }
+
+    // Always unlock locally even if API fails
+    setEmail(emailInput)
+    onUnlocked('local')
+    setLoading(false)
   }
 
   return (
@@ -68,60 +66,79 @@ export function EmailGate({ onUnlocked }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
+      className="relative"
     >
       {/* Blurred preview teaser */}
-      <div className="relative mb-4 rounded-xl overflow-hidden">
-        <div className="blur-md opacity-50 pointer-events-none p-6 bg-slate-900 border border-slate-800 rounded-xl space-y-3">
-          <div className="h-4 bg-slate-700 rounded w-3/4" />
-          <div className="h-4 bg-slate-700 rounded w-1/2" />
-          <div className="h-20 bg-slate-800 rounded" />
-          <div className="h-4 bg-slate-700 rounded w-2/3" />
+      <div className="relative mb-5 rounded-lg overflow-hidden">
+        <div className="blur-md opacity-40 pointer-events-none p-6 bg-[oklch(0.12_0.008_260)] border border-[oklch(0.20_0.008_260)] rounded-lg space-y-3">
+          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-3/4" />
+          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-1/2" />
+          <div className="h-20 bg-[oklch(0.15_0.008_260)] rounded" />
+          <div className="h-4 bg-[oklch(0.18_0.008_260)] rounded w-2/3" />
         </div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-center gap-2 bg-slate-950/80 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-700">
-            <Lock className="h-4 w-4 text-amber-400" />
-            <span className="text-sm text-slate-300 font-medium">Unlock full report below</span>
+          <div className="flex items-center gap-2 bg-[oklch(0.08_0.008_260/0.9)] backdrop-blur-sm px-4 py-2 rounded-full border border-[oklch(0.78_0.14_80/0.2)]">
+            <Lock className="h-3.5 w-3.5 text-[oklch(0.78_0.14_80)]" />
+            <span className="text-xs font-medium text-[oklch(0.70_0.05_80)]">Full report locked</span>
           </div>
         </div>
       </div>
 
-      <Card className="border-2 border-dashed border-amber-400/30 bg-slate-900">
-        <CardHeader className="text-center pb-2">
-          <CardTitle className="text-lg text-white">Unlock Your Full Valuation Report</CardTitle>
-          <p className="text-sm text-slate-400">Enter your email to access:</p>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-1 mb-4">
-            {UNLOCKS.map((item) => (
-              <li key={item} className="flex items-start gap-2 text-sm text-slate-300">
-                <span className="text-green-400 mt-0.5">&#10003;</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+      {/* Gate card */}
+      <div className="rounded-lg border-2 border-dashed border-[oklch(0.78_0.14_80/0.25)] bg-[oklch(0.10_0.01_80/0.3)] p-6 sm:p-8">
+        <div className="text-center mb-6">
+          <h3 className="font-heading text-xl text-[oklch(0.93_0.005_80)] mb-2">
+            Unlock Your Full Report
+          </h3>
+          <p className="text-sm text-[oklch(0.45_0.01_260)]">
+            Enter your email to access the complete valuation analysis — free during beta.
+          </p>
+        </div>
 
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
-              type="email"
-              placeholder="founder@startup.com"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              required
-              className="bg-slate-800 border-slate-700 text-white"
-            />
-            <Button type="submit" disabled={!isValidEmail || loading} className="bg-amber-500 hover:bg-amber-600 text-slate-900">
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Unlocking...
-                </>
-              ) : (
-                'Unlock Report'
-              )}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+        {/* What you get */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          {UNLOCKS.map(({ icon: Icon, text }) => (
+            <div key={text} className="flex items-start gap-2.5 text-xs text-[oklch(0.55_0.01_260)]">
+              <Icon className="w-3.5 h-3.5 text-[oklch(0.78_0.14_80)] mt-0.5 shrink-0" />
+              <span>{text}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Email form */}
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            placeholder="founder@startup.com"
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+            required
+            className="flex-1 h-11 px-4 text-sm rounded-lg bg-[oklch(0.08_0.008_260)] border border-[oklch(0.20_0.008_260)] text-[oklch(0.85_0.005_80)] placeholder:text-[oklch(0.35_0.01_260)] focus:outline-none focus:border-[oklch(0.78_0.14_80/0.4)] transition-colors"
+          />
+          <button
+            type="submit"
+            disabled={!isValidEmail || loading}
+            className="h-11 px-6 text-sm font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Unlocking...
+              </span>
+            ) : (
+              'Unlock Report'
+            )}
+          </button>
+        </form>
+
+        {error && (
+          <p className="text-xs text-[oklch(0.62_0.18_25)] mt-2">{error}</p>
+        )}
+
+        <p className="text-[10px] text-[oklch(0.35_0.01_260)] mt-3 text-center">
+          No spam. We only send your valuation report link.
+        </p>
+      </div>
     </motion.div>
   )
 }

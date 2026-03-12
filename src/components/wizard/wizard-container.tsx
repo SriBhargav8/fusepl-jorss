@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useValuationStore } from '@/stores/valuation-store'
 import { calculateValuation } from '@/lib/valuation'
 import { WIZARD_STEPS } from '@/lib/constants'
-import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CompanyStep } from './company-step'
 import { TeamStep } from './team-step'
@@ -96,17 +95,27 @@ export function WizardContainer() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4">
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <p className="text-[11px] font-semibold text-[oklch(0.78_0.14_80)] uppercase tracking-[0.2em] mb-3">
+          Step {currentStep} of 6
+        </p>
+        <h1 className="font-heading text-2xl sm:text-3xl text-[oklch(0.93_0.005_80)]">
+          {WIZARD_STEPS[currentStep - 1]}
+        </h1>
+      </div>
+
       {/* Progress bar */}
       <div className="mb-8">
-        <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
+        <div className="relative h-1 bg-[oklch(0.15_0.008_260)] rounded-full overflow-hidden">
           <motion.div
-            className="absolute inset-y-0 left-0 bg-amber-500 rounded-full"
+            className="absolute inset-y-0 left-0 bg-[oklch(0.78_0.14_80)] rounded-full"
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           />
         </div>
-        <div className="flex justify-between mt-3">
+        <div className="flex justify-between mt-4">
           {WIZARD_STEPS.map((label, i) => {
             const stepNum = i + 1
             const isActive = stepNum === currentStep
@@ -117,38 +126,40 @@ export function WizardContainer() {
                 key={label}
                 onClick={() => handleStepClick(stepNum)}
                 disabled={!isClickable}
-                className={`text-xs font-medium transition-colors ${
-                  isActive
-                    ? 'text-amber-400'
-                    : isCompleted
-                    ? 'text-emerald-400 cursor-pointer'
-                    : isClickable
-                    ? 'text-slate-400 cursor-pointer hover:text-slate-300'
-                    : 'text-slate-600 cursor-not-allowed'
-                }`}
+                className="flex flex-col items-center gap-1.5 transition-colors"
               >
-                <motion.span
-                  animate={isActive ? { scale: 1.1 } : { scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs mb-1 ${
-                    isActive
-                      ? 'bg-amber-400/20 text-amber-400 ring-1 ring-amber-400/50'
+                <span
+                  className={`
+                    inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-medium transition-all
+                    ${isActive
+                      ? 'bg-[oklch(0.78_0.14_80/0.15)] text-[oklch(0.78_0.14_80)] ring-1 ring-[oklch(0.78_0.14_80/0.4)]'
                       : isCompleted
-                      ? 'bg-emerald-400/20 text-emerald-400'
-                      : 'bg-slate-800 text-slate-500'
-                  }`}
+                      ? 'bg-[oklch(0.65_0.16_155/0.15)] text-[oklch(0.65_0.16_155)]'
+                      : isClickable
+                      ? 'bg-[oklch(0.15_0.008_260)] text-[oklch(0.45_0.01_260)] cursor-pointer'
+                      : 'bg-[oklch(0.12_0.008_260)] text-[oklch(0.30_0.01_260)] cursor-not-allowed'
+                    }
+                  `}
                 >
                   {isCompleted ? '✓' : stepNum}
-                </motion.span>
-                <span className="block">{label}</span>
+                </span>
+                <span className={`text-[10px] hidden sm:block ${
+                  isActive
+                    ? 'text-[oklch(0.78_0.14_80)]'
+                    : isCompleted
+                    ? 'text-[oklch(0.50_0.01_260)]'
+                    : 'text-[oklch(0.30_0.01_260)]'
+                }`}>
+                  {label}
+                </span>
               </button>
             )
           })}
         </div>
       </div>
 
-      {/* Step content with AnimatePresence */}
-      <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 md:p-8 mb-6 overflow-hidden">
+      {/* Step content */}
+      <div className="bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] rounded-xl p-6 md:p-8 mb-6 overflow-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentStep}
@@ -165,30 +176,29 @@ export function WizardContainer() {
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button
-          variant="outline"
+        <button
           onClick={handlePrev}
           disabled={currentStep === 1}
-          className="border-slate-700 text-slate-300 hover:bg-slate-800"
+          className="h-10 px-5 text-sm font-medium rounded-lg border border-[oklch(0.20_0.008_260)] text-[oklch(0.55_0.01_260)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.75_0.005_80)] disabled:opacity-30 disabled:cursor-not-allowed"
         >
           Back
-        </Button>
-        <Button
+        </button>
+        <button
           onClick={handleNext}
           disabled={computing}
-          className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold px-8"
+          className="h-10 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98] disabled:opacity-50"
         >
           {computing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Computing...
-            </>
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Computing 10 methods...
+            </span>
           ) : currentStep === 6 ? (
             'Get Valuation'
           ) : (
             'Continue'
           )}
-        </Button>
+        </button>
       </div>
     </div>
   )

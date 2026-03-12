@@ -31,7 +31,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="text-slate-400 hover:text-white"
+            className="text-[oklch(0.50_0.01_260)] hover:text-[oklch(0.85_0.005_80)]"
           />
         }
       >
@@ -41,15 +41,15 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
 
       <SheetContent
         side="right"
-        className="w-[300px] bg-slate-950/95 backdrop-blur-xl border-slate-800/50 p-0"
+        className="w-[300px] bg-[oklch(0.08_0.008_260/0.95)] backdrop-blur-xl border-[oklch(0.18_0.008_260)] p-0"
       >
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
 
         <div className="flex flex-col h-full">
           {/* Branding */}
-          <div className="flex items-center gap-2 p-5 border-b border-slate-800/50">
+          <div className="flex items-center gap-2 p-5 border-b border-[oklch(0.18_0.008_260)]">
             <span className="text-lg">&#x1f984;</span>
-            <span className="font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="font-heading text-lg text-gold-gradient">
               First Unicorn Startup
             </span>
           </div>
@@ -69,8 +69,8 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                     relative rounded-lg px-4 py-3 text-sm font-medium transition-colors
                     ${
                       isActive
-                        ? 'bg-amber-500/10 text-amber-400 border-l-2 border-amber-400'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-[oklch(0.78_0.14_80/0.08)] text-[oklch(0.78_0.14_80)] border-l-2 border-[oklch(0.78_0.14_80)]'
+                        : 'text-[oklch(0.50_0.01_260)] hover:text-[oklch(0.85_0.005_80)] hover:bg-[oklch(0.12_0.008_260)]'
                     }
                   `}
                 >
@@ -81,11 +81,11 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
           </nav>
 
           {/* CTA at bottom */}
-          <div className="p-4 border-t border-slate-800/50">
+          <div className="p-4 border-t border-[oklch(0.18_0.008_260)]">
             <Link
               href="/valuation"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center w-full rounded-lg h-10 px-4 text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-slate-950 transition-colors"
+              className="flex items-center justify-center w-full rounded-lg h-10 px-4 text-sm font-semibold bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)]"
             >
               Get Valuation
             </Link>

@@ -21,7 +21,7 @@ export default function NotFound() {
             Go Home
           </Link>
           <Link
-            href="/valuation/purpose"
+            href="/valuation"
             className="inline-flex items-center justify-center h-10 px-6 text-sm font-medium border border-[oklch(0.78_0.14_80/0.2)] text-[oklch(0.70_0.05_80)] rounded-lg transition-all hover:border-[oklch(0.78_0.14_80/0.35)]"
           >
             Get Valuation

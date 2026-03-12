@@ -58,7 +58,7 @@ export function Header() {
 
           <div className="ml-5 pl-5 border-l border-[oklch(0.78_0.14_80/0.12)]">
             <Link
-              href="/valuation/purpose"
+              href="/valuation"
               className="inline-flex items-center justify-center rounded-lg h-8 px-5 text-[13px] font-semibold tracking-wide bg-[oklch(0.78_0.14_80)] text-[oklch(0.10_0_0)] transition-all hover:bg-[oklch(0.82_0.14_80)] hover:shadow-[0_0_24px_oklch(0.78_0.14_80/0.2)] active:scale-[0.98]"
             >
               Get Valuation

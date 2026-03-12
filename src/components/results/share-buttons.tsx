@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { formatINR } from '@/lib/utils'
 
 interface Props {
@@ -36,17 +35,23 @@ export function ShareButtons({ compositeValue, companyName }: Props) {
     )
   }
 
+  const buttons = [
+    { label: 'LinkedIn', onClick: shareLinkedIn },
+    { label: 'Twitter', onClick: shareTwitter },
+    { label: 'WhatsApp', onClick: shareWhatsApp },
+  ]
+
   return (
     <div className="flex gap-2">
-      <Button variant="outline" size="sm" onClick={shareLinkedIn} className="border-slate-700 text-slate-300 hover:bg-slate-800">
-        Share on LinkedIn
-      </Button>
-      <Button variant="outline" size="sm" onClick={shareTwitter} className="border-slate-700 text-slate-300 hover:bg-slate-800">
-        Share on Twitter
-      </Button>
-      <Button variant="outline" size="sm" onClick={shareWhatsApp} className="border-slate-700 text-slate-300 hover:bg-slate-800">
-        Share on WhatsApp
-      </Button>
+      {buttons.map(({ label, onClick }) => (
+        <button
+          key={label}
+          onClick={onClick}
+          className="h-9 px-4 text-xs font-medium rounded-lg border border-[oklch(0.20_0.008_260)] text-[oklch(0.55_0.01_260)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.78_0.14_80)]"
+        >
+          {label}
+        </button>
+      ))}
     </div>
   )
 }

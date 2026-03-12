@@ -1,7 +1,6 @@
 'use client'
 
 import { AreaChart, Area, XAxis, YAxis, ReferenceLine, ResponsiveContainer, Tooltip } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { MonteCarloResult } from '@/types'
 import { formatINR } from '@/lib/utils'
 
@@ -23,45 +22,49 @@ export function MonteCarloChart({ monteCarlo }: Props) {
 
   const percentileLines = [
     { value: p10, label: 'P10', color: '#ef4444' },
-    { value: p25, label: 'P25', color: '#f97316' },
-    { value: p50, label: 'P50', color: '#22c55e' },
-    { value: p75, label: 'P75', color: '#f97316' },
+    { value: p25, label: 'P25', color: 'oklch(0.78 0.14 80)' },
+    { value: p50, label: 'P50', color: 'oklch(0.65 0.16 155)' },
+    { value: p75, label: 'P75', color: 'oklch(0.78 0.14 80)' },
     { value: p90, label: 'P90', color: '#ef4444' },
   ]
 
   return (
-    <Card className="bg-slate-900 border-slate-800">
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base text-white">Monte Carlo Simulation</CardTitle>
-          <span className="text-xs text-slate-500">
-            {monteCarlo.iterations_valid.toLocaleString()} / {monteCarlo.iterations_total.toLocaleString()} valid iterations
-          </span>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <div className="rounded-xl bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-3 border-b border-[oklch(0.15_0.008_260)]">
+        <h3 className="text-sm font-semibold text-[oklch(0.78_0.14_80)]">Monte Carlo Simulation</h3>
+        <span className="text-[10px] text-[oklch(0.40_0.01_260)]">
+          {monteCarlo.iterations_valid.toLocaleString()} / {monteCarlo.iterations_total.toLocaleString()} valid
+        </span>
+      </div>
+      <div className="p-5">
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={points} margin={{ top: 5, right: 20, bottom: 5, left: 20 }}>
               <XAxis
                 dataKey="value"
                 tickFormatter={(v) => formatINR(v)}
-                tick={{ fontSize: 10, fill: '#94a3b8' }}
+                tick={{ fontSize: 10, fill: 'oklch(0.45 0.01 260)' }}
                 interval="preserveStartEnd"
-                stroke="#334155"
+                stroke="oklch(0.18 0.008 260)"
               />
               <YAxis hide />
               <Tooltip
                 formatter={() => ['Relative likelihood', '']}
                 labelFormatter={(v) => formatINR(v as number)}
-                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', color: '#e2e8f0' }}
+                contentStyle={{
+                  backgroundColor: 'oklch(0.12 0.008 260)',
+                  border: '1px solid oklch(0.22 0.008 260)',
+                  color: 'oklch(0.85 0.005 80)',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
               />
               <Area
                 type="monotone"
                 dataKey="density"
-                stroke="#f59e0b"
-                fill="#f59e0b"
-                fillOpacity={0.15}
+                stroke="oklch(0.78 0.14 80)"
+                fill="oklch(0.78 0.14 80)"
+                fillOpacity={0.12}
               />
               {percentileLines.map(pl => (
                 <ReferenceLine
@@ -76,14 +79,14 @@ export function MonteCarloChart({ monteCarlo }: Props) {
           </ResponsiveContainer>
         </div>
 
-        <div className="flex justify-between text-xs text-slate-500 mt-2 px-4">
-          <span>P10: {formatINR(p10)}</span>
-          <span>P25: {formatINR(p25)}</span>
-          <span className="font-medium text-amber-400">P50: {formatINR(p50)}</span>
-          <span>P75: {formatINR(p75)}</span>
-          <span>P90: {formatINR(p90)}</span>
+        <div className="flex justify-between text-[10px] mt-3 px-2">
+          <span className="text-[oklch(0.40_0.01_260)]">P10: {formatINR(p10)}</span>
+          <span className="text-[oklch(0.45_0.01_260)]">P25: {formatINR(p25)}</span>
+          <span className="font-semibold text-[oklch(0.78_0.14_80)]">P50: {formatINR(p50)}</span>
+          <span className="text-[oklch(0.45_0.01_260)]">P75: {formatINR(p75)}</span>
+          <span className="text-[oklch(0.40_0.01_260)]">P90: {formatINR(p90)}</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

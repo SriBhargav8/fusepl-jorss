@@ -1,17 +1,25 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { METHOD_LABELS } from '@/lib/constants'
 import type { MethodResult, MonteCarloResult } from '@/types'
 import { APPROACH_ORDER, APPROACH_LABELS } from '@/types'
 import { formatINR } from '@/lib/utils'
 
-function confidenceBadge(confidence: number) {
-  if (confidence >= 0.7) return <Badge className="bg-green-600/20 text-green-400 border-green-600/30">High</Badge>
-  if (confidence >= 0.4) return <Badge className="bg-amber-600/20 text-amber-400 border-amber-600/30">Medium</Badge>
-  return <Badge className="bg-slate-600/20 text-slate-400 border-slate-600/30">Low</Badge>
+function confidenceDot(confidence: number) {
+  const color =
+    confidence >= 0.7 ? 'bg-[oklch(0.65_0.16_155)]' :
+    confidence >= 0.4 ? 'bg-[oklch(0.78_0.14_80)]' :
+    'bg-[oklch(0.40_0.01_260)]'
+  const label =
+    confidence >= 0.7 ? 'High' :
+    confidence >= 0.4 ? 'Medium' : 'Low'
+  return (
+    <span className="flex items-center gap-1.5">
+      <span className={`w-1.5 h-1.5 rounded-full ${color}`} />
+      <span className="text-[10px] text-[oklch(0.45_0.01_260)]">{label}</span>
+    </span>
+  )
 }
 
 interface Props {
@@ -32,7 +40,7 @@ export function MethodCards({ methods, monteCarlo }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {grouped.map((group, i) => (
         <motion.div
           key={group.approach}
@@ -41,34 +49,32 @@ export function MethodCards({ methods, monteCarlo }: Props) {
           viewport={{ once: true, margin: '-30px' }}
           transition={{ duration: 0.4, delay: i * 0.05 }}
         >
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base text-white">{group.label}</CardTitle>
-                <span className="text-sm font-medium text-slate-400">
-                  Avg: {formatINR(approachAvg(group.methods))}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          <div className="rounded-xl bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[oklch(0.15_0.008_260)]">
+              <h3 className="text-sm font-semibold text-[oklch(0.78_0.14_80)]">{group.label}</h3>
+              <span className="text-xs font-medium text-[oklch(0.50_0.01_260)]">
+                Avg: {formatINR(approachAvg(group.methods))}
+              </span>
+            </div>
+            <div className="divide-y divide-[oklch(0.15_0.008_260)]">
               {group.methods.map(m => (
-                <div key={m.method} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-slate-300">{METHOD_LABELS[m.method] ?? m.method}</span>
-                    {confidenceBadge(m.confidence)}
+                <div key={m.method} className="flex items-center justify-between px-5 py-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-[oklch(0.75_0.005_80)]">{METHOD_LABELS[m.method] ?? m.method}</span>
+                    {confidenceDot(m.confidence)}
                   </div>
                   <div className="text-right">
-                    <span className="font-medium text-white">{formatINR(m.value)}</span>
+                    <span className="font-medium text-sm text-[oklch(0.93_0.005_80)]">{formatINR(m.value)}</span>
                     {m.method === 'dcf' && monteCarlo && (
-                      <span className="text-xs text-slate-500 ml-2">
+                      <span className="text-[10px] text-[oklch(0.40_0.01_260)] ml-2">
                         MC: {formatINR(monteCarlo.p10)}–{formatINR(monteCarlo.p90)}
                       </span>
                     )}
                   </div>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </motion.div>
       ))}
     </div>

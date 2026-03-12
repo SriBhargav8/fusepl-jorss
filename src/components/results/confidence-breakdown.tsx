@@ -1,7 +1,5 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
 import type { ValuationResult } from '@/types'
 
 interface Props {
@@ -34,26 +32,34 @@ export function ConfidenceBreakdown({ result }: Props) {
   ]
 
   return (
-    <Card className="bg-slate-900 border-slate-800">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base text-white">What Drove Your Confidence Score</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {breakdown.map(item => (
-          <div key={item.label} className="space-y-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-slate-300">{item.label}</span>
-              <span className="font-medium text-white">{item.score}/{item.max}</span>
+    <div className="rounded-xl bg-[oklch(0.10_0.008_260)] border border-[oklch(0.18_0.008_260)] overflow-hidden">
+      <div className="px-5 py-3 border-b border-[oklch(0.15_0.008_260)]">
+        <h3 className="text-sm font-semibold text-[oklch(0.78_0.14_80)]">Confidence Breakdown</h3>
+      </div>
+      <div className="p-5 space-y-4">
+        {breakdown.map(item => {
+          const pct = (item.score / item.max) * 100
+          return (
+            <div key={item.label} className="space-y-1.5">
+              <div className="flex justify-between text-xs">
+                <span className="text-[oklch(0.65_0.005_80)]">{item.label}</span>
+                <span className="font-medium text-[oklch(0.85_0.005_80)]">{item.score}/{item.max}</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-[oklch(0.15_0.008_260)] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-[oklch(0.78_0.14_80)] transition-all duration-500"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-[oklch(0.40_0.01_260)]">{item.description}</p>
             </div>
-            <Progress value={(item.score / item.max) * 100} className="h-2" />
-            <p className="text-xs text-slate-500">{item.description}</p>
-          </div>
-        ))}
-        <div className="border-t border-slate-800 pt-3 flex justify-between font-medium">
-          <span className="text-slate-300">Total Confidence</span>
-          <span className="text-amber-400">{result.confidence_score}/100</span>
+          )
+        })}
+        <div className="border-t border-[oklch(0.18_0.008_260)] pt-3 flex justify-between">
+          <span className="text-sm font-medium text-[oklch(0.65_0.005_80)]">Total Confidence</span>
+          <span className="text-sm font-bold text-[oklch(0.78_0.14_80)]">{result.confidence_score}/100</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
