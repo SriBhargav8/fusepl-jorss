@@ -78,22 +78,25 @@ export function CompanyStep() {
         }
 
         if (fields.length > 0) {
-          setPrefillStatus(fields.length >= 3 ? 'success' : 'partial')
-          setPrefillMessage(`Detected: ${fields.join(', ')}`)
-          toast.success(`Auto-filled ${fields.length} fields from website`)
+          const isPartial = data.partial || fields.length < 3
+          setPrefillStatus(isPartial ? 'partial' : 'success')
+          const msg = `Detected: ${fields.join(', ')}`
+          setPrefillMessage(data.note ? `${msg}. ${data.note}` : msg)
+          toast.success(`Auto-filled ${fields.length} field${fields.length > 1 ? 's' : ''}`)
+        } else if (data.note) {
+          setPrefillStatus('partial')
+          setPrefillMessage(data.note)
         } else {
           setPrefillStatus('partial')
-          setPrefillMessage('Website loaded but no fields could be detected. Please fill manually.')
+          setPrefillMessage('No fields detected — please fill manually below.')
         }
+      } else if (!res.ok) {
+        // HTTP error from API — still try to show a helpful message
+        setPrefillStatus('error')
+        setPrefillMessage(data.hint || data.note || 'Website unreachable — please fill the fields manually below.')
       } else {
         setPrefillStatus('error')
-        setPrefillMessage(
-          data.hint || (
-            data.error === 'Could not fetch website'
-              ? 'Website unreachable — please fill the fields manually below.'
-              : 'Could not extract data — please fill the fields manually below.'
-          )
-        )
+        setPrefillMessage('Could not extract data — please fill the fields manually below.')
       }
     } catch {
       setPrefillStatus('error')

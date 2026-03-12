@@ -197,7 +197,34 @@ const SECTOR_KEYWORDS: Record<string, string[]> = {
   insurance_distribution: ['insurance aggregat', 'policy compar', 'insurance marketplace'],
 }
 
-function detectSector(text: string): string {
+// Well-known Indian startup domain → sector mappings
+const KNOWN_DOMAINS: Record<string, string> = {
+  'razorpay.com': 'fintech_payments', 'paytm.com': 'fintech_payments', 'cashfree.com': 'fintech_payments',
+  'zerodha.com': 'fintech_neobroking', 'groww.in': 'fintech_neobroking', 'upstox.com': 'fintech_neobroking',
+  'cred.club': 'fintech_payments', 'bharatpe.com': 'fintech_payments', 'phonepe.com': 'fintech_payments',
+  'zomato.com': 'foodtech_delivery', 'swiggy.com': 'foodtech_delivery', 'blinkit.com': 'ecommerce_grocery',
+  'flipkart.com': 'ecommerce_general', 'meesho.com': 'ecommerce_general', 'myntra.com': 'ecommerce_fashion',
+  'nykaa.com': 'ecommerce_beauty', 'purplle.com': 'ecommerce_beauty', 'mamaearth.in': 'ecommerce_beauty',
+  'freshworks.com': 'saas_horizontal', 'zoho.com': 'saas_horizontal', 'browserstack.com': 'saas_devtools',
+  'postman.com': 'saas_devtools', 'darwinbox.com': 'hrtech_recruitment', 'leadsquared.com': 'saas_horizontal',
+  'byju.com': 'edtech_k12', 'byjus.com': 'edtech_k12', 'unacademy.com': 'edtech_test_prep',
+  'physicswallah.in': 'edtech_test_prep', 'upgrad.com': 'edtech_upskilling', 'scaler.com': 'edtech_coding',
+  'ola.com': 'auto_ev', 'olaelectric.com': 'auto_ev', 'ather.in': 'auto_ev',
+  'delhivery.com': 'logistics_last_mile', 'dunzo.com': 'logistics_last_mile',
+  'urbancompany.com': 'marketplace', 'zetwerk.com': 'marketplace',
+  'dream11.com': 'gaming_mobile', 'mpl.live': 'gaming_mobile',
+  'practo.com': 'healthtech_services', 'pharmeasy.in': 'healthtech_pharma',
+  'oyo.com': 'travel_booking', 'oyorooms.com': 'travel_booking', 'makemytrip.com': 'travel_booking',
+  'lenskart.com': 'ecommerce_beauty', 'sharechat.com': 'social_impact',
+}
+
+function detectSector(text: string, hostname?: string): string {
+  // Check known domains first
+  if (hostname) {
+    const domain = hostname.replace(/^www\./, '')
+    if (KNOWN_DOMAINS[domain]) return KNOWN_DOMAINS[domain]
+  }
+
   const lower = text.toLowerCase()
   let bestSector = 'other'
   let bestScore = 0
@@ -286,79 +313,87 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 })
     }
 
-    // Fetch the webpage with a realistic User-Agent
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 10000)
+    // Try to extract from URL itself first (domain, path keywords)
+    const urlObj = new URL(normalizedUrl)
+    const urlText = `${urlObj.hostname} ${urlObj.pathname}`.replace(/[/\-_.]/g, ' ')
 
-    let html: string
+    // Attempt to fetch the webpage — fail gracefully
+    let html = ''
+    let fetchSucceeded = false
     try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 7000)
+
       const response = await fetch(normalizedUrl, {
         signal: controller.signal,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
           Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
         },
         redirect: 'follow',
       })
 
-      if (!response.ok) {
-        return NextResponse.json({
-          success: false,
-          error: 'Could not fetch website',
-          hint: `The website returned status ${response.status}. Please fill the fields manually.`,
-        }, { status: 422 })
-      }
-
-      html = await response.text()
-    } catch (fetchErr) {
-      const isTimeout = fetchErr instanceof DOMException && fetchErr.name === 'AbortError'
-      return NextResponse.json({
-        success: false,
-        error: 'Could not fetch website',
-        hint: isTimeout
-          ? 'The website took too long to respond. Please fill the fields manually.'
-          : 'The website could not be reached. Check the URL and try again.',
-      }, { status: 422 })
-    } finally {
       clearTimeout(timeout)
+
+      if (response.ok) {
+        html = await response.text()
+        fetchSucceeded = true
+      }
+    } catch {
+      // Fetch failed — we'll still try to extract from the URL itself
     }
 
-    // Extract text content (strip HTML)
-    const textContent = html
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 10000)
+    // Extract text content (strip HTML) — works even if html is empty
+    let textContent = ''
+    let title = ''
+    let description = ''
+    let ogTitle = ''
 
-    // Extract metadata
-    const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i)
-    const descriptionMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)/i)
-    const ogTitleMatch = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)/i)
+    if (html) {
+      textContent = html
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .slice(0, 10000)
 
-    const title = titleMatch?.[1]?.trim() || ''
-    const description = descriptionMatch?.[1]?.trim() || ''
-    const ogTitle = ogTitleMatch?.[1]?.trim() || ''
+      title = html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1]?.trim() || ''
+      description = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || ''
+      ogTitle = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || ''
+    }
 
-    const allText = `${title} ${description} ${ogTitle} ${textContent}`
+    // Combine all available text — URL text always included as fallback
+    const allText = `${urlText} ${title} ${description} ${ogTitle} ${textContent}`
 
     // Detect fields
-    const sector = detectSector(allText)
-    const teamSize = extractTeamSize(allText)
+    const sector = detectSector(allText, urlObj.hostname)
+    const teamSize = fetchSucceeded ? extractTeamSize(allText) : null
     const city = extractCity(allText)
-    const foundingYear = extractFoundingYear(allText)
+    const foundingYear = fetchSucceeded ? extractFoundingYear(allText) : null
 
-    // Extract company name from title or og:title
+    // Extract company name from domain if no HTML title available
     let companyName = ogTitle || title
     companyName = companyName
       .replace(/\s*[-|–—]\s*.*/g, '')
       .replace(/\s*\(.*?\)/g, '')
       .trim()
 
+    // Fallback: derive company name from domain
+    if (!companyName) {
+      const domainParts = urlObj.hostname.replace(/^www\./, '').split('.')
+      if (domainParts.length > 0) {
+        const raw = domainParts[0]
+        companyName = raw.charAt(0).toUpperCase() + raw.slice(1)
+      }
+    }
+
+    const hasData = companyName || sector !== 'other' || city
+
     return NextResponse.json({
       success: true,
+      partial: !fetchSucceeded,
       data: {
         company_name: companyName || null,
         sector: sector !== 'other' ? sector : null,
@@ -367,6 +402,8 @@ export async function POST(req: NextRequest) {
         team_size: teamSize,
         description: description.slice(0, 200) || null,
       },
+      ...((!fetchSucceeded && hasData) ? { note: 'Website was unreachable, but we detected some fields from the URL.' } : {}),
+      ...(!hasData ? { note: 'Could not detect fields. Please fill manually.' } : {}),
     })
   } catch (err) {
     console.error('Analyze URL error:', err)
