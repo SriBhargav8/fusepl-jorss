@@ -72,9 +72,28 @@ describe('calculateValuation (orchestrator)', () => {
     expect(result.ibc_recovery_range!.low).toBeLessThan(result.ibc_recovery_range!.high)
   })
 
-  it('sets monte_carlo to null (sync mode)', () => {
+  it('runs Monte Carlo simulation with valid percentiles', () => {
     const result = calculateValuation(makeInputs())
-    expect(result.monte_carlo).toBeNull()
+    expect(result.monte_carlo).not.toBeNull()
+    expect(result.monte_carlo!.p10).toBeGreaterThan(0)
+    expect(result.monte_carlo!.p50).toBeGreaterThan(0)
+    expect(result.monte_carlo!.p90).toBeGreaterThan(0)
+    expect(result.monte_carlo!.p10).toBeLessThan(result.monte_carlo!.p50)
+    expect(result.monte_carlo!.p50).toBeLessThan(result.monte_carlo!.p90)
+    expect(result.monte_carlo!.iterations_total).toBe(10000)
+    expect(result.monte_carlo!.iterations_valid).toBeGreaterThan(1000)
+  })
+
+  it('uses MC P10/P90 for composite range instead of placeholders', () => {
+    const result = calculateValuation(makeInputs())
+    expect(result.composite_low).toBe(result.monte_carlo!.p10)
+    expect(result.composite_high).toBe(result.monte_carlo!.p90)
+  })
+
+  it('runs Monte Carlo for pre-revenue startups', () => {
+    const result = calculateValuation(makeInputs({ annual_revenue: 0, gross_margin_pct: 0 }))
+    expect(result.monte_carlo).not.toBeNull()
+    expect(result.monte_carlo!.p50).toBeGreaterThan(0)
   })
 
   it('produces different results for different sectors', () => {
