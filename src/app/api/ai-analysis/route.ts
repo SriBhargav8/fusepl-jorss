@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       .from('valuations')
       .select('id', { count: 'exact', head: true })
       .not('ai_narrative', 'is', null)
-      .gte('updated_at', todayStart.toISOString())
+      .gte('created_at', todayStart.toISOString())
 
     if ((dailyCount ?? 0) >= 100) {
       return NextResponse.json({ error: 'Daily AI analysis limit reached. Try again tomorrow.' }, { status: 429 })
