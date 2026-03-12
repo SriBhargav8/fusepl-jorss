@@ -38,6 +38,13 @@ const SIGNALS = [
     metric: '3,952 outcomes',
     color: 'oklch(0.72 0.14 25)',
   },
+  {
+    icon: '🗂️',
+    label: '164 Sectors',
+    text: 'Exhaustive Indian startup taxonomy — from Fintech to DeepTech, AgriTech to SpaceTech. Every niche covered with sector-specific benchmarks.',
+    metric: '27 verticals',
+    color: 'oklch(0.65 0.16 155)',
+  },
 ]
 
 const containerVariants = {
