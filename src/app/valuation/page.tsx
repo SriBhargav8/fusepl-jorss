@@ -15,7 +15,7 @@ import { ShareButtons } from '@/components/results/share-buttons'
 import { EmailGate } from '@/components/results/email-gate'
 import { PDFDownloadButton } from '@/components/report/pdf-download-button'
 import { formatINR } from '@/lib/utils'
-import { BarChart3, Plus, Sparkles } from 'lucide-react'
+import { ArrowRight, BarChart3, Lock, Plus, Sparkles } from 'lucide-react'
 
 type PageMode = 'loading' | 'interstitial' | 'wizard' | 'results'
 
@@ -24,6 +24,7 @@ export default function ValuationPage() {
   const router = useRouter()
   const [mode, setMode] = useState<PageMode>('loading')
   const [hydrated, setHydrated] = useState(false)
+  const [gateOpen, setGateOpen] = useState(false)
 
   // Wait for Zustand hydration from localStorage
   useEffect(() => {
@@ -170,11 +171,8 @@ export default function ValuationPage() {
               />
             </div>
 
-            {/* EMAIL GATE */}
-            {!email && <EmailGate onUnlocked={handleUnlocked} />}
-
             {/* GATED — after email capture */}
-            {email && (
+            {email ? (
               <>
                 <MethodCards
                   methods={result.methods}
@@ -208,7 +206,29 @@ export default function ValuationPage() {
                   />
                 </div>
               </>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-center py-6"
+              >
+                <button
+                  onClick={() => setGateOpen(true)}
+                  className="group inline-flex items-center gap-3 h-14 px-10 text-sm font-semibold rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_32px_oklch(0.62_0.22_330/0.25)] active:scale-[0.98]"
+                >
+                  <Lock className="w-4 h-4 text-[oklch(0.62_0.22_330)]" />
+                  Unlock Full Report & PDF
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+                <p className="text-[11px] text-[oklch(0.45_0.01_250)] mt-3">
+                  Confidence breakdown, comparable startups, PDF download — free during beta
+                </p>
+              </motion.div>
             )}
+
+            {/* Email gate modal */}
+            <EmailGate open={gateOpen} onOpenChange={setGateOpen} onUnlocked={handleUnlocked} />
           </motion.div>
         </AnimatePresence>
       </div>
