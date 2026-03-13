@@ -150,31 +150,18 @@ export default function ValuationPage() {
               </button>
             </div>
 
+            {/* FREE — visible to all */}
             <ValuationReveal result={result} companyName={inputs.company_name} />
 
             <MethodCards
               methods={result.methods}
               monteCarlo={result.monte_carlo}
+              unlocked={!!email}
             />
 
             {result.monte_carlo && (
               <MonteCarloChart monteCarlo={result.monte_carlo} />
             )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <MethodContribution
-                methods={result.methods}
-                compositeValue={result.composite_value}
-              />
-              <ConfidenceBreakdown result={result} />
-            </div>
-
-            <ComparablesPreview
-              sector={inputs.sector}
-              stage={inputs.stage}
-              revenue={inputs.annual_revenue}
-              compositeValue={result.composite_value}
-            />
 
             <div className="flex justify-center">
               <ShareButtons
@@ -183,20 +170,44 @@ export default function ValuationPage() {
               />
             </div>
 
-            {/* Email gate — always show if no email captured yet */}
-            {!email ? (
-              <EmailGate onUnlocked={handleUnlocked} />
-            ) : (
-              <div className="text-center space-y-4 py-4">
-                <PDFDownloadButton
-                  valuation={{
-                    company_name: inputs.company_name,
-                    sector: inputs.sector,
-                    stage: inputs.stage,
-                  }}
-                  result={result}
+            {/* EMAIL GATE */}
+            {!email && <EmailGate onUnlocked={handleUnlocked} />}
+
+            {/* GATED — after email capture */}
+            {email && (
+              <>
+                <MethodCards
+                  methods={result.methods}
+                  monteCarlo={result.monte_carlo}
+                  unlocked
                 />
-              </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <MethodContribution
+                    methods={result.methods}
+                    compositeValue={result.composite_value}
+                  />
+                  <ConfidenceBreakdown result={result} />
+                </div>
+
+                <ComparablesPreview
+                  sector={inputs.sector}
+                  stage={inputs.stage}
+                  revenue={inputs.annual_revenue}
+                  compositeValue={result.composite_value}
+                />
+
+                <div className="text-center space-y-4 py-4">
+                  <PDFDownloadButton
+                    valuation={{
+                      company_name: inputs.company_name,
+                      sector: inputs.sector,
+                      stage: inputs.stage,
+                    }}
+                    result={result}
+                  />
+                </div>
+              </>
             )}
           </motion.div>
         </AnimatePresence>

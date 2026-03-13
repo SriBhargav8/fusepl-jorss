@@ -303,7 +303,7 @@ export function WizardContainer() {
       </div>
 
       {/* Step content */}
-      <div className="relative bg-gradient-to-b from-[oklch(1 0 0)] to-[oklch(0.98 0.002 260)] border border-[oklch(0.91 0.005 260)] rounded-2xl p-6 md:p-8 mb-6 overflow-hidden shadow-[0_4px_24px_oklch(0_0_0/0.06),inset_0_1px_0_oklch(1_0_0/0.5)]">
+      <div className="relative bg-gradient-to-b from-[oklch(1 0 0)] to-[oklch(0.98 0.002 260)] border border-[oklch(0.91 0.005 260)] rounded-2xl p-6 md:p-8 mb-6 shadow-[0_4px_24px_oklch(0_0_0/0.06),inset_0_1px_0_oklch(1_0_0/0.5)]">
         {/* Top border accent — warm gold */}
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[oklch(0.62_0.22_330/0.35)] to-transparent" />
         {/* Bottom edge */}

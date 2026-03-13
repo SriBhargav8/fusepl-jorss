@@ -79,7 +79,7 @@ function HealthSemicircleGauge({ score, color, label }: { score: number; color: 
   const arcPath = `M ${startX} ${startY} A ${r} ${r} 0 0 1 ${endX} ${endY}`
 
   return (
-    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260 / 0.9), oklch(0.97 0.003 260 / 0.7)), linear-gradient(180deg, oklch(0.72 0.12 155 / 0.04), transparent)' }}>
+    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260), oklch(0.97 0.003 260))' }}>
       {/* Grid-line background for dashboard feel */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{
         backgroundImage: `linear-gradient(oklch(0.78 0.14 75 / 0.5) 1px, transparent 1px), linear-gradient(90deg, oklch(0.78 0.14 75 / 0.5) 1px, transparent 1px)`,

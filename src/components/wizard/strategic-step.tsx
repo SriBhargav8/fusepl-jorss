@@ -41,7 +41,7 @@ function RiskThermometerCard({ score, color, label, message }: { score: number; 
   const fillHeight = (score / 100) * height
 
   return (
-    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260 / 0.8), oklch(0.97 0.003 260 / 0.6))' }}>
+    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260), oklch(0.97 0.003 260))' }}>
       {/* Subtle background icons */}
       <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-[0.04] pointer-events-none">
         <AlertTriangle className="w-10 h-10" /><ShieldCheck className="w-10 h-10" /><AlertTriangle className="w-10 h-10" />
@@ -164,7 +164,7 @@ export function StrategicStep() {
             <SelectTrigger className="bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] mt-1 h-10">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[oklch(0.985 0.002 260)] border-[oklch(0.91 0.005 260)]">
+            <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.985 0.002 260)] border-[oklch(0.91 0.005 260)]">
               {PARTNERSHIP_LEVELS.map(key => (
                 <SelectItem key={key} value={key} className="text-[oklch(0.15 0.02 260)] hover:bg-[oklch(0.91 0.005 260)]">
                   {PARTNERSHIP_LABELS[key]}

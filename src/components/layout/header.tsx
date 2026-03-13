@@ -16,7 +16,7 @@ export function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[oklch(0.91_0.005_260)] bg-[oklch(1_0_0/0.85)] backdrop-blur-2xl backdrop-saturate-150">
+    <header className="sticky top-0 z-50 w-full border-b border-[oklch(0.91_0.005_260)] bg-[oklch(0.995_0.001_260)]">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
           <Image src="/logo.png" alt="First Unicorn Startup" width={140} height={36} className="h-8 w-auto" priority />

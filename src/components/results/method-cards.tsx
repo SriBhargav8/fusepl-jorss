@@ -5,7 +5,7 @@ import { METHOD_LABELS } from '@/lib/constants'
 import type { MethodResult, MonteCarloResult, ValuationApproach } from '@/types'
 import { APPROACH_ORDER, APPROACH_LABELS } from '@/types'
 import { formatINR } from '@/lib/utils'
-import { TrendingUp, BarChart3, Landmark, Rocket } from 'lucide-react'
+import { TrendingUp, BarChart3, Landmark, Rocket, Lock } from 'lucide-react'
 
 const APPROACH_ICONS: Record<ValuationApproach, typeof TrendingUp> = {
   income: TrendingUp,
@@ -40,9 +40,10 @@ function confidenceBar(confidence: number) {
 interface Props {
   methods: MethodResult[]
   monteCarlo: MonteCarloResult | null
+  unlocked?: boolean
 }
 
-export function MethodCards({ methods, monteCarlo }: Props) {
+export function MethodCards({ methods, monteCarlo, unlocked }: Props) {
   const grouped = APPROACH_ORDER.map(approach => ({
     approach,
     label: APPROACH_LABELS[approach],
@@ -82,9 +83,11 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                     {group.label}
                   </h3>
                 </div>
-                <span className="text-xs font-medium text-[oklch(0.45 0.01 260)] tabular-nums">
-                  Avg: {formatINR(approachAvg(group.methods))}
-                </span>
+                {unlocked && (
+                  <span className="text-xs font-medium text-[oklch(0.45 0.01 260)] tabular-nums">
+                    Avg: {formatINR(approachAvg(group.methods))}
+                  </span>
+                )}
               </div>
 
               {/* Methods */}
@@ -98,7 +101,12 @@ export function MethodCards({ methods, monteCarlo }: Props) {
                       <span className="text-sm text-[oklch(0.25 0.02 260)]">
                         {METHOD_LABELS[m.method] ?? m.method}
                       </span>
-                      {confidenceBar(m.confidence)}
+                      {unlocked ? confidenceBar(m.confidence) : (
+                        <div className="flex items-center gap-1.5">
+                          <Lock className="w-3 h-3 text-[oklch(0.55 0.01 260)]" />
+                          <span className="text-[10px] text-[oklch(0.55 0.01 260)]">Unlock full analysis</span>
+                        </div>
+                      )}
                     </div>
                     <div className="text-right">
                       <span className="font-semibold text-sm text-[oklch(0.15 0.02 260)] tabular-nums">

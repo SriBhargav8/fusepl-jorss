@@ -287,7 +287,7 @@ export function CompanyStep() {
                   {CATEGORY_SHORT_LABELS[inputs.sector]}
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent className="bg-[oklch(0.96 0.005 260)] border-[oklch(0.91 0.005 260)] max-h-[320px]">
+              <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.96 0.005 260)] border-[oklch(0.91 0.005 260)] max-h-[320px]">
                 <SectorDropdownContent search={sectorSearch} onSearch={setSectorSearch} />
               </SelectContent>
             </Select>
@@ -319,7 +319,7 @@ export function CompanyStep() {
               <SelectTrigger className="bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] h-10">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[oklch(0.96 0.005 260)] border-[oklch(0.91 0.005 260)] max-h-[280px]">
+              <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.96 0.005 260)] border-[oklch(0.91 0.005 260)] max-h-[280px]">
                 <div className="px-2 pb-2 pt-1 sticky top-0 bg-[oklch(0.96 0.005 260)] z-10">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[oklch(0.50 0.01 260)]" />

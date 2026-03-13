@@ -222,7 +222,13 @@ export async function generateValuationPDF(data: PDFData): Promise<jsPDF> {
 
   y = addGoldTable(doc, y, [['Approach', 'Method', 'Value', 'Confidence']], methodRows)
 
-  // Method details
+  // Method details (filtered to safe keys only — protects proprietary internals)
+  const SAFE_DETAIL_KEYS = new Set([
+    'revenue', 'multiple_used', 'comparable_count', 'stage',
+    'sector', 'team_score', 'market_score', 'iterations',
+    'p10', 'p25', 'p50', 'p75', 'p90',
+  ])
+
   y = addSectionHeader(doc, 'Method Details', y)
   for (const m of data.result.methods) {
     if (!m.applicable) continue
@@ -238,7 +244,8 @@ export async function generateValuationPDF(data: PDFData): Promise<jsPDF> {
     if (m.details && Object.keys(m.details).length > 0) {
       doc.setFontSize(8)
       doc.setTextColor(...TEXT_MED)
-      for (const [key, val] of Object.entries(m.details)) {
+      const safeEntries = Object.entries(m.details).filter(([key]) => SAFE_DETAIL_KEYS.has(key))
+      for (const [key, val] of safeEntries) {
         doc.text(`${key}: ${val}`, 24, y)
         y += 4
       }

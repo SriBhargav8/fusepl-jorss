@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useValuationStore } from '@/stores/valuation-store'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -61,7 +61,7 @@ function ConcentricShieldRings({ score, color }: { score: number; color: string 
   ]
 
   return (
-    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ borderColor: 'oklch(0.32 0.02 200 / 0.4)', background: 'linear-gradient(135deg, oklch(0.98 0.003 260 / 0.8), oklch(0.97 0.003 260 / 0.6)), linear-gradient(180deg, oklch(0.50 0.06 200 / 0.03), transparent)' }}>
+    <div className="glass-card grain relative rounded-xl p-5 overflow-hidden" style={{ borderColor: 'oklch(0.32 0.02 200 / 0.4)', background: 'linear-gradient(135deg, oklch(0.98 0.003 260), oklch(0.97 0.003 260))' }}>
       {/* Subtle Shield icons */}
       <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-[0.04] pointer-events-none">
         <Shield className="w-10 h-10" /><Shield className="w-10 h-10" /><Shield className="w-10 h-10" />
@@ -115,8 +115,6 @@ function ConcentricShieldRings({ score, color }: { score: number; color: string 
 
 export function MarketProductStep() {
   const { inputs, setField } = useValuationStore()
-  const [hoveredAdvantage, setHoveredAdvantage] = useState<string | null>(null)
-
   const moatScore = useMemo(
     () => computeMoatScore(inputs.competitive_advantages, inputs.patents_count),
     [inputs.competitive_advantages, inputs.patents_count],
@@ -179,7 +177,7 @@ export function MarketProductStep() {
             <SelectTrigger className="bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] mt-1 h-10">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[oklch(0.985 0.002 260)] border-[oklch(0.91 0.005 260)]">
+            <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.985 0.002 260)] border-[oklch(0.91 0.005 260)]">
               {DEV_STAGES.map(key => (
                 <SelectItem key={key} value={key} className="text-[oklch(0.15 0.02 260)] hover:bg-[oklch(0.91 0.005 260)]">
                   {DEV_STAGE_LABELS[key]}
@@ -218,15 +216,13 @@ export function MarketProductStep() {
         </div>
         <div className="flex flex-wrap gap-2.5">
           {COMPETITIVE_ADVANTAGES.map(key => (
-            <div key={key} className="relative">
+            <div key={key} className="group relative">
               <label
                 className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg border cursor-pointer transition-all text-sm ${
                   inputs.competitive_advantages.includes(key)
                     ? 'border-[oklch(0.62_0.22_330/0.5)] bg-[oklch(0.62_0.22_330/0.10)] text-[oklch(0.75 0.18 162)] shadow-[0_0_12px_oklch(0.62_0.22_330/0.08)]'
                     : 'border-[oklch(0.91 0.005 260)] bg-[oklch(0.98 0.002 260)] text-[oklch(0.45 0.01 260)] hover:border-[oklch(0.35_0.008_260)] hover:bg-[oklch(0.985 0.002 260)]'
                 }`}
-                onMouseEnter={() => setHoveredAdvantage(key)}
-                onMouseLeave={() => setHoveredAdvantage(null)}
               >
                 <Checkbox
                   checked={inputs.competitive_advantages.includes(key)}
@@ -235,8 +231,8 @@ export function MarketProductStep() {
                 />
                 {COMPETITIVE_ADVANTAGE_LABELS[key]}
               </label>
-              {hoveredAdvantage === key && ADVANTAGE_DESCRIPTIONS[key] && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-white border border-[oklch(0.91_0.005_260)] text-[10px] text-[oklch(0.35_0.02_260)] whitespace-nowrap max-w-[250px] text-wrap z-50 shadow-lg pointer-events-none">
+              {ADVANTAGE_DESCRIPTIONS[key] && (
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-white border border-[oklch(0.91_0.005_260)] text-[10px] text-[oklch(0.35_0.02_260)] whitespace-nowrap max-w-[250px] text-wrap z-50 shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
                   {ADVANTAGE_DESCRIPTIONS[key]}
                   <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-r-[5px] border-t-[5px] border-l-transparent border-r-transparent border-t-[oklch(0.91_0.005_260)]" />
                 </div>
