@@ -140,7 +140,7 @@ export function EmailGate({ onUnlocked }: Props) {
               <button
                 type="submit"
                 disabled={!isValidEmail || loading}
-                className="group h-12 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.62 0.22 330)] text-white transition-all hover:bg-[oklch(0.55 0.20 330)] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
+                className="group h-12 px-6 text-sm font-semibold rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap flex items-center gap-2"
               >
                 {loading ? (
                   <>

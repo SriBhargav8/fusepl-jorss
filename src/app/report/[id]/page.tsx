@@ -178,7 +178,7 @@ export default function ReportPage() {
               Retry
             </Button>
             <Link href="/valuation">
-              <Button className="bg-[oklch(0.62_0.22_330)] hover:bg-[oklch(0.55_0.20_330)] text-white">
+              <Button className="bg-[#32373c] hover:bg-[#1d2024] text-white">
                 Create New Valuation
               </Button>
             </Link>

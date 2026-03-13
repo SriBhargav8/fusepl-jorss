@@ -26,7 +26,7 @@ export default function Error({
         )}
         <button
           onClick={reset}
-          className="inline-flex items-center justify-center h-10 px-6 text-sm font-semibold bg-[oklch(0.62 0.22 330)] text-white rounded-lg transition-all hover:bg-[oklch(0.55 0.20 330)]"
+          className="inline-flex items-center justify-center h-10 px-6 text-sm font-semibold bg-[#32373c] text-white rounded-lg transition-all hover:bg-[#1d2024]"
         >
           Try Again
         </button>

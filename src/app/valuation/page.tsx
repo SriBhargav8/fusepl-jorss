@@ -103,7 +103,7 @@ export default function ValuationPage() {
             </button>
             <button
               onClick={handleStartNew}
-              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg bg-[oklch(0.62 0.22 330)] text-white transition-all hover:bg-[oklch(0.55 0.20 330)] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 h-12 px-7 text-sm font-semibold rounded-lg bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] active:scale-[0.98]"
             >
               <Plus className="w-4 h-4" />
               Start New Valuation

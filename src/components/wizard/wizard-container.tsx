@@ -274,7 +274,7 @@ export function WizardContainer() {
                   className={`
                     inline-flex items-center justify-center w-8 h-8 rounded-full text-[11px] font-semibold transition-all duration-300
                     ${isActive
-                      ? 'bg-[oklch(0.62 0.22 330)] text-white shadow-[0_0_16px_oklch(0.62_0.22_330/0.3)]'
+                      ? 'bg-[#32373c] text-white shadow-[0_0_16px_oklch(0.62_0.22_330/0.3)]'
                       : isCompleted
                       ? 'bg-[oklch(0.65_0.16_155/0.15)] text-[oklch(0.65_0.16_155)] ring-1 ring-[oklch(0.65_0.16_155/0.3)]'
                       : isClickable
@@ -346,7 +346,7 @@ export function WizardContainer() {
         <button
           onClick={handleNext}
           disabled={computing}
-          className="btn-press focus-ring group inline-flex items-center gap-2 h-11 px-8 text-sm font-semibold rounded-lg bg-[oklch(0.62 0.22 330)] text-white transition-all hover:bg-[oklch(0.55 0.20 330)] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.25)] disabled:opacity-50"
+          className="btn-press focus-ring group inline-flex items-center gap-2 h-11 px-8 text-sm font-semibold rounded-lg bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.25)] disabled:opacity-50"
         >
           {computing ? (
             <>
