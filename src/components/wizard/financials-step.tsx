@@ -10,6 +10,19 @@ import { Slider } from '@/components/ui/slider'
 import { Activity, TrendingUp, Wallet, CircleDollarSign } from 'lucide-react'
 import { useAnimatedCounter, staggerContainer, staggerItem } from './wizard-container'
 
+// Logarithmic slider for revenue: 0 → 0, 100 → 100 Cr (1 billion)
+const REVENUE_MAX = 1_000_000_000 // 100 Cr
+function sliderToRevenue(pos: number): number {
+  if (pos === 0) return 0
+  // Exponential mapping: slider 1-100 → ₹10K to ₹100Cr
+  return Math.round(10_000 * Math.pow(REVENUE_MAX / 10_000, pos / 100))
+}
+function revenueToSlider(revenue: number): number {
+  if (revenue <= 0) return 0
+  if (revenue >= REVENUE_MAX) return 100
+  return Math.round(100 * Math.log(revenue / 10_000) / Math.log(REVENUE_MAX / 10_000))
+}
+
 function CurrencyInput({ label, value, onChange, placeholder, help }: {
   label: string; value: number | null; onChange: (v: number | null) => void;
   placeholder?: string; help?: string
@@ -139,7 +152,31 @@ export function FinancialsStep() {
           <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[oklch(0.45 0.01 260)]">Revenue & Growth</span>
         </div>
 
-        <CurrencyInput label="Annual Revenue (ARR) *" value={inputs.annual_revenue} onChange={(v) => setField('annual_revenue', v ?? 0)} help="Enter 0 if pre-revenue — VC methods will be used" />
+        <div>
+          <div className="flex items-center justify-between">
+            <Label className="text-[oklch(0.78_0.005_250)] text-xs font-semibold uppercase tracking-wider">Annual Revenue (ARR) *</Label>
+            <span className="font-mono text-sm font-bold tabular-nums text-[oklch(0.62 0.22 330)]">{formatINR(inputs.annual_revenue)}</span>
+          </div>
+          <p className="text-[10px] text-[oklch(0.50 0.01 260)] mb-2">Enter 0 if pre-revenue — VC methods will be used</p>
+          <Slider
+            value={[revenueToSlider(inputs.annual_revenue)]}
+            onValueChange={(v) => setField('annual_revenue', sliderToRevenue(Array.isArray(v) ? v[0] : v))}
+            min={0}
+            max={100}
+            step={1}
+          />
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-[oklch(0.50 0.01 260)] text-sm font-mono">₹</span>
+            <Input
+              type="number"
+              value={inputs.annual_revenue || ''}
+              onChange={(e) => setField('annual_revenue', parseFloat(e.target.value) || 0)}
+              placeholder="0"
+              className="bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] h-9 w-36 text-sm focus:border-[oklch(0.62_0.22_330/0.5)]"
+            />
+            <span className="text-[9px] text-[oklch(0.50 0.01 260)] font-mono">per year</span>
+          </div>
+        </div>
 
         {inputs.annual_revenue === 0 && (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-[oklch(0.62_0.22_330/0.08)] border border-[oklch(0.62_0.22_330/0.2)] text-[oklch(0.62 0.22 330)]">
