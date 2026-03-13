@@ -1,14 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { STARTUP_CATEGORIES, CATEGORY_LABELS, STAGES, type StartupCategory, type Stage, type DealCheckInput, type DealCheckResult } from '@/types'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SECTOR_GROUPS, CATEGORY_SHORT_LABELS, STAGES, type StartupCategory, type Stage, type DealCheckInput, type DealCheckResult } from '@/types'
 import { computeDealCheck } from '@/lib/deal-check'
 import { formatINR } from '@/lib/utils'
-import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, Sparkles, Scale, TrendingUp, Users, ArrowRight } from 'lucide-react'
+import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, Sparkles, Scale, TrendingUp, Users, ArrowRight, Search } from 'lucide-react'
 
 const STAGE_LABELS: Record<Stage, string> = {
   idea: 'Idea',
@@ -61,6 +61,23 @@ export default function DealCheckPage() {
     ask_cr: 0,
   })
   const [result, setResult] = useState<DealCheckResult | null>(null)
+  const [sectorSearch, setSectorSearch] = useState('')
+
+  const filteredSectorGroups = useMemo(() => {
+    const q = sectorSearch.toLowerCase()
+    if (!q) return SECTOR_GROUPS
+    return SECTOR_GROUPS
+      .map(g => ({
+        ...g,
+        items: g.items.filter(key =>
+          CATEGORY_SHORT_LABELS[key].toLowerCase().includes(q) ||
+          g.group.toLowerCase().includes(q)
+        ),
+      }))
+      .filter(g => g.items.length > 0)
+  }, [sectorSearch])
+
+  const currentSectorGroup = SECTOR_GROUPS.find(g => g.items.includes(input.sector))?.group
 
   const handleCheck = () => {
     const r = computeDealCheck(input)
@@ -111,14 +128,47 @@ export default function DealCheckPage() {
                 onValueChange={(v) => setInput({ ...input, sector: v as StartupCategory })}
               >
                 <SelectTrigger className="bg-[oklch(0.98_0.002_260)] border-[oklch(0.91_0.005_260)] text-[oklch(0.20_0.02_260)] mt-1 h-10">
-                  <SelectValue />
+                  <SelectValue>
+                    {currentSectorGroup && (
+                      <span className="text-[oklch(0.45_0.01_260)]">{currentSectorGroup} / </span>
+                    )}
+                    {CATEGORY_SHORT_LABELS[input.sector]}
+                  </SelectValue>
                 </SelectTrigger>
-                <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.96_0.005_260)] border-[oklch(0.91_0.005_260)] max-h-[280px]">
-                  {STARTUP_CATEGORIES.map((s) => (
-                    <SelectItem key={s} value={s} className="text-[oklch(0.25_0.02_260)] hover:bg-[oklch(0.91_0.005_260)] text-xs">
-                      {CATEGORY_LABELS[s]}
-                    </SelectItem>
+                <SelectContent alignItemWithTrigger={false} className="bg-[oklch(0.96_0.005_260)] border-[oklch(0.91_0.005_260)] max-h-[320px]">
+                  <div className="px-2 pb-2 pt-1 sticky top-0 bg-[oklch(0.96_0.005_260)] z-10">
+                    <div className="relative">
+                      <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[oklch(0.50_0.01_260)]" />
+                      <input
+                        type="text"
+                        placeholder="Search 139 sectors..."
+                        value={sectorSearch}
+                        onChange={(e) => setSectorSearch(e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        className="w-full h-8 pl-8 pr-3 text-xs rounded-md bg-[oklch(0.985_0.002_260)] border border-[oklch(0.91_0.005_260)] text-[oklch(0.20_0.02_260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)]"
+                      />
+                    </div>
+                  </div>
+                  {filteredSectorGroups.map(({ group, items }) => (
+                    <SelectGroup key={group}>
+                      <SelectLabel className="text-[10px] font-bold uppercase tracking-[0.15em] text-[oklch(0.62_0.22_330)] px-3 py-1.5 bg-[oklch(0.96_0.005_260)] sticky">
+                        {group}
+                      </SelectLabel>
+                      {items.map(key => (
+                        <SelectItem
+                          key={key}
+                          value={key}
+                          className="text-[oklch(0.25_0.02_260)] hover:bg-[oklch(0.91_0.005_260)] focus:bg-[oklch(0.91_0.005_260)] text-xs pl-5"
+                        >
+                          {CATEGORY_SHORT_LABELS[key]}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   ))}
+                  {filteredSectorGroups.length === 0 && (
+                    <div className="px-3 py-4 text-xs text-[oklch(0.45_0.01_250)] text-center">No sectors match &ldquo;{sectorSearch}&rdquo;</div>
+                  )}
                 </SelectContent>
               </Select>
             </div>
