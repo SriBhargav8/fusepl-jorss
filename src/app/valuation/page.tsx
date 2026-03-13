@@ -30,10 +30,15 @@ export default function ValuationPage() {
     setHydrated(true)
   }, [])
 
-  // Determine mode after hydration
+  // Determine mode after hydration + transition wizard→results when done
   useEffect(() => {
     if (!hydrated) return
-    if (mode === 'wizard' || mode === 'results') return // user already chose
+    if (mode === 'results') return // already showing results
+    if (mode === 'wizard') {
+      // Wizard completed — transition to results when result is set
+      if (result) setMode('results')
+      return
+    }
     setMode(result ? 'interstitial' : 'wizard')
   }, [hydrated, result, mode])
 
