@@ -29,14 +29,18 @@ const UNLOCKS = [
 export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
   const { inputs, result, setEmail, purpose } = useValuationStore()
   const [emailInput, setEmailInput] = useState('')
+  const [nameInput, setNameInput] = useState('')
+  const [phoneInput, setPhoneInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [unlocked, setUnlocked] = useState(false)
 
   const isValidEmail = EMAIL_REGEX.test(emailInput)
+  const isFormValid = isValidEmail && nameInput.trim().length >= 2
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isValidEmail || !result) return
+    if (!isFormValid || !result) return
 
     setLoading(true)
     setError('')
@@ -47,6 +51,8 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: emailInput,
+          name: nameInput,
+          phone: phoneInput,
           valuation_inputs: inputs,
           valuation_result: result,
           purpose,
@@ -56,15 +62,18 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
       if (res.ok) {
         const data = await res.json()
         setEmail(emailInput)
-        onOpenChange(false)
-        onUnlocked(data.report_id)
+        setUnlocked(true)
+        setTimeout(() => {
+          onOpenChange(false)
+          onUnlocked(data.report_id)
+        }, 1000)
         return
       }
     } catch {
-      // Supabase not configured — that's fine for beta
+      // API failed
     }
 
-    // Always unlock locally even if API fails
+    // Fallback unlock
     setEmail(emailInput)
     onOpenChange(false)
     onUnlocked('local')
@@ -111,26 +120,51 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
             ))}
           </div>
 
-          {/* Email form */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3">
-            <input
-              type="email"
-              placeholder="founder@startup.com"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              required
-              autoFocus
-              className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.985 0.002 260)] border border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)] transition-all"
-            />
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                required
+                autoFocus
+                className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.985 0.002 260)] border border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)] transition-all"
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="email"
+                  placeholder="Business Email"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  required
+                  className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.985 0.002 260)] border border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)] transition-all"
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number (Optional)"
+                  value={phoneInput}
+                  onChange={(e) => setPhoneInput(e.target.value)}
+                  className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.985 0.002 260)] border border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)] transition-all"
+                />
+              </div>
+            </div>
+
             <button
               type="submit"
-              disabled={!isValidEmail || loading}
+              disabled={!isFormValid || loading || unlocked}
               className="group w-full h-12 text-sm font-semibold rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Unlocking...
+                  Processing...
+                </>
+              ) : unlocked ? (
+                <>
+                  <Lock className="w-4 h-4 text-[oklch(0.62_0.22_330)]" />
+                  Unlocked! Redirecting...
                 </>
               ) : (
                 <>

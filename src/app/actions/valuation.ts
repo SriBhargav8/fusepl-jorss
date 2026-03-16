@@ -61,10 +61,17 @@ export async function saveValuation(data: any) {
   try {
     // 1. Upsert user
     const userResult = await db.insert(users)
-      .values({ email: data.email })
+      .values({ 
+        email: data.email,
+        name: data.name,
+        phone: data.phone
+      })
       .onConflictDoUpdate({
         target: users.email,
-        set: { email: data.email }
+        set: { 
+          name: data.name,
+          phone: data.phone
+        }
       })
       .returning({ id: users.id })
     

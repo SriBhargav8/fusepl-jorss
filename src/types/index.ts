@@ -870,6 +870,8 @@ export interface SectorMapping {
 
 export interface CaptureRequest {
   email: string
+  name?: string
+  phone?: string
   valuation_inputs: WizardInputs
   valuation_result: ValuationResult
 }

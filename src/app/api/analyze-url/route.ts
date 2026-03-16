@@ -294,102 +294,140 @@ function extractFoundingYear(text: string): number | null {
 
 export async function POST(req: NextRequest) {
   try {
-    const { url } = await req.json()
+    let body;
+    try {
+      body = await req.json();
+    } catch (e) {
+      console.error('[analyze-url] JSON parse failed:', e);
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
+
+    const { url } = body;
 
     if (!url || typeof url !== 'string') {
-      return NextResponse.json({ error: 'URL is required' }, { status: 400 })
+      return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
     // Normalize URL
-    let normalizedUrl = url.trim()
+    let normalizedUrl = url.trim();
     if (!normalizedUrl.startsWith('http')) {
-      normalizedUrl = 'https://' + normalizedUrl
+      normalizedUrl = 'https://' + normalizedUrl;
     }
 
     // Validate URL format
+    let urlObj: URL;
     try {
-      new URL(normalizedUrl)
+      urlObj = new URL(normalizedUrl);
     } catch {
-      return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 })
+      return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
-    // Try to extract from URL itself first (domain, path keywords)
-    const urlObj = new URL(normalizedUrl)
-    const urlText = `${urlObj.hostname} ${urlObj.pathname}`.replace(/[/\-_.]/g, ' ')
+    // Try to extract from URL itself first
+    const urlText = `${urlObj.hostname} ${urlObj.pathname}`.replace(/[/\-_.]/g, ' ');
 
     // Attempt to fetch the webpage — fail gracefully
-    let html = ''
-    let fetchSucceeded = false
+    let html = '';
+    let fetchSucceeded = false;
+    let finalUrl = normalizedUrl;
+
     try {
-      const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 7000)
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000); // 8s timeout
 
       const response = await fetch(normalizedUrl, {
         signal: controller.signal,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
         },
         redirect: 'follow',
-      })
+      });
 
-      clearTimeout(timeout)
+      clearTimeout(timeout);
 
       if (response.ok) {
-        html = await response.text()
-        fetchSucceeded = true
+        finalUrl = response.url;
+        // Check content type
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('text/html')) {
+          // Read chunk by chunk or limit size to avoid memory issues
+          html = await response.text();
+          if (html.length > 500000) { // 500KB limit for safety
+            html = html.slice(0, 500000);
+          }
+          fetchSucceeded = true;
+        } else {
+          console.log(`[analyze-url] Non-HTML content: ${contentType}`);
+        }
+      } else {
+        console.log(`[analyze-url] Fetch failed with status: ${response.status}`);
       }
-    } catch {
-      // Fetch failed — we'll still try to extract from the URL itself
+    } catch (fetchErr: any) {
+      console.error(`[analyze-url] Fetch attempt failed for ${normalizedUrl}:`, fetchErr.message || fetchErr);
+      // Fail gracefully — we'll use URL text fallback
     }
 
-    // Extract text content (strip HTML) — works even if html is empty
-    let textContent = ''
-    let title = ''
-    let description = ''
-    let ogTitle = ''
+    // Extract text content (strip HTML)
+    let textContent = '';
+    let title = '';
+    let description = '';
+    let ogTitle = '';
 
-    if (html) {
-      textContent = html
-        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .slice(0, 10000)
-
-      title = html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1]?.trim() || ''
-      description = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || ''
-      ogTitle = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || ''
+    if (fetchSucceeded && html) {
+      try {
+        // Safe regex extraction
+        title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || '';
+        description = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || '';
+        ogTitle = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)/i)?.[1]?.trim() || '';
+        
+        // Clean text content safely
+        textContent = html
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 5000); // 5KB of text is plenty for sector detection
+      } catch (parseErr) {
+        console.error('[analyze-url] HTML parse error:', parseErr);
+      }
     }
 
-    // Combine all available text — URL text always included as fallback
-    const allText = `${urlText} ${title} ${description} ${ogTitle} ${textContent}`
+    // Combine all available text
+    const allText = `${urlText} ${title} ${ogTitle} ${description} ${textContent}`;
 
     // Detect fields
-    const sector = detectSector(allText, urlObj.hostname)
-    const teamSize = fetchSucceeded ? extractTeamSize(allText) : null
-    const city = extractCity(allText)
-    const foundingYear = fetchSucceeded ? extractFoundingYear(allText) : null
+    const sector = detectSector(allText, new URL(finalUrl).hostname);
+    const teamSize = fetchSucceeded ? extractTeamSize(allText) : null;
+    const city = extractCity(allText);
+    const foundingYear = fetchSucceeded ? extractFoundingYear(allText) : null;
 
-    // Extract company name from domain if no HTML title available
-    let companyName = ogTitle || title
-    companyName = companyName
-      .replace(/\s*[-|–—]\s*.*/g, '')
-      .replace(/\s*\(.*?\)/g, '')
-      .trim()
+    // Extract company name
+    let companyName = ogTitle || title;
+    if (companyName) {
+      companyName = companyName
+        .replace(/\s*[-|–—]\s*.*/g, '')
+        .replace(/\s*\(.*?\)/g, '')
+        .trim();
+    }
 
     // Fallback: derive company name from domain
     if (!companyName) {
-      const domainParts = urlObj.hostname.replace(/^www\./, '').split('.')
-      if (domainParts.length > 0) {
-        const raw = domainParts[0]
-        companyName = raw.charAt(0).toUpperCase() + raw.slice(1)
+      try {
+        const domainParts = new URL(finalUrl).hostname.replace(/^www\./, '').split('.');
+        if (domainParts.length > 0) {
+          const raw = domainParts[0];
+          companyName = raw.charAt(0).toUpperCase() + raw.slice(1);
+        }
+      } catch {
+        companyName = 'New Startup';
       }
     }
 
-    const hasData = companyName || sector !== 'other' || city
+    const hasData = companyName || (sector && sector !== 'other') || city;
 
     return NextResponse.json({
       success: true,
@@ -404,9 +442,9 @@ export async function POST(req: NextRequest) {
       },
       ...((!fetchSucceeded && hasData) ? { note: 'Website was unreachable, but we detected some fields from the URL.' } : {}),
       ...(!hasData ? { note: 'Could not detect fields. Please fill manually.' } : {}),
-    })
-  } catch (err) {
-    console.error('Analyze URL error:', err)
-    return NextResponse.json({ error: 'Analysis failed' }, { status: 500 })
+    });
+  } catch (err: any) {
+    console.error('[analyze-url] Critical failure:', err);
+    return NextResponse.json({ error: 'Server error during analysis' }, { status: 500 });
   }
 }

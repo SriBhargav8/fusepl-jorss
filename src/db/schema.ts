@@ -3,6 +3,8 @@ import { pgTable, text, timestamp, uuid, integer, boolean, decimal, jsonb, bigse
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   email: text('email').unique().notNull(),
+  name: text('name'),
+  phone: text('phone'),
   companyName: text('company_name'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   source: text('source').default('organic'),

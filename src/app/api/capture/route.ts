@@ -11,7 +11,7 @@ import { saveValuation } from '@/app/actions/valuation'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json() as CaptureRequest & { purpose?: string }
-    const { email, valuation_inputs: inputs, valuation_result: result, purpose } = body
+    const { email, name, phone, valuation_inputs: inputs, valuation_result: result, purpose } = body
 
     // Validate required fields
     if (!email || !inputs.company_name || !inputs.sector || !inputs.stage) {
@@ -43,6 +43,8 @@ export async function POST(req: NextRequest) {
     // Save using Server Action
     const { reportId } = await saveValuation({
       email,
+      name,
+      phone,
       ip_address: ip,
       company_name: sanitize(inputs.company_name),
       sector: inputs.sector,
