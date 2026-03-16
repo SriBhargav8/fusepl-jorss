@@ -14,25 +14,25 @@ const COLORS = ['#2563eb', '#16a34a', '#d97706', '#9333ea', '#ef4444', '#06b6d4'
 
 interface Props {
   valuation: {
-    target_raise: number | null
-    esop_pool_pct: number | null
-    current_cap_table: CapTableEntry[] | null
+    targetRaise: number | null
+    esopPoolPct: number | null
+    currentCapTable: CapTableEntry[] | null
   }
   compositeValue: number
 }
 
 export function CapTableSection({ valuation, compositeValue }: Props) {
-  const [raiseAmount, setRaiseAmount] = useState(valuation.target_raise ?? compositeValue * 0.2)
+  const [raiseAmount, setRaiseAmount] = useState(Number(valuation.targetRaise) ?? compositeValue * 0.2)
   const [preMoney, setPreMoney] = useState(compositeValue)
   const [esopTiming, setEsopTiming] = useState<'pre_round' | 'post_round'>('pre_round')
 
-  const currentCapTable: CapTableEntry[] = valuation.current_cap_table ?? [
+  const currentCapTable: CapTableEntry[] = valuation.currentCapTable ?? [
     { name: 'Founders', percentage: 80, share_class: 'common' },
     { name: 'ESOP Pool', percentage: 10, share_class: 'esop' },
     { name: 'Angel Investors', percentage: 10, share_class: 'preference' },
   ]
 
-  const esopExpansion = valuation.esop_pool_pct ?? 0
+  const esopExpansion = Number(valuation.esopPoolPct) ?? 0
   const roundResult = simulateRound(currentCapTable, {
     raise_amount: raiseAmount,
     pre_money: preMoney,

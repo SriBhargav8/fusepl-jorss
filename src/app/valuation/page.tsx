@@ -198,7 +198,7 @@ export default function ValuationPage() {
                 <div className="text-center space-y-4 py-4">
                   <PDFDownloadButton
                     valuation={{
-                      company_name: inputs.company_name,
+                      companyName: inputs.company_name,
                       sector: inputs.sector,
                       stage: inputs.stage,
                     }}

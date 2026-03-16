@@ -8,10 +8,10 @@ import { Loader2, FileDown } from 'lucide-react'
 
 interface Props {
   valuation: {
-    company_name: string
+    companyName: string
     sector: string
     stage: string
-    ai_narrative?: string | null
+    aiNarrative?: string | null
   }
   result: ValuationResult
 }
@@ -24,14 +24,14 @@ export function PDFDownloadButton({ valuation, result }: Props) {
     try {
       const benchmark = getDamodaranBenchmark(valuation.sector as StartupCategory)
       const doc = await generateValuationPDF({
-        companyName: valuation.company_name,
+        companyName: valuation.companyName,
         sector: valuation.sector,
         stage: valuation.stage,
         result,
         benchmark,
-        aiNarrative: valuation.ai_narrative,
+        aiNarrative: valuation.aiNarrative,
       })
-      doc.save(`${valuation.company_name || 'startup'}-valuation-report.pdf`)
+      doc.save(`${valuation.companyName || 'startup'}-valuation-report.pdf`)
     } finally {
       setGenerating(false)
     }

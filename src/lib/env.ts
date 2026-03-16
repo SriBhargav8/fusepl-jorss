@@ -2,9 +2,7 @@
 // Import this in API routes to validate env vars are set
 
 const REQUIRED_SERVER_VARS = [
-  'NEXT_PUBLIC_SUPABASE_URL',
-  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'SUPABASE_SERVICE_ROLE_KEY',
+  'DATABASE_URL',
   'ANTHROPIC_API_KEY',
   'NEXT_PUBLIC_RAZORPAY_KEY_ID',
   'RAZORPAY_KEY_SECRET',
@@ -13,7 +11,7 @@ const REQUIRED_SERVER_VARS = [
 
 type EnvKey = (typeof REQUIRED_SERVER_VARS)[number]
 
-function getEnv(key: EnvKey): string {
+function getEnv(key: string): string {
   const value = process.env[key]
   if (!value) {
     throw new Error(
@@ -25,10 +23,8 @@ function getEnv(key: EnvKey): string {
 }
 
 export const env = {
-  supabase: {
-    url: () => getEnv('NEXT_PUBLIC_SUPABASE_URL'),
-    anonKey: () => getEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-    serviceRoleKey: () => getEnv('SUPABASE_SERVICE_ROLE_KEY'),
+  db: {
+    url: () => getEnv('DATABASE_URL'),
   },
   anthropic: {
     apiKey: () => getEnv('ANTHROPIC_API_KEY'),

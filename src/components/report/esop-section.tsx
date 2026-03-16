@@ -10,8 +10,8 @@ import type { StartupCategory } from '@/types'
 interface Props {
   valuation: {
     sector: string
-    esop_pool_pct: number | null
-    time_to_liquidity_years: number | null
+    esopPoolPct: number | null
+    timeToLiquidityYears: number | null
   }
   compositeValue: number
 }
@@ -20,8 +20,8 @@ export function ESOPSection({ valuation, compositeValue }: Props) {
   const benchmark = getDamodaranBenchmark(valuation.sector as StartupCategory)
   if (!benchmark) return null
 
-  const esopPct = valuation.esop_pool_pct ?? 10
-  const timeToLiquidity = valuation.time_to_liquidity_years ?? 4
+  const esopPct = Number(valuation.esopPoolPct) ?? 10
+  const timeToLiquidity = Number(valuation.timeToLiquidityYears) ?? 4
   const totalShares = 10_000_000 // Assume 1 Cr shares for per-share calc
   const volatility = clamp(benchmark.beta * 0.55, 0.40, 0.80)
 
