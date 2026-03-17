@@ -12,7 +12,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Search, Loader2, ArrowRight, Calendar, Building2, History as HistoryIcon } from 'lucide-react'
-import { getValuationHistory } from '@/app/actions/valuation'
+import { getValuationHistory, getValuationById } from '@/app/actions/valuation'
+import { useValuationStore } from '@/stores/valuation-store'
 import { motion, AnimatePresence } from 'framer-motion'
 import { normalizePhone } from '@/lib/utils'
 import Link from 'next/link'
@@ -144,10 +145,80 @@ export function PreviousValuationsDialog({ open, onOpenChange }: PreviousValuati
 
                 <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
                   {records.length > 0 ? records.map((record) => (
-                    <Link
+                    <button
                       key={record.id}
-                      href={`/report/${record.id}`}
-                      className="group block glass-card grain p-4 rounded-xl border border-[oklch(0.91_0.005_260)] hover:border-[oklch(0.62_0.22_330/0.5)] hover:bg-[oklch(0.62_0.22_330/0.02)] transition-all"
+                      disabled={loading}
+                      onClick={async () => {
+                        setLoading(true)
+                        try {
+                          const fullData = await getValuationHistory(email, normalizePhone(phone))
+                          // Actually we need getValuationById for full data
+                          const detail = await getValuationById(record.id)
+                          if (detail) {
+                            useValuationStore.getState().loadSession({
+                              inputs: {
+                                company_name: detail.company_name || '',
+                                sector: (detail.sector as any) || 'saas_horizontal',
+                                stage: (detail.stage as any) || 'seed',
+                                business_model: (detail.business_model as any) || 'saas_subscription',
+                                city: detail.city || '',
+                                founding_year: Number(detail.founding_year) || new Date().getFullYear() - 1,
+                                team_size: Number(detail.team_size) || 1,
+                                founder_experience: Number(detail.founder_experience) || 1,
+                                domain_expertise: Number(detail.domain_expertise) || 1,
+                                previous_exits: !!detail.previous_exits,
+                                technical_cofounder: false, 
+                                key_hires: [],
+                                annual_revenue: Number(detail.annual_revenue) || 0,
+                                revenue_growth_pct: Number(detail.revenue_growth_pct) || 0,
+                                gross_margin_pct: Number(detail.gross_margin_pct) || 0,
+                                monthly_burn: Number(detail.monthly_burn) || 0,
+                                cash_in_bank: Number(detail.cash_in_bank) || 0,
+                                cac: null,
+                                ltv: null,
+                                last_round_size: null,
+                                last_round_valuation: null,
+                                tam: Number(detail.tam) || 1000,
+                                dev_stage: (detail.dev_stage as any) || 'idea',
+                                competition_level: Number(detail.competition_level) || 3,
+                                competitive_advantages: (detail.competitive_advantages as any) || [],
+                                patents_count: 0,
+                                strategic_partnerships: 'none',
+                                regulatory_risk: 3,
+                                revenue_concentration_pct: null,
+                                international_revenue_pct: 0,
+                                esop_pool_pct: detail.esop_pool_pct ? Number(detail.esop_pool_pct) : null,
+                                time_to_liquidity_years: Number(detail.time_to_liquidity_years) || 4,
+                                current_cap_table: (detail.current_cap_table as any) || null,
+                                target_raise: detail.target_raise ? Number(detail.target_raise) : null,
+                                expected_dilution_pct: null,
+                              },
+                              result: {
+                                composite_value: Number(detail.valuation_mid),
+                                composite_low: Number(detail.valuation_low),
+                                composite_high: Number(detail.valuation_high),
+                                confidence_score: Number(detail.confidence_score),
+                                methods: detail.method_results as any,
+                                monte_carlo: detail.monte_carlo_percentiles as any,
+                                ibc_recovery_range: detail.ibc_recovery_range as any,
+                              },
+                              email: detail.userEmail || email,
+                              userName: detail.userName || undefined,
+                              userPhone: detail.userPhone || phone,
+                            })
+                            onOpenChange(false)
+                            // If we're not on /valuation, redirect there
+                            if (window.location.pathname !== '/valuation') {
+                              window.location.href = '/valuation'
+                            }
+                          }
+                        } catch (err) {
+                          console.error(err)
+                        } finally {
+                          setLoading(false)
+                        }
+                      }}
+                      className="w-full text-left group block glass-card grain p-4 rounded-xl border border-[oklch(0.91_0.005_260)] hover:border-[oklch(0.62_0.22_330/0.5)] hover:bg-[oklch(0.62_0.22_330/0.02)] transition-all"
                     >
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
@@ -169,7 +240,7 @@ export function PreviousValuationsDialog({ open, onOpenChange }: PreviousValuati
                           <ArrowRight className="w-3 h-3 ml-auto mt-1 text-[oklch(0.45_0.01_260)] group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
-                    </Link>
+                    </button>
                   )) : (
                     <div className="py-12 text-center space-y-3 bg-[oklch(0.15_0.02_260/0.02)] rounded-2xl border border-dashed border-[oklch(0.91_0.005_260)]">
                       <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mx-auto shadow-sm">

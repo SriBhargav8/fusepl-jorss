@@ -47,11 +47,10 @@ export default function ValuationPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated])
 
-  const handleUnlocked = (reportId: string) => {
+  const handleUnlocked = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    if (reportId !== 'local') {
-      router.push(`/report/${reportId}`)
-    }
+    setMode('results')
+    setGateOpen(false)
   }
 
   const handleStartNew = () => {

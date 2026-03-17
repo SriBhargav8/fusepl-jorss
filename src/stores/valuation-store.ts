@@ -62,6 +62,7 @@ interface ValuationStore {
   setUserName: (name: string) => void
   setUserPhone: (phone: string) => void
   setPurpose: (purpose: ValuationPurpose) => void
+  loadSession: (data: { inputs: WizardInputs; result: ValuationResult; email?: string; userName?: string; userPhone?: string }) => void
   reset: () => void
 }
 
@@ -109,6 +110,17 @@ export const useValuationStore = create<ValuationStore>()(
       setUserPhone: (phone) => set({ userPhone: phone }),
 
       setPurpose: (purpose) => set({ purpose }),
+      
+      loadSession: (data) =>
+        set({
+          inputs: data.inputs,
+          result: data.result,
+          email: data.email || null,
+          userName: data.userName || null,
+          userPhone: data.userPhone || null,
+          currentStep: 6,
+          highestCompletedStep: 6,
+        }),
 
       reset: () =>
         set({
