@@ -26,7 +26,7 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+    transition: { delay: i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }
   })
 }
 
@@ -188,7 +188,7 @@ export function ValuationIntro({ onStart }: ValuationIntroProps) {
       <div className="mb-24">
         <h2 className="font-heading text-3xl text-center text-[oklch(0.15 0.02 260)] mb-12">Supporting FAQ</h2>
         <div className="max-w-2xl mx-auto">
-          <Accordion type="single" className="space-y-4">
+          <Accordion className="space-y-4">
             <FaqItem 
               question="How accurate is a startup valuation calculator?"
               answer="It gives an indicative starting point, not a final expert report. It is based on rigorous institutional methods but lacks the subjective nuance of a deep expert review."

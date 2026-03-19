@@ -148,6 +148,8 @@ export default function ValuationPage() {
   }
 
   // Results mode
+  if (!result) return null
+
   return (
     <main className="grain relative min-h-[calc(100dvh-5rem)] bg-[oklch(0.985 0.002 260)] pt-4 pb-20 md:pt-8 md:pb-24 overflow-x-hidden">
       <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full bg-[oklch(0.62_0.22_330/0.04)] blur-[140px] pointer-events-none" />
