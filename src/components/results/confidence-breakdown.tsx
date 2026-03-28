@@ -27,10 +27,10 @@ export function ConfidenceBreakdown({ result }: Props) {
   const dataQuality = Math.max(0, Math.min(10, result.confidence_score - computedSubtotal))
 
   const breakdown = [
-    { label: 'Data Completeness', score: dataCompleteness, max: 30, description: `${applicable.length}/10 methods`, color: 'oklch(0.65 0.16 250)' },
-    { label: 'Method Agreement', score: methodAgreement, max: 40, description: `CV ${(cv * 100).toFixed(0)}%`, color: 'oklch(0.65 0.16 155)' },
-    { label: 'Revenue Maturity', score: revenueMature, max: 20, description: hasDCF ? 'Revenue available' : 'Limited data', color: 'oklch(0.62 0.22 330)' },
-    { label: 'Data Quality', score: dataQuality, max: 10, description: 'Internal consistency', color: 'oklch(0.65 0.16 310)' },
+    { label: 'Data Completeness', score: dataCompleteness, max: 30, description: `${applicable.length}/10 methods`, color: '#6366f1' }, // Indigo
+    { label: 'Method Agreement', score: methodAgreement, max: 40, description: `CV ${(cv * 100).toFixed(0)}%`, color: '#22c55e' }, // Green
+    { label: 'Revenue Maturity', score: revenueMature, max: 20, description: hasDCF ? 'Revenue available' : 'Limited data', color: '#db2777' }, // Pink
+    { label: 'Data Quality', score: dataQuality, max: 10, description: 'Internal consistency', color: '#8b5cf6' }, // Violet
   ]
 
   return (
@@ -40,12 +40,12 @@ export function ConfidenceBreakdown({ result }: Props) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <div className="rounded-xl bg-[oklch(0.97 0.003 260)] border border-[oklch(0.91 0.005 260)] overflow-hidden h-full">
-        <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-[oklch(0.91 0.005 260)]">
+      <div className="glass-card grain relative rounded-xl border border-[oklch(0.91_0.005_260/0.8)] overflow-hidden h-full bg-gradient-to-br from-[oklch(0.99_0.002_260)] to-[oklch(0.985_0.002_260)]">
+        <div className="flex items-center gap-2.5 px-5 py-4 border-b border-[oklch(0.91_0.005_260/0.5)]">
           <div className="w-7 h-7 rounded-lg bg-[oklch(0.62_0.22_330/0.08)] flex items-center justify-center">
             <ShieldCheck className="w-3.5 h-3.5 text-[oklch(0.62 0.22 330)]" />
           </div>
-          <h3 className="text-sm font-semibold text-[oklch(0.62 0.22 330)]">Confidence Breakdown</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Confidence Breakdown</h3>
         </div>
         <div className="p-5 space-y-4">
           {breakdown.map((item, i) => {
@@ -68,14 +68,13 @@ export function ConfidenceBreakdown({ result }: Props) {
                     <span className="text-[10px] text-[oklch(0.50 0.01 260)]">/ {item.max}</span>
                   </div>
                 </div>
-                <div className="h-2 rounded-full bg-[oklch(0.96 0.005 260)] overflow-hidden">
+                <div className="h-2 rounded-full bg-[oklch(0.91_0.005_260)] overflow-hidden shadow-inner">
                   <motion.div
-                    className="h-full rounded-full"
+                    className="h-full rounded-full shadow-sm"
                     style={{ backgroundColor: item.color }}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + i * 0.1, duration: 0.6, ease: 'easeOut' }}
+                    initial={{ width: '0%', opacity: 0 }}
+                    animate={{ width: `${Math.max(pct, 5)}%`, opacity: 1 }}
+                    transition={{ delay: 0.3 + i * 0.1, duration: 1, ease: 'easeOut' }}
                   />
                 </div>
                 <p className="text-[10px] text-[oklch(0.50 0.01 260)]">{item.description}</p>

@@ -38,55 +38,78 @@ const QUALIFICATIONS: { label: string; value: string; detail: string; icon: Reac
 
 export function FounderAuthority() {
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
-      <div className="section-divider absolute inset-x-0 top-0" />
-      <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[oklch(0.62_0.22_330/0.03)] blur-[140px] pointer-events-none" />
+    <section className="relative py-32 px-6 overflow-hidden bg-[oklch(0.985_0.002_260)]">
+      <div className="section-divider absolute inset-x-0 top-0 opacity-50" />
+      
+      {/* Dynamic background accent */}
+      <div className="absolute top-1/2 right-[-5%] -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[oklch(0.62_0.22_330/0.05)] blur-[140px] pointer-events-none animate-pulse" />
 
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-[1.2fr_1fr] gap-12 md:gap-16 items-start">
-          {/* Left — narrative */}
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">Who Built This</p>
-            <h2 className="font-heading text-3xl sm:text-[2.5rem] text-[oklch(0.15 0.02 260)] leading-tight mb-6">
-              Not Another<br />
-              <span className="text-gold-gradient">AI Number Generator</span>
+      <div className="max-w-6xl mx-auto relative">
+        <div className="grid lg:grid-cols-[1fr_0.9fr] gap-16 lg:gap-24 items-center">
+          {/* Narrative Content */}
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }} 
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.3em] mb-6">The Expertise</p>
+            <h2 className="font-heading text-4xl sm:text-[3.5rem] text-[oklch(0.15 0.02 260)] leading-[1.1] tracking-tight mb-8">
+              Not Another <br />
+              <span className="text-gold-gradient italic">AI Number Generator</span>
             </h2>
-            <div className="space-y-4 text-sm text-[oklch(0.40 0.01 260)] leading-relaxed">
+            <div className="space-y-6 text-[16px] text-[oklch(0.40 0.01 260)] leading-relaxed font-medium">
               <p>
-                Most startup valuation tools give you a number with no methodology behind it. This platform is different — it was built by a practising IBBI-registered insolvency professional who has seen valuations challenged in NCLT proceedings, investor due diligence, and M&A negotiations.
+                Most startup valuation tools provide a number with no rigorous methodology behind it. 
+                This platform is different — it was built by a practising **IBBI-registered insolvency professional** 
+                who has seen valuations challenged in NCLT proceedings, investor due diligence, and M&A negotiations.
               </p>
               <p>
-                Every method, every benchmark, every assumption is documented and defensible. When an investor asks <span className="text-[oklch(0.75 0.18 162)] font-medium">&ldquo;how did you arrive at this number?&rdquo;</span> — you&apos;ll have a real answer.
+                Every method, every benchmark, and every assumption is documented and defensible. 
+                When an investor asks <span className="text-[oklch(0.62 0.22 330)] font-bold italic">&ldquo;how did you arrive at this valuation?&rdquo;</span> 
+                — you&apos;ll have a professional, institutional-grade answer.
               </p>
             </div>
 
-            {/* Quick proof points */}
-            <div className="mt-8 flex flex-wrap gap-3">
+            {/* Proof Tags */}
+            <div className="mt-10 flex flex-wrap gap-3">
               {['IVS 105 Aligned', 'Rule 11UA Compliant', 'FEMA NDI Ready', 'IBC Case Law'].map(tag => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-[0.12em] px-3 py-1.5 rounded-full border border-[oklch(0.62_0.22_330/0.15)] bg-[oklch(0.62_0.22_330/0.05)] text-[oklch(0.62 0.22 330)]">
+                <span key={tag} className="text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-2 rounded-full border border-[oklch(0.62_0.22_330/0.15)] bg-white text-[oklch(0.62 0.22 330)] shadow-sm">
                   {tag}
                 </span>
               ))}
             </div>
           </motion.div>
 
-          {/* Right — credential cards */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }} className="space-y-4">
+          {/* Credential Cards */}
+          <motion.div 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: '-100px' }} 
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }} 
+            className="space-y-5"
+          >
             {QUALIFICATIONS.map((q) => (
               <motion.div
                 key={q.label}
-                variants={{ hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}
-                className="relative rounded-2xl border border-[oklch(0.91 0.005 260/0.6)] bg-[oklch(0.97 0.003 260/0.5)] p-5 backdrop-blur-sm"
+                variants={{ 
+                  hidden: { opacity: 0, scale: 0.95, y: 10 }, 
+                  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } } 
+                }}
+                className="glass-card group relative p-6 rounded-3xl"
               >
-                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[oklch(0.62_0.22_330/0.15)] to-transparent" />
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-7 h-7 rounded-md flex items-center justify-center bg-[oklch(0.62_0.22_330/0.1)] text-[oklch(0.62 0.22 330)] shrink-0">
+                <div className="flex items-start gap-5">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[oklch(0.62_0.22_330/0.08)] text-[oklch(0.62 0.22 330)] shrink-0 shadow-sm border border-[oklch(0.62_0.22_330/0.1)]">
                     {q.icon}
                   </div>
-                  <span className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.15em]">{q.label}</span>
-                  <span className="ml-auto text-[11px] font-semibold text-[oklch(0.25 0.02 260)]">{q.value}</span>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em]">{q.label}</span>
+                      <span className="text-[11px] font-bold text-[oklch(0.25 0.02 260)]">{q.value}</span>
+                    </div>
+                    <p className="text-[13px] text-[oklch(0.45 0.01 260)] leading-relaxed font-medium">{q.detail}</p>
+                  </div>
                 </div>
-                <p className="text-xs text-[oklch(0.45 0.01 260)] leading-relaxed pl-10">{q.detail}</p>
               </motion.div>
             ))}
           </motion.div>

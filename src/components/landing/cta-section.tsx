@@ -2,8 +2,11 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useModal } from '@/components/providers/modal-provider'
 
 export function CtaSection() {
+  const { openLeadModal } = useModal()
+
   return (
     <section className="relative py-32 px-6 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.98 0.002 260)] via-[oklch(0.97 0.003 260)] to-[oklch(0.98 0.002 260)]" />
@@ -13,21 +16,24 @@ export function CtaSection() {
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(oklch(0.25 0 0 / 0.3) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="relative max-w-3xl mx-auto text-center">
-        <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-5">Ready to pitch?</motion.p>
-        <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.05 }} className="font-heading text-3xl sm:text-4xl lg:text-[3.25rem] text-[oklch(0.15 0.02 260)] leading-[1.1]">
-          Walk Into Any Room With<br /><span className="text-gold-gradient">Numbers That Command Respect</span>
+        <motion.p initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-5">Take the next step</motion.p>
+        <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.05 }} className="font-heading text-3xl sm:text-4xl lg:text-[3.25rem] text-[oklch(0.15 0.02 260)] leading-tight tracking-tight">
+          Start With <span className="text-gold-gradient italic">Clarity</span>
         </motion.h2>
-        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="mt-6 text-base sm:text-lg text-[oklch(0.40 0.01 260)] max-w-lg mx-auto leading-relaxed">
-          Whether you&apos;re pitching to investors, negotiating a deal, or planning your next round — know exactly what your startup is worth.
+        <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="mt-6 text-base sm:text-lg text-[oklch(0.40 0.01 260)] max-w-lg mx-auto leading-relaxed font-medium">
+          Get an indicative estimate with our free engine, or book a strategy session with <b>MKW Advisors</b> for a professional deep-dive review.
         </motion.p>
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="flex flex-wrap justify-center gap-4 mt-10">
-          <Link href="/valuation" className="btn-press group inline-flex items-center justify-center h-14 px-10 text-base font-semibold tracking-wide rounded-2xl bg-[#32373c] text-white transition-all duration-300 hover:bg-[#1d2024] hover:shadow-[0_4px_24px_oklch(0_0_0/0.2)] hover:scale-[1.02]">
-            Get Your Valuation
+          <Link href="/valuation" className="btn-press group inline-flex items-center justify-center h-14 px-10 text-base font-bold tracking-wide rounded-2xl bg-[#1d2024] text-white transition-all duration-300 hover:bg-black hover:shadow-[0_8px_32px_oklch(0_0_0/0.25)] hover:scale-[1.02]">
+            Try Free Valuation Engine
             <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </Link>
-          <Link href="/deal-check" className="btn-press inline-flex items-center justify-center h-14 px-8 text-base font-medium tracking-wide rounded-2xl border border-[oklch(0.80 0.015 260)] text-[oklch(0.25 0.02 260)] transition-all duration-300 hover:border-[oklch(0.62_0.22_330/0.4)] hover:text-[oklch(0.62_0.22_330)] hover:bg-[oklch(0.62_0.22_330/0.08)]">
-            Investor Deal Check
-          </Link>
+          <button 
+            onClick={openLeadModal}
+            className="btn-press cursor-pointer inline-flex items-center justify-center h-14 px-8 text-base font-semibold tracking-wide rounded-2xl border-2 border-[oklch(0.15_0.02_260/0.1)] text-[oklch(0.15 0.02 260)] backdrop-blur-sm transition-all duration-300 hover:border-[oklch(0.62_0.22_330/0.5)] hover:text-[oklch(0.62_0.22_330)] hover:bg-[oklch(0.62_0.22_330/0.05)]"
+          >
+            Book Valuation Review
+          </button>
         </motion.div>
 
         {/* Bottom proof strip — more visual weight */}

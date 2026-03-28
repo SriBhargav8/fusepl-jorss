@@ -15,14 +15,24 @@ export default function CapTablePage() {
         No login required.
       </p>
       <StandaloneCapTable />
-      <div className="mt-8 text-center">
-        <p className="text-sm text-muted-foreground mb-3">
-          Want a full 10-method startup valuation with this cap table analysis?
-        </p>
-        <a href="/valuation" className="text-[oklch(0.62_0.22_330)] font-medium hover:underline">
-          Get Your Free Valuation &rarr;
-        </a>
+      
+      {/* Quick Tool Links */}
+      <div className="mt-12 pt-8 border-t border-[oklch(0.91_0.005_260)] text-center">
+        <p className="text-[10px] font-bold text-[oklch(0.62_0.22_330)] uppercase tracking-[0.2em] mb-4">Explore More Tools</p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <ToolLink href="/valuation" label="Valuation Engine" />
+          <ToolLink href="/deal-check" label="Deal Check" />
+        </div>
       </div>
     </main>
+  )
+}
+
+function ToolLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} className="flex items-center gap-2 px-4 py-2 rounded-full border border-[oklch(0.91_0.005_260)] bg-white text-[13px] font-semibold text-[oklch(0.20_0.02_260)] transition-all hover:bg-[oklch(0.985_0.002_260)] hover:border-[oklch(0.62_0.22_330/0.4)] hover:text-[oklch(0.62_0.22_330)] hover:shadow-sm">
+      {label}
+      <svg className="w-3.5 h-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+    </a>
   )
 }

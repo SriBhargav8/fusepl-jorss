@@ -2,7 +2,6 @@
 
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { useValuationStore } from '@/stores/valuation-store'
 import { MethodologySection } from '@/components/report/methodology-section'
 import { BenchmarksSection } from '@/components/report/benchmarks-section'
@@ -17,6 +16,7 @@ import { RecommendationsSection } from '@/components/report/recommendations-sect
 import { CertifiedCTA } from '@/components/report/certified-cta'
 import { GatedSection } from '@/components/report/gated-section'
 import { PDFDownloadButton } from '@/components/report/pdf-download-button'
+import { StickyReportCTA } from '@/components/report/sticky-report-cta'
 import { getReportConfig } from '@/lib/report-config'
 import { formatINR } from '@/lib/utils'
 import { ReportSkeleton } from '@/components/skeletons'
@@ -61,19 +61,15 @@ interface ValuationRow {
   created_at: string
 }
 
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !key) return null
-  return createClient(url, key)
-}
+import { getValuationById } from '@/app/actions/valuation'
 
 export default function ReportPage() {
   const params = useParams()
   const id = params?.id as string
   const storeResult = useValuationStore((s) => s.result)
   const storeInputs = useValuationStore((s) => s.inputs)
-  const [valuation, setValuation] = useState<ValuationRow | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [valuation, setValuation] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [usingLocalFallback, setUsingLocalFallback] = useState(false)
@@ -82,22 +78,18 @@ export default function ReportPage() {
     if (!id) return
 
     async function fetchReport() {
-      // 1. Try Supabase fetch
-      const supabase = getSupabaseClient()
-      if (supabase && id !== 'local') {
+      // 1. Try DB fetch via Server Action
+      if (id !== 'local') {
         try {
-          const { data, error: fetchError } = await supabase
-            .from('valuations')
-            .select('*')
-            .eq('id', id)
-            .single()
+          const data = await getValuationById(id)
 
-          if (!fetchError && data) {
-            setValuation(data as ValuationRow)
+          if (data) {
+            setValuation(data)
             setLoading(false)
             return
           }
-        } catch {
+        } catch (err) {
+          console.error('[Report] Fetch failed:', err)
           // Fall through to local fallback
         }
       }
@@ -112,12 +104,12 @@ export default function ReportPage() {
           company_name: storeInputs.company_name,
           sector: storeInputs.sector,
           stage: storeInputs.stage,
-          annual_revenue: storeInputs.annual_revenue,
-          revenue_growth_pct: storeInputs.revenue_growth_pct,
-          gross_margin_pct: storeInputs.gross_margin_pct,
-          monthly_burn: storeInputs.monthly_burn,
-          cash_in_bank: storeInputs.cash_in_bank,
-          tam: storeInputs.tam,
+          annual_revenue: storeInputs.annual_revenue?.toString(),
+          revenue_growth_pct: storeInputs.revenue_growth_pct?.toString(),
+          gross_margin_pct: storeInputs.gross_margin_pct?.toString(),
+          monthly_burn: storeInputs.monthly_burn?.toString(),
+          cash_in_bank: storeInputs.cash_in_bank?.toString(),
+          tam: storeInputs.tam?.toString(),
           team_size: storeInputs.team_size,
           founder_experience: storeInputs.founder_experience,
           domain_expertise: storeInputs.domain_expertise,
@@ -125,13 +117,13 @@ export default function ReportPage() {
           dev_stage: storeInputs.dev_stage,
           competitive_advantages: storeInputs.competitive_advantages?.join(', ') ?? null,
           competition_level: storeInputs.competition_level,
-          esop_pool_pct: storeInputs.esop_pool_pct,
+          esop_pool_pct: storeInputs.esop_pool_pct?.toString(),
           time_to_liquidity_years: storeInputs.time_to_liquidity_years,
-          target_raise: storeInputs.target_raise,
+          target_raise: storeInputs.target_raise?.toString(),
           current_cap_table: storeInputs.current_cap_table,
-          valuation_low: storeResult.composite_low,
-          valuation_mid: storeResult.composite_value,
-          valuation_high: storeResult.composite_high,
+          valuation_low: storeResult.composite_low?.toString(),
+          valuation_mid: storeResult.composite_value?.toString(),
+          valuation_high: storeResult.composite_high?.toString(),
           confidence_score: storeResult.confidence_score,
           method_results: storeResult.methods,
           monte_carlo_percentiles: storeResult.monte_carlo,
@@ -198,8 +190,8 @@ export default function ReportPage() {
     ibc_recovery_range: valuation.ibc_recovery_range,
   }
 
-  const purpose = valuation.purpose ?? valuation.paid_purpose ?? 'indicative'
-  const paidPurpose = valuation.paid_purpose ?? null
+  const purpose = valuation.purpose ?? valuation.paidPurpose ?? 'indicative'
+  const paidPurpose = valuation.paidPurpose ?? null
   const config = getReportConfig(purpose)
 
   return (
@@ -216,21 +208,26 @@ export default function ReportPage() {
       {/* Header */}
       <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">{valuation.company_name}</h1>
-        <p className="text-amber-400 text-xl font-semibold">
-          {formatINR(result.composite_low)} — {formatINR(result.composite_high)}
+        <p className="border-amber-400 text-xl font-semibold">
+          {formatINR(Number(result.composite_low))} — {formatINR(Number(result.composite_high))}
         </p>
         <p className="text-slate-400 text-sm mt-1">
-          Composite: {formatINR(result.composite_value)} | Confidence: {result.confidence_score}/100
+          Composite: {formatINR(Number(result.composite_value))} | Confidence: {result.confidence_score}/100
         </p>
       </div>
 
       <MethodologySection methods={result.methods} />
 
-      <BenchmarksSection sector={valuation.sector} />
-
-      <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
-        <ComparablesSection sector={valuation.sector} stage={valuation.stage} />
-      </GatedSection>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-5">
+           <BenchmarksSection sector={valuation.sector} />
+        </div>
+        <div className="lg:col-span-7">
+          <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
+            <ComparablesSection sector={valuation.sector} stage={valuation.stage} />
+          </GatedSection>
+        </div>
+      </div>
 
       {config.showListedComparables && (
         <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
@@ -242,31 +239,53 @@ export default function ReportPage() {
         </GatedSection>
       )}
 
-      {config.showIBCDownside && (
-        <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
-          <DownsideSection sector={valuation.sector} />
-        </GatedSection>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-6">
+          {config.showESOPDetail ? (
+            <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
+              <ESOPSection valuation={valuation} compositeValue={result.composite_value} />
+            </GatedSection>
+          ) : (
+            <div className="glass-card grain rounded-xl p-8 flex flex-col items-center justify-center text-center h-full bg-slate-50/50">
+              <p className="text-sm font-medium text-slate-400 italic">ESOP analysis unavailable for this report type.</p>
+            </div>
+          )}
+        </div>
+        <div className="lg:col-span-6">
+          <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
+            <CapTableSection valuation={valuation} compositeValue={result.composite_value} />
+          </GatedSection>
+        </div>
+      </div>
 
-      {config.showESOPDetail && (
-        <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
-          <ESOPSection valuation={valuation} compositeValue={result.composite_value} />
-        </GatedSection>
-      )}
-
-      <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
-        <CapTableSection valuation={valuation} compositeValue={result.composite_value} />
-      </GatedSection>
-
-      {config.showInvestorMatch && (
-        <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
-          <InvestorSection
-            sector={valuation.sector}
-            stage={valuation.stage}
-            targetRaise={valuation.target_raise}
-          />
-        </GatedSection>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-7">
+          {config.showInvestorMatch ? (
+            <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
+              <InvestorSection
+                sector={valuation.sector}
+                stage={valuation.stage}
+                targetRaise={valuation.target_raise}
+              />
+            </GatedSection>
+          ) : (
+             <div className="glass-card grain rounded-xl p-8 flex flex-col items-center justify-center text-center h-full bg-slate-50/50">
+                <p className="text-sm font-medium text-slate-400 italic">Investor matching unavailable for this report type.</p>
+             </div>
+          )}
+        </div>
+        <div className="lg:col-span-5">
+          {config.showIBCDownside ? (
+            <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
+              <DownsideSection sector={valuation.sector} />
+            </GatedSection>
+          ) : (
+             <div className="glass-card grain rounded-xl p-8 flex flex-col items-center justify-center text-center h-full bg-slate-50/50">
+                <p className="text-sm font-medium text-slate-400 italic">Downside analysis unavailable for this report type.</p>
+             </div>
+          )}
+        </div>
+      </div>
 
       {config.showAINarrative && (
         <GatedSection purpose={purpose} paidPurpose={paidPurpose}>
@@ -280,7 +299,11 @@ export default function ReportPage() {
 
       <PDFDownloadButton valuation={valuation} result={result} />
 
-      <CertifiedCTA valuationId={valuation.id} email={valuation.email || ''} purpose={purpose} />
+      <div id="certified-cta-section">
+        <CertifiedCTA valuationId={valuation.id} email={valuation.email || ''} purpose={purpose} />
+      </div>
+
+      <StickyReportCTA />
     </main>
   )
 }

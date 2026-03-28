@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu } from 'lucide-react'
+import { useModal } from '@/components/providers/modal-provider'
 import {
   Sheet,
   SheetContent,
@@ -24,6 +25,7 @@ interface MobileNavProps {
 
 export function MobileNav({ links, pathname }: MobileNavProps) {
   const [open, setOpen] = useState(false)
+  const { openLeadModal } = useModal()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -49,7 +51,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
         <div className="flex flex-col h-full">
           {/* Branding */}
           <div className="flex items-center gap-2 p-5 border-b border-[oklch(0.91_0.005_260)]">
-            <Image src="/logo.png" alt="First Unicorn Startup" width={120} height={32} className="h-7 w-auto" />
+            <Image src="/logo.png" alt="First Unicorn Startup" width={140} height={36} className="h-8 w-auto" />
           </div>
 
           {/* Navigation */}
@@ -58,6 +60,23 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
               const isActive =
                 pathname === link.href ||
                 (pathname?.startsWith(link.href + '/') ?? false)
+              const isModal = (link as any).isModal
+
+              if (isModal) {
+                return (
+                  <button
+                    key={link.label}
+                    onClick={() => {
+                      setOpen(false)
+                      openLeadModal()
+                    }}
+                    className="relative rounded-lg px-4 py-3 text-sm text-left font-medium transition-colors text-[oklch(0.35_0.02_260)] hover:text-[oklch(0.15_0.02_260)] hover:bg-[oklch(0.96_0.005_260)]"
+                  >
+                    {link.label}
+                  </button>
+                )
+              }
+
               return (
                 <Link
                   key={link.href}
@@ -85,7 +104,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
               onClick={() => setOpen(false)}
               className="flex items-center justify-center w-full rounded-lg h-10 px-4 text-sm font-semibold bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
             >
-              Get Valuation
+              Try Free Valuation Engine
             </Link>
           </div>
         </div>

@@ -46,12 +46,12 @@ export function MethodContribution({ methods, compositeValue }: Props) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <div className="rounded-xl bg-[oklch(0.97 0.003 260)] border border-[oklch(0.91 0.005 260)] overflow-hidden h-full">
-        <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-[oklch(0.91 0.005 260)]">
+      <div className="glass-card grain relative rounded-xl border border-[oklch(0.91_0.005_260/0.8)] overflow-hidden h-full bg-gradient-to-br from-[oklch(0.99_0.002_260)] to-[oklch(0.985_0.002_260)]">
+        <div className="flex items-center gap-2.5 px-5 py-4 border-b border-[oklch(0.91_0.005_260/0.5)]">
           <div className="w-7 h-7 rounded-lg bg-[oklch(0.65_0.16_310/0.1)] flex items-center justify-center">
             <PieChartIcon className="w-3.5 h-3.5 text-[oklch(0.65_0.16_310)]" />
           </div>
-          <h3 className="text-sm font-semibold text-[oklch(0.62 0.22 330)]">Method Contribution</h3>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Method Contribution</h3>
         </div>
         <div className="p-5">
           <div className="h-[200px]">

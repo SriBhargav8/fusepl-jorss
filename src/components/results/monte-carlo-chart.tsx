@@ -45,22 +45,22 @@ export function MonteCarloChart({ monteCarlo }: Props) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <div className="rounded-xl bg-[oklch(0.97 0.003 260)] border border-[oklch(0.91 0.005 260)] overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.91 0.005 260)]">
+      <div className="glass-card grain relative rounded-xl border border-[oklch(0.91_0.005_260/0.8)] overflow-hidden h-full bg-gradient-to-br from-[oklch(0.99_0.002_260)] to-[oklch(0.985_0.002_260)]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[oklch(0.91_0.005_260/0.5)]">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg bg-[oklch(0.65_0.16_155/0.1)] flex items-center justify-center">
               <Activity className="w-3.5 h-3.5 text-[oklch(0.65_0.16_155)]" />
             </div>
-            <h3 className="text-sm font-semibold text-[oklch(0.62 0.22 330)]">Monte Carlo Simulation</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Monte Carlo Simulation</h3>
           </div>
-          <span className="text-[10px] text-[oklch(0.50 0.01 260)] tabular-nums">
-            {monteCarlo.iterations_valid.toLocaleString()} / {monteCarlo.iterations_total.toLocaleString()} valid
+          <span className="text-[9px] font-bold text-[oklch(0.50_0.01_260)] uppercase tracking-tighter tabular-nums opacity-60">
+            {monteCarlo.iterations_valid.toLocaleString()} Valid
           </span>
         </div>
         <div className="p-5">
-          <div className="h-[220px]">
+          <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={points} margin={{ top: 10, right: 20, bottom: 5, left: 20 }}>
+              <AreaChart data={points} margin={{ top: 15, right: 20, bottom: 5, left: 20 }}>
                 <defs>
                   <linearGradient id="mcGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="oklch(0.62 0.22 330)" stopOpacity={0.25} />

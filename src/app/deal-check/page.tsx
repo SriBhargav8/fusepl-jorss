@@ -333,15 +333,17 @@ export default function DealCheckPage() {
                 </div>
               )}
 
-              {/* CTA */}
-              <div className="text-center pt-2">
-                <p className="text-xs text-[oklch(0.50_0.01_260)] mb-2">Want a full 10-method valuation with this deal analysis?</p>
-                <a
-                  href="/valuation"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[oklch(0.62_0.22_330)] hover:text-[oklch(0.50_0.22_330)] transition-colors"
-                >
-                  Get Your Free Valuation <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+              {/* Quick Tool Links */}
+              <div className="mt-8 pt-6 border-t border-[oklch(0.91_0.005_260)] text-center">
+                <p className="text-[10px] font-bold text-[oklch(0.62_0.22_330)] uppercase tracking-[0.2em] mb-4">Founders Ecosystem</p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <a href="/valuation" className="flex items-center gap-2 px-4 py-2 rounded-full border border-[oklch(0.91_0.005_260)] bg-white text-[12px] font-semibold text-[oklch(0.20_0.02_260)] transition-all hover:border-[oklch(0.62_0.22_330/0.4)] hover:text-[oklch(0.62_0.22_330)]">
+                    Valuation Engine <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                  <a href="/cap-table" className="flex items-center gap-2 px-4 py-2 rounded-full border border-[oklch(0.91_0.005_260)] bg-white text-[12px] font-semibold text-[oklch(0.20_0.02_260)] transition-all hover:border-[oklch(0.62_0.22_330/0.4)] hover:text-[oklch(0.62_0.22_330)]">
+                    Cap Table Simulator <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}

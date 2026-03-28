@@ -98,7 +98,7 @@ describe('calculateValuation (orchestrator)', () => {
 
   it('produces different results for different sectors', () => {
     const saas = calculateValuation(makeInputs({ sector: 'saas_horizontal' }))
-    const agritech = calculateValuation(makeInputs({ sector: 'agritech' }))
+    const agritech = calculateValuation(makeInputs({ sector: 'agritech_precision' }))
     expect(saas.composite_value).not.toBe(agritech.composite_value)
   })
 

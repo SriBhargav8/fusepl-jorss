@@ -1,19 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDamodaranBenchmark } from '@/lib/data/sector-mapping'
 import type { StartupCategory, ValuationPurpose, DamodaranBenchmark } from '@/types'
-
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) return null
-  const { createClient } = require('@supabase/supabase-js')
-  return createClient(url, key)
-}
+import { db } from '@/db'
+import { valuations } from '@/db/schema'
+import { eq, gte, and, notIlike, isNotNull } from 'drizzle-orm'
+import Anthropic from '@anthropic-ai/sdk'
 
 function getAnthropic() {
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) return null
-  const Anthropic = require('@anthropic-ai/sdk').default
   return new Anthropic({ apiKey })
 }
 
@@ -27,35 +22,35 @@ const PURPOSE_FRAMING: Record<ValuationPurpose, string> = {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function buildPrompt(existing: Record<string, any>, purpose: ValuationPurpose, damodaranBenchmark: DamodaranBenchmark | null): string {
-  const runway = (existing.monthly_burn as number) > 0
-    ? Math.round((existing.cash_in_bank as number) / (existing.monthly_burn as number))
+function buildPrompt(existing: any, purpose: ValuationPurpose, damodaranBenchmark: DamodaranBenchmark | null): string {
+  const runway = Number(existing.monthlyBurn) > 0
+    ? Math.round(Number(existing.cashInBank) / Number(existing.monthlyBurn))
     : 'N/A'
 
-  const recovery = existing.ibc_recovery_range
-    ? `${(existing.ibc_recovery_range as { low: number; high: number }).low}-${(existing.ibc_recovery_range as { low: number; high: number }).high}%`
+  const recovery = existing.ibcRecoveryRange
+    ? `${(existing.ibcRecoveryRange as { low: number; high: number }).low}-${(existing.ibcRecoveryRange as { low: number; high: number }).high}%`
     : 'N/A'
 
   return `You are a senior Indian startup valuation professional writing a report section.
 
 CONTEXT:
-- Company: ${existing.company_name}, ${existing.sector}, ${existing.stage}
+- Company: ${existing.companyName}, ${existing.sector}, ${existing.stage}
 - Purpose: ${PURPOSE_FRAMING[purpose]}
 
 DATA (do not recompute — use these exact numbers):
-- Revenue: Rs ${existing.annual_revenue}, Growth: ${existing.revenue_growth_pct}%, Gross Margin: ${existing.gross_margin_pct}%
-- Burn: Rs ${existing.monthly_burn}/month, Runway: ${runway} months
-- Team: ${existing.founder_experience}/5 experience, ${existing.domain_expertise}/5 domain expertise, Previous exits: ${existing.previous_exits}
-- Product: ${existing.dev_stage}, Competition: ${existing.competition_level}/5
+- Revenue: Rs ${existing.annualRevenue}, Growth: ${existing.revenueGrowthPct}%, Gross Margin: ${existing.grossMarginPct}%
+- Burn: Rs ${existing.monthlyBurn}/month, Runway: ${runway} months
+- Team: ${existing.founderExperience}/5 experience, ${existing.domainExpertise}/5 domain expertise, Previous exits: ${existing.previousExits}
+- Product: ${existing.devStage}, Competition: ${existing.competitionLevel}/5
 - TAM: Rs ${existing.tam} Cr
-- Competitive advantages: ${existing.competitive_advantages}
-- Valuation range: Rs ${existing.valuation_low}–${existing.valuation_high}
-- Composite value: Rs ${existing.valuation_mid}
-- Confidence score: ${existing.confidence_score}/100
+- Competitive advantages: ${existing.competitiveAdvantages}
+- Valuation range: Rs ${existing.valuationLow}–${existing.valuationHigh}
+- Composite value: Rs ${existing.valuationMid}
+- Confidence score: ${existing.confidenceScore}/100
 - Damodaran India multiples: ${existing.sector} trades at ${damodaranBenchmark ? `${(damodaranBenchmark.ev_revenue as number).toFixed(1)}x EV/Revenue` : 'N/A'}
 - IBC context: Companies in ${existing.sector} recover ${recovery} in insolvency scenarios
 
-${existing.method_results ? `METHOD RESULTS: ${JSON.stringify(existing.method_results)}` : ''}
+${existing.methodResults ? `METHOD RESULTS: ${JSON.stringify(existing.methodResults)}` : ''}
 
 WRITE the following sections in professional valuer tone:
 
@@ -78,12 +73,7 @@ Use INR. Reference Indian market context. Be direct, not diplomatic.`
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = getSupabase()
     const anthropic = getAnthropic()
-
-    if (!supabase) {
-      return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
-    }
 
     if (!anthropic) {
       return NextResponse.json({ error: 'AI service not configured' }, { status: 503 })
@@ -94,36 +84,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing valuation_id' }, { status: 400 })
     }
 
-    // Check cache first — fetch all needed fields including purpose and method_results
-    const { data: existing } = await supabase
-      .from('valuations')
-      .select('ai_narrative, company_name, sector, stage, annual_revenue, revenue_growth_pct, gross_margin_pct, monthly_burn, cash_in_bank, founder_experience, domain_expertise, previous_exits, dev_stage, competition_level, tam, competitive_advantages, valuation_low, valuation_mid, valuation_high, confidence_score, ibc_recovery_range, method_results, purpose, paid_purpose')
-      .eq('id', valuation_id)
-      .single()
+    // Check cache first
+    const existingList = await db.select().from(valuations).where(eq(valuations.id, valuation_id)).limit(1)
+    const existing = existingList[0]
 
     if (!existing) {
       return NextResponse.json({ error: 'Valuation not found' }, { status: 404 })
     }
 
     // Return cached if available
-    if (existing.ai_narrative) {
-      return NextResponse.json({ narrative: existing.ai_narrative })
+    if (existing.aiNarrative) {
+      return NextResponse.json({ narrative: existing.aiNarrative })
     }
 
     // Rate limit: 100 AI calls per day
     const todayStart = new Date()
     todayStart.setHours(0, 0, 0, 0)
-    const { count: dailyCount } = await supabase
-      .from('valuations')
-      .select('id', { count: 'exact', head: true })
-      .not('ai_narrative', 'is', null)
-      .gte('created_at', todayStart.toISOString())
+    
+    const dailyCalls = await db.select({ count: valuations.id }).from(valuations).where(
+      and(
+        isNotNull(valuations.aiNarrative),
+        gte(valuations.createdAt, todayStart)
+      )
+    )
 
-    if ((dailyCount ?? 0) >= 100) {
+    if (dailyCalls.length >= 100) {
       return NextResponse.json({ error: 'Daily AI analysis limit reached. Try again tomorrow.' }, { status: 429 })
     }
 
-    const purpose: ValuationPurpose = existing.purpose || existing.paid_purpose || 'indicative'
+    const purpose: ValuationPurpose = (existing.purpose as ValuationPurpose) || (existing.paidPurpose as ValuationPurpose) || 'indicative'
     const damodaranBenchmark = getDamodaranBenchmark(existing.sector as StartupCategory)
     const prompt = buildPrompt(existing, purpose, damodaranBenchmark)
 
@@ -140,11 +129,8 @@ export async function POST(req: NextRequest) {
 
     const narrative = message.content[0].type === 'text' ? message.content[0].text : ''
 
-    // Cache in Supabase
-    await supabase
-      .from('valuations')
-      .update({ ai_narrative: narrative })
-      .eq('id', valuation_id)
+    // Cache in DB
+    await db.update(valuations).set({ aiNarrative: narrative }).where(eq(valuations.id, valuation_id))
 
     return NextResponse.json({ narrative })
   } catch (err) {

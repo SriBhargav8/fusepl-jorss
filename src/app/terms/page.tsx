@@ -57,8 +57,8 @@ export default function TermsPage() {
               Premium reports are priced based on valuation purpose. Payments are processed securely by Razorpay. All prices are in Indian Rupees (INR) and inclusive of applicable taxes.
             </p>
             <p>
-              Refunds are available within 7 days of purchase if the report has not been accessed. Once a report is viewed, no refund is available. Contact us to request a refund.
-            </p>
+              <strong className="text-[oklch(0.62 0.22 330)]">No Refund Policy:</strong> Due to the digital nature of our reports and the immediate delivery of analysis, all sales are final. We do not offer refunds once a payment has been processed and a report has been generated. For more details, see our <a href="/refund-policy" className="text-[oklch(0.62 0.22 330)] hover:underline">Refund Policy</a>.
+            </p> section.
           </Section>
 
           <Section title="6. Intellectual Property">

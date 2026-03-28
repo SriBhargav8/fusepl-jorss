@@ -49,3 +49,12 @@ export function clamp(value: number, min: number, max: number): number {
 
 /** Shared email validation regex */
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+/** Normalize phone number by stripping all non-digits and removing Indian country code if present */
+export function normalizePhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '')
+  if (digits.length === 12 && digits.startsWith('91')) {
+    return digits.slice(2)
+  }
+  return digits
+}
