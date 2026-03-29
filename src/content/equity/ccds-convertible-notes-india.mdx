@@ -1,0 +1,525 @@
+---
+title: "CCDs and Convertible Notes — India's Answer to SAFEs (With Tax Implications)"
+excerpt: "SAFEs don't work in India. Understand why, and learn how CCDs (Compulsorily Convertible Debentures), CCPS, and iSAFEs actually work — including the tax implications, FEMA rules for foreign investors, and the conversion mechanics at Series A."
+pillar: "equity"
+publishDate: "2026-03-29"
+readingTime: 27
+wordCount: 6600
+featured: false
+tags: ["CCD", "convertible note", "SAFE India", "startup fundraising", "CCPS", "bridge round India"]
+---
+
+## The SAFE That Wasn't Safe
+
+In 2019, a Bengaluru-based SaaS startup accepted an investment from a US-based angel investor using a SAFE (Simple Agreement for Future Equity) — the Y Combinator standard document. The angel had used SAFEs for dozens of investments in US companies. The founders were comfortable with the document. Everything seemed straightforward.
+
+Two years later, when the company was raising a Series A, the legal team flagged the SAFE as a problem. Under Indian law, specifically the Companies Act 2013 and FEMA (Foreign Exchange Management Act), the SAFE did not constitute a recognized instrument for foreign investment. The amount was potentially classified as an External Commercial Borrowing (ECB). There were penalties, compliance filings that hadn't been done, and months of legal remediation before the Series A could close.
+
+The SAFE, designed to be simple, had become one of the most complex legal problems the company faced.
+
+This is why Indian startup lawyers consistently advise against SAFEs for India-incorporated companies. Understanding what to use instead — CCDs, CCPS, and their mechanics — is one of the most practically important pieces of legal and financial literacy for Indian founders and early-stage investors.
+
+---
+
+## Why SAFEs Don't Work in India
+
+SAFEs were designed for Delaware C-Corps. They exploit the flexibility of US corporate law, which allows very simple equity instruments with minimal formality. Indian law is more prescriptive about what constitutes an investment instrument.
+
+**The Companies Act 2013 problem:** Under Section 2(30) of the Companies Act, "debentures" include any instrument that acknowledges a debt. Section 2(84) defines "shares." An instrument that is neither a recognized debt instrument nor a recognized equity instrument falls into a grey zone that creates compliance problems. A SAFE, which is a contract for future equity without being a debenture or a share, doesn't fit cleanly into any defined category.
+
+**The FEMA problem:** FEMA regulations governing foreign investment in Indian companies (specifically FDI regulations under FEMA 20(R)) require that any foreign equity investment be made in "capital instruments" — which are specifically defined as equity shares, fully, compulsorily, and mandatorily convertible preference shares, or fully, compulsorily, and mandatorily convertible debentures. A SAFE is none of these.
+
+If a foreign investor puts money into an Indian startup using a SAFE, it is likely classified either as an ECB (External Commercial Borrowing) or as a contravention of FEMA. Either way, there are filing requirements, pricing guidelines, and interest rate constraints that make the SAFE structure non-compliant.
+
+**The valuation issue:** Even for domestic (Indian resident) investors, the Companies Act requires that equity shares or convertible instruments be issued at a price determined by an independent registered valuer (for unlisted companies). A SAFE without a specific valuation creates ambiguity about the price at conversion time, which the Companies Act doesn't accommodate well.
+
+**The iSAFE exception:** There is an India-specific variant called the iSAFE, developed by the Indian Angel Network (IAN) in collaboration with SEBI and legal practitioners. iSAFE is structured as a "convertible note" under Section 42 of the Companies Act (private placement rules) with a maturity period of up to 5 years, and conversion provisions that comply with FEMA. Some seed investors and accelerators use iSAFE. But it is still less widely adopted than CCDs or CCPS, and legal opinions on its robustness for foreign investors vary.
+
+---
+
+## What is a CCD?
+
+A CCD — Compulsorily Convertible Debenture — is a debt instrument issued by a private company that must convert into equity shares upon the occurrence of a defined trigger event (or at maturity at the latest). Unlike an optionally convertible debenture, the conversion is mandatory — the investor cannot choose to stay as a creditor and demand repayment in cash.
+
+**Why this structure matters:** The mandatory conversion means CCDs are classified as "capital instruments" under FEMA regulations, making them legal for foreign investment. This is the critical distinction that makes CCDs work where SAFEs don't.
+
+### The Legal Architecture of a CCD
+
+**Governing law:** Companies Act 2013 (Sections 71, 42), SEBI Debenture Trustee Regulations (where applicable), FEMA 20(R) for foreign investment.
+
+**Key structural elements:**
+
+| Element | Description | Typical Range (India) |
+|---|---|---|
+| Face value | Nominal value of the debenture | ₹10–100 per debenture |
+| Interest rate | Annual coupon on the principal | 0–10% (often nominal: 0.001% or 0%) |
+| Maturity | Maximum tenor before mandatory conversion | 5 years (FEMA ceiling for compulsorily convertible instruments) |
+| Conversion trigger | Event that causes conversion | Next equity round above a threshold, maturity, or qualified IPO |
+| Conversion price | Price at which debentures convert to equity shares | Usually: lower of (a) valuation cap price and (b) next round price × (1 - discount) |
+| Trustee | Required for listed companies; optional for private companies | Often waived in small rounds |
+| ROC filing | Required under Companies Act | Form PAS-3 for allotment; CHG-9 for debenture charge (if secured) |
+
+### The Conversion Mechanics
+
+This is where CCDs differ most from a simple fixed-price equity round. The conversion price is typically determined by a formula, not a fixed price at issuance.
+
+**Formula 1: Discount on next round**
+
+```
+Conversion Price = Next Round Price per Share × (1 - Discount Rate)
+
+Example:
+- CCD issued at ₹1 Cr by angel investor
+- Discount rate: 20%
+- Series A priced at ₹100 per share (post-money ₹50 Cr on 50 lakh shares)
+- Conversion price = ₹100 × (1 - 0.20) = ₹80 per share
+- Shares received by CCD investor = ₹1 Cr / ₹80 = 1,25,000 shares
+- At Series A price of ₹100, these shares are worth ₹1.25 Cr immediately
+  (the 20% discount = 25% premium on investment from day 1)
+```
+
+**Formula 2: Valuation cap**
+
+```
+Conversion Price = min(
+  (a) Valuation Cap / Fully Diluted Shares at conversion,
+  (b) Next Round Price per Share × (1 - Discount)
+)
+
+Example:
+- CCD invested ₹50L
+- Valuation cap: ₹10 Cr
+- Discount: 20%
+- Series A post-money: ₹50 Cr; pre-money ₹45 Cr; 50 lakh shares → ₹90 per share
+- Cap price = ₹10 Cr / 50 lakh shares = ₹20 per share
+- Discount price = ₹90 × 0.80 = ₹72 per share
+- Conversion price = min(₹20, ₹72) = ₹20 per share (cap applies)
+- Shares received = ₹50L / ₹20 = 2,50,000 shares
+- At Series A price ₹90, worth ₹2.25 Cr — 4.5x the invested amount at conversion
+```
+
+The valuation cap protects early investors from being diluted when a company does very well. Without a cap, an angel who invested in a company at the earliest stage might only get a 20% discount to a Series A that prices the company at 100x their entry. With a cap, they get the benefit of the lower implied entry valuation.
+
+---
+
+## Tax Implications of CCDs
+
+The tax treatment of CCDs has two phases: while the debenture is outstanding (pre-conversion) and at conversion.
+
+### Phase 1: While the CCD is Outstanding
+
+**For the company (issuer):**
+
+- Interest paid on CCDs is deductible as a business expense under Section 36(1)(iii) of the Income Tax Act 1961.
+- If the CCD carries a nominal 0.001% interest rate (common in startup CCD deals), the deduction is minimal — but it exists.
+- Some startups negotiate a 0% interest rate on CCDs. In this case, there is a potential deemed income implication under Section 56(2)(x) — if the company issues debentures at less than face value, the differential could be treated as income. However, for start-ups recognized by DPIIT under the Startup India scheme, there is an exemption from Section 56(2)(x) for investments up to ₹25 crore per year from eligible investors (angel tax exemption).
+
+**For the investor:**
+
+- Interest income (if CCD carries a coupon) is taxable as "Income from Other Sources" at the investor's applicable slab rate.
+- For corporate investors, it's taxable as business income.
+- For individual angel investors, it's taxed as interest income — meaning the highest slab rate (30% + surcharge for high-income individuals), which is less tax-efficient than equity gains.
+- This is one reason many CCD deals carry 0.001% or 0% interest — to minimize the investor's current tax burden in exchange for capital gains treatment on conversion.
+
+### Phase 2: At Conversion
+
+This is the most complex and most important tax question.
+
+**When CCDs convert to equity shares, what is the tax treatment?**
+
+The question is: does conversion itself trigger a taxable event?
+
+**For the investor:** Under the Income Tax Act, conversion of debentures into shares is treated as a "transfer" under Section 2(47). This means capital gains tax principles apply.
+
+However, Section 47(x) provides an exemption: the conversion of bonds or debentures into shares of the same company is NOT treated as a transfer for capital gains purposes. No tax is due at the moment of conversion.
+
+The investor's cost of acquisition of the new equity shares is the original cost of the CCD. The holding period for the shares (for long-term capital gains purposes — 24 months for unlisted shares) starts from the date of conversion, not the date of CCD purchase.
+
+```
+Example:
+- CCD purchased: April 2023, ₹50L
+- Conversion: March 2025 (₹50L converts to 2,50,000 shares at ₹20/share)
+- Sale of shares: June 2026, at ₹200/share → 2,50,000 × ₹200 = ₹5 Cr proceeds
+
+Capital gains calculation:
+- Sale consideration: ₹5 Cr
+- Cost of acquisition: ₹50L (original CCD investment)
+- Holding period from conversion: March 2025 to June 2026 = 15 months
+  (not yet 24 months — so SHORT TERM capital gain)
+- STCG: ₹5 Cr - ₹50L = ₹4.5 Cr, taxed at 20% = ₹90L tax
+
+If held until March 2027 (24+ months after conversion):
+- LTCG: ₹4.5 Cr, taxed at 12.5% (post-Finance Act 2024) = ₹56.25L tax
+- Saving from holding longer: ₹33.75L
+```
+
+**For the company:** The conversion itself has no direct tax implication for the company. There may be a premium on conversion (the shares issued are worth more than their face value) — the excess is recorded as Securities Premium Reserve, which is not taxable income.
+
+**Angel Tax (Section 56(2)(x)) at conversion:**
+
+When shares are issued at less than "fair market value" (as determined by DCCF or NAV method), the difference is taxable as income of the company. For a CCD converting at a discount to the next round price, the FMV at conversion is the next round price, and the conversion price is lower — so there is a potential Section 56(2)(x) exposure.
+
+This is a real issue. The DPIIT startup exemption covers this for eligible startups (registered under Startup India, total investment not exceeding ₹25 Cr from angel investors). If you're DPIIT-registered and within limits, you're protected. If not, get a proper valuation report at conversion to defend the conversion price as FMV.
+
+---
+
+## The CCPS Alternative
+
+CCPS (Compulsorily Convertible Preference Shares) is the other common instrument for early-stage Indian startup funding — used more commonly for equity rounds than for bridge/convertible instruments.
+
+**Key differences between CCD and CCPS:**
+
+| Feature | CCD | CCPS |
+|---|---|---|
+| Nature | Debt instrument that converts | Preference equity that converts |
+| Balance sheet treatment | Liability until conversion | Equity |
+| Interest/Dividend | Interest (tax-deductible for co.) | Dividend (not tax-deductible, requires sufficient distributable profits) |
+| Voting rights | Typically no voting rights (debenture holder) | Typically limited voting rights (preference shareholder) |
+| Priority in liquidation | Senior to equity, potentially senior to preference shares | Senior to ordinary equity, junior to secured debt |
+| FEMA treatment | Capital instrument (compliant for foreign investment) | Capital instrument (compliant for foreign investment) |
+| Conversion timing flexibility | More flexible — triggered by event or maturity | Usually triggered by defined events |
+| ROC filings | Form PAS-3 (allotment) + CHG-9 (charge) | Form SH-1 (share certificate) + Form PAS-3 |
+| Stamp duty | On debenture issuance (rate varies by state) | On share issuance |
+
+**When to use CCPS vs CCD:**
+
+Use **CCPS** when:
+- You are doing a priced equity round (this is the standard instrument for Series A and later)
+- The investor wants preference rights (priority in liquidation, anti-dilution, ROFR)
+- The investment amount is large enough to justify the full incorporation process
+- The company has sufficient paid-up capital and documented valuation
+
+Use **CCD** when:
+- It is a bridge round or convertible note (you want flexibility on conversion price)
+- Speed is important (CCD documentation is typically faster than a full CCPS round)
+- The investor is comfortable with no preference rights before conversion
+- You want to offer a discount or valuation cap without pricing the round today
+
+---
+
+## Comparison Table: CCD vs CCPS vs Equity vs iSAFE
+
+| Feature | Equity (Ordinary Shares) | CCPS | CCD | iSAFE |
+|---|---|---|---|---|
+| Instrument type | Equity | Preference equity | Debt | Contract |
+| FEMA compliant for foreign investment | Yes | Yes | Yes | Debated/Evolving |
+| Companies Act compliant | Yes | Yes | Yes | Partial (varies) |
+| Pricing at issuance | Fixed | Fixed | Fixed face value; conversion price may be formula-based | Usually formula-based (cap + discount) |
+| Voting rights | Full | Limited (usually) | None (until conversion) | None (until conversion) |
+| Liquidation preference | No | Yes (ahead of equity) | Senior to equity; converts before liquidation | Converts before liquidation |
+| Interest/dividend | No | Dividend (subject to profits) | Interest (small or nominal) | None typically |
+| Conversion | Not applicable | Mandatory (on trigger) | Mandatory (on trigger or maturity) | On trigger |
+| Balance sheet | Equity | Equity | Liability | Usually off-balance sheet or liability |
+| Tax at conversion | Not applicable | No tax at conversion | No tax at conversion (Section 47(x)) | Unclear; document-dependent |
+| Stamp duty | On issuance | On issuance | On issuance of debenture | Lower / varies |
+| Best used for | Founder shares, ESOPs, large structured rounds | Series A, B, C rounds | Bridge rounds, angel rounds, early VC | Early-stage domestic-only rounds |
+| Legal cost to implement | Low | Medium | Medium | Low–Medium |
+| Documentation complexity | Low | High | Medium | Low |
+
+---
+
+## When to Use CCDs: The Bridge Round Use Case
+
+CCDs are most commonly used for bridge rounds — situations where the company needs capital quickly, before the full diligence and structuring work of a priced round can be completed.
+
+**Scenario: You're 3 months from closing your Series A, but you need ₹1–2 crore to cover burn while the round is finalizing.**
+
+A full CCPS round for ₹2 crore would require:
+- Board resolution
+- Valuation report from registered valuer (2–4 weeks)
+- Shareholder approval (if EGM required)
+- ROC filings
+- Full term sheet and SHA negotiation (2–6 weeks with lawyers)
+- Total time: 6–12 weeks minimum
+
+A CCD bridge round can be structured in 1–3 weeks:
+- Board resolution approving CCD issuance (Section 179, Companies Act)
+- CCD subscription agreement (3–5 pages; much simpler than SHA)
+- Basic ROC filing (Form PAS-3 within 15 days of allotment)
+- Conversion terms: auto-converts at the Series A pricing with a 15–20% discount
+
+The CCD investor gets rewarded for the speed and risk with the discount — they convert at a cheaper price than the Series A investors who went through full diligence.
+
+**Angel investor use case:** Many angel investors prefer CCDs precisely because they don't have to decide on valuation at the time of investment. An angel who believes in a founding team but isn't sure how to value a pre-revenue company can invest via CCD — let the market (the next priced round) determine valuation — and receive a discount for investing early.
+
+---
+
+## FEMA Implications for Foreign CCD Investors
+
+If a foreign investor (including NRI investors on a non-repatriation basis) invests in CCDs, there are specific FEMA compliance requirements.
+
+**Step 1: Eligible sectors.** CCDs are FDI-compliant only in sectors where FDI is permitted. For most startups, this is not an issue (software, services, marketplace, etc. are under automatic route). But regulated sectors (banking, insurance, media) have FDI restrictions that apply equally to CCDs.
+
+**Step 2: Pricing guidelines.** Under FEMA, CCDs must be issued at a price that is not less than the "fair value" as determined by a SEBI-registered merchant banker or a Chartered Accountant using internationally accepted pricing methodology. For a bridge CCD, this means you need a valuation report before issuing to foreign investors — or at minimum documentation that the conversion discount is market-standard.
+
+**Step 3: Maturity constraint.** For compulsorily convertible instruments (CCDs), FEMA regulations require that the conversion must happen within 5 years of issuance. If the trigger event (qualified round) doesn't happen within 5 years, the CCD must still convert to equity — it cannot be redeemed for cash. This is usually fine for startups that expect a funded round within 5 years, but be aware of this constraint.
+
+**Step 4: FC-GPR Filing.** When the CCD converts to equity, the company must file FC-GPR (Foreign Currency – Gross Provisional Return) with the RBI through the Authorised Dealer bank within 30 days of allotment. Failure to file attracts compounding penalties under FEMA.
+
+**Step 5: Annual return.** While the CCD is outstanding, the company must include the outstanding investment in its Annual Return on Foreign Liabilities and Assets (FLA return), filed with RBI by July 15 each year.
+
+**Practical checklist for foreign CCD investment:**
+
+```
+Before issuance:
+□ Confirm sector is under automatic FDI route
+□ Obtain valuation report from SEBI-registered merchant banker
+□ Board resolution approving CCD issuance to foreign investor
+□ CCD subscription agreement with standard terms
+□ Ensure maturity date ≤ 5 years from issuance
+
+At issuance:
+□ Form FC-TRS (Transfer of Shares) — only if investor is an NRI transferring existing shares;
+  not required for fresh issuance
+□ Intimate AD bank of inward remittance (within 30 days of receipt)
+
+At conversion:
+□ File FC-GPR with RBI via AD bank within 30 days of allotment
+□ Update cap table and MCA records
+□ File PAS-3 with ROC within 15 days of allotment
+
+Annual:
+□ FLA return to RBI by July 15 (includes outstanding CCD as FDI liability)
+```
+
+---
+
+## Standard CCD Term Sheet Clauses
+
+Understanding the key clauses in a CCD term sheet protects both founders and investors. Here are the terms that matter most.
+
+### 1. Principal Amount and Interest Rate
+
+```
+Principal: ₹[X] crore
+Interest Rate: [0.001% / 8% / etc.] per annum, accruing from date of subscription
+Interest Payment: Accrued and added to principal at conversion (not paid in cash)
+```
+
+For startup CCDs, the interest rate is usually nominal (0.001%) or 0%. If you have a foreign investor, check if a 0% rate creates a transfer pricing issue — it usually doesn't at these amounts but confirm with your CA.
+
+### 2. Maturity Date
+
+```
+Maturity: 3 years from date of subscription [or earlier if Conversion Trigger occurs]
+At Maturity: If no Qualified Financing has occurred, the CCD will automatically convert
+to equity shares at the Maturity Conversion Price, being the lower of (a) ₹X per share
+(implied cap of ₹Y crore) or (b) the 90-day VWAP of comparable transactions.
+```
+
+The maturity conversion backstop is important — without it, the CCD becomes an illegal debt instrument if no conversion trigger occurs.
+
+### 3. Conversion Trigger (Qualified Financing)
+
+```
+"Qualified Financing" means the next equity financing round in which:
+(a) New investors invest an aggregate minimum of ₹[5] crore in new capital, and
+(b) The pre-money valuation of the Company is at least ₹[15] crore
+(the "Minimum Valuation Threshold")
+
+The Minimum Valuation Threshold ensures the CCD doesn't convert in a small bridge round
+that doesn't represent real price discovery.
+```
+
+Founders should negotiate the Minimum Valuation Threshold carefully. If it's set too high, you can get stuck: the CCD keeps accruing, and investors in small interim rounds cause potential problems.
+
+### 4. Conversion Price Formula
+
+```
+Conversion Price = min(
+  (a) Cap Price: [₹Y crore total valuation] / Fully Diluted Capitalization at Conversion, and
+  (b) Discount Price: Qualified Financing Price per Share × (1 - [20]%)
+)
+
+"Fully Diluted Capitalization" includes all issued shares, all shares issuable
+on conversion of outstanding convertible securities, and all shares in the authorized
+but unissued ESOP pool (whether or not granted).
+```
+
+The "fully diluted capitalization" definition is critical. Make sure ESOP pool shares are included — some founders try to exclude ungranted ESOP shares, which effectively lowers the number of shares in the denominator and increases the cap price, benefiting founders. Investors often insist on including the full ESOP pool.
+
+### 5. MFN (Most Favoured Nation) Clause
+
+```
+If the Company issues any other CCDs or convertible instruments to other investors
+on terms more favorable than those in this Agreement (including a higher cap or
+larger discount), the Investor shall have the right to elect to have its CCD
+automatically amended to reflect such more favorable terms.
+```
+
+The MFN clause protects early CCD investors from being disadvantaged if later CCD investors get better terms. For founders: be careful not to give wildly different terms to different CCD investors in the same round — the MFN clause means your best terms become the standard for everyone.
+
+### 6. Pro-Rata Rights at Conversion
+
+```
+At a Qualified Financing, the Investor shall have the right (but not obligation) to
+invest an additional amount up to [the Investor's pro-rata share based on their
+converted ownership / a fixed ₹X amount] in the Qualified Financing at the
+Qualified Financing price per share.
+```
+
+Pro-rata rights let the CCD investor maintain their ownership percentage at the next round. This is standard and usually reasonable to grant. Founders should be careful about granting super pro-rata rights (the right to invest more than their pro-rata share) to CCD investors — this can make the next round more complex.
+
+### 7. Information Rights
+
+```
+The Company shall provide the Investor with:
+(a) Unaudited quarterly financial statements within 30 days of each quarter end
+(b) Audited annual financial statements within 90 days of financial year end
+(c) Notice of board meetings [with or without right to attend]
+(d) Prompt notice of any material adverse development
+```
+
+Angel investors often don't insist on these rights in practice, but they should be in the document. If your CCD investors have formal information rights and you're not providing information, it creates legal exposure.
+
+---
+
+## What Happens to CCDs at Series A
+
+This is the moment all the conversion mechanics become real. Here's a complete walkthrough.
+
+**Pre-Series A cap table:**
+
+| Holder | Shares | Instrument | Amount Invested |
+|---|---|---|---|
+| Founder 1 | 45,00,000 | Ordinary shares | ₹10L (par value) |
+| Founder 2 | 35,00,000 | Ordinary shares | ₹7L (par value) |
+| ESOP pool | 10,00,000 | Ordinary shares (reserved) | — |
+| Angel 1 | CCD outstanding | CCD (₹1 Cr) | ₹1 Cr |
+| Angel 2 | CCD outstanding | CCD (₹75L) | ₹75L |
+| Angel 3 | CCD outstanding | CCD (₹50L) | ₹50L |
+
+CCD terms: 20% discount, ₹25 Cr valuation cap
+
+**Series A terms:**
+- Pre-money valuation: ₹40 crore
+- Series A investment: ₹12 crore (new lead investor)
+- Post-money: ₹52 crore
+- Series A price per share: ₹40 Cr / 90 lakh fully diluted shares = ₹44.44 per share
+
+**Step 1: Calculate conversion price for each CCD**
+
+```
+Cap price = ₹25 Cr / 90 lakh shares = ₹27.78 per share
+Discount price = ₹44.44 × (1 - 0.20) = ₹35.55 per share
+Conversion price = min(₹27.78, ₹35.55) = ₹27.78 (cap applies)
+```
+
+The cap applies here because the company did very well — it raised at ₹40 Cr pre-money, which is much higher than the ₹25 Cr cap.
+
+**Step 2: Calculate shares issued to each CCD investor**
+
+```
+Angel 1: ₹1 Cr / ₹27.78 = 3,60,115 shares
+Angel 2: ₹75L / ₹27.78 = 2,70,086 shares
+Angel 3: ₹50L / ₹27.78 = 1,80,058 shares
+Total CCD conversion: 8,10,259 shares
+```
+
+**Step 3: Series A new shares issued**
+
+```
+Series A investment: ₹12 Cr
+Series A price: ₹44.44 per share
+New Series A shares: ₹12 Cr / ₹44.44 = 27,00,270 shares
+```
+
+**Step 4: Final post-Series A cap table**
+
+| Holder | Shares | % |
+|---|---|---|
+| Founder 1 | 45,00,000 | 38.0% |
+| Founder 2 | 35,00,000 | 29.6% |
+| ESOP pool | 10,00,000 | 8.5% |
+| Angel 1 (converted from CCD) | 3,60,115 | 3.0% |
+| Angel 2 (converted from CCD) | 2,70,086 | 2.3% |
+| Angel 3 (converted from CCD) | 1,80,058 | 1.5% |
+| Series A investor | 27,00,270 | 22.8% |
+| **Total** | **1,18,10,529** | **100%** |
+
+Note that the CCD investors received CCPS (compulsorily convertible preference shares, i.e., the same class as Series A investors) upon conversion — their CCDs became preference shares at conversion. This is typically specified in the CCD agreement: "On conversion, the Investor shall receive [Ordinary Shares / a new class of Preference Shares on the same terms as the Qualified Financing investors]."
+
+Most sophisticated angel investors will negotiate for CCPS on conversion, not ordinary shares, to maintain preference rights.
+
+---
+
+## Common Mistakes in CCD Structuring
+
+### Mistake 1: Not Specifying the Conversion Share Class
+
+If the CCD agreement doesn't specify what class of shares the investor receives on conversion, there can be a dispute at the time of the Series A. The Series A investor's lawyers will insist on clarity. Specify upfront: "Conversion shall be into the same class of shares as the Qualified Financing, on the same terms, at the Conversion Price."
+
+### Mistake 2: Forgetting the MCA Filing
+
+Many angel rounds structured as CCDs skip the ROC filing (Form PAS-3). This is a compliance violation. The penalty for late filing is ₹200 per day. More importantly, if the filing isn't done, the CCD investor's claim is not reflected in the official records — which creates problems at due diligence for the next round.
+
+### Mistake 3: Setting the Valuation Cap Too High
+
+A high valuation cap protects the company (less dilution from CCD conversion). But if the cap is so high that even a successful Series A doesn't trigger it, the discount becomes the only benefit for the investor — which may not adequately compensate for the early risk. Angel investors who feel undercompensated are less likely to give warm introductions or actively help with the next round.
+
+A reasonable cap is typically 1.5–3x the implied valuation at the time of the CCD investment.
+
+### Mistake 4: ESOP Pool Exclusion in Fully Diluted Cap
+
+As noted above, excluding the ungranted ESOP pool from "fully diluted capitalization" when calculating the cap price benefits founders but is often contested by investors. Set this clearly upfront — most standard CCD forms include the ESOP pool.
+
+### Mistake 5: No Maturity Conversion Mechanism
+
+A CCD without a maturity conversion mechanism is potentially a non-compliant debt instrument under Indian law. Always include a "if no qualified financing occurs by [date], the CCD shall automatically convert to ordinary equity shares at [formula or fixed price]."
+
+---
+
+## The Decision Framework: Which Instrument Should You Use?
+
+Use this decision tree before your next fundraising:
+
+```
+Are you raising from Indian residents only?
+├── YES: iSAFE or CCD are both viable. CCD is more widely accepted.
+└── NO (foreign investors involved):
+    └── Use CCD or CCPS only (FEMA compliance requires capital instrument)
+
+Is this a bridge round (conversion price TBD, investing quickly)?
+├── YES: Use CCD with discount + cap structure
+└── NO (priced round, full diligence, term sheet negotiation):
+    └── Use CCPS (standard priced round instrument)
+
+Is the investor an angel / small check (< ₹1 Cr)?
+├── YES: CCD is usually faster and cheaper to document
+└── NO (institutional investor, >₹2 Cr):
+    └── Institutional investors will usually insist on CCPS with full SHA and term sheet
+
+Is speed the priority (need money in 2 weeks)?
+├── YES: CCD with subscription agreement only (no SHA, lighter documentation)
+└── NO: CCPS with full term sheet, SHA, and valuation report
+
+Do you want investors to have preference rights immediately (not just at conversion)?
+├── YES: CCPS
+└── NO: CCD (preference rights kick in only after conversion)
+```
+
+---
+
+## Key Takeaways
+
+1. SAFEs do not work for India-incorporated companies accepting foreign investment. Use CCDs or CCPS instead.
+
+2. CCDs are debt instruments that mandatorily convert to equity — this mandatory conversion is what makes them FEMA-compliant for foreign investors.
+
+3. The conversion mechanics (cap + discount formula) reward early-stage investors for their risk without requiring a valuation today — exactly like a SAFE, but legally compliant in India.
+
+4. Tax at conversion is deferred (Section 47(x) exemption), but the holding period for LTCG starts from conversion date, not investment date. Plan accordingly.
+
+5. FEMA compliance for foreign CCDs requires: valuation report at issuance, maturity ≤ 5 years, FC-GPR filing at conversion, annual FLA return.
+
+6. Specify the conversion share class, include the full ESOP pool in the cap calculation, and always include a maturity conversion backstop. These three drafting points prevent the majority of CCD disputes.
+
+---
+
+## Related Guides
+
+- [The Pitch Deck That Actually Raises Money in India](/fundraising/pitch-deck-india-startups) — Once your instruments are structured, here's how to pitch them effectively.
+- [The Overvaluation Trap — Why High Valuations Can Kill Your Startup](/valuation-finance/overvaluation-trap-india) — The valuation cap you set in your CCD has long-term consequences. Understand the math.
+- [The Due Diligence Data Room — What Indian VCs Actually Ask For](/investor-intelligence/data-room-checklist-india) — CCD agreements, FEMA filings, and cap tables are all part of what investors examine.
+- [ESOP Design for Indian Startups — What Founders Get Wrong](/equity/esop-india-startups) — How ESOPs interact with your CCD cap calculations and conversion mechanics.
+- [Bootstrap vs VC Funding — The Math Indian Founders Don't Run](/founder-playbooks/bootstrap-vs-vc-india) — Whether you need convertible instruments at all depends on this fundamental decision.
