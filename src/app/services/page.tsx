@@ -203,6 +203,50 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* ValuateIN Platform Banner */}
+      <section className="max-w-5xl mx-auto px-6 pb-10 -mt-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="relative rounded-2xl overflow-hidden bg-[#32373c] p-8 md:p-10"
+        >
+          <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, oklch(0.62 0.22 330), transparent)' }} />
+          <div className="absolute bottom-0 right-0 w-[400px] h-[300px] rounded-full bg-[oklch(0.62_0.22_330/0.08)] blur-[100px] pointer-events-none" />
+          <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex-1">
+              <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-2">Professional Platform</p>
+              <h3 className="font-heading text-2xl text-white mb-2">ValuateIN — For Practitioners</h3>
+              <p className="text-sm text-[oklch(0.70 0.01 260)] leading-relaxed max-w-lg">
+                CA / RV firms, VC funds, and family offices doing repeat statutory work need more than a per-report tool.
+                ValuateIN gives you unlimited engagements, 20 assignment types (Rule 11UA, FEMA, ESOP, IBC, Ind AS),
+                full WACC build-up, .docx client reports, and an AI narrative — all in one platform.
+              </p>
+              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                {['Unlimited valuations', '20 assignment types', '.docx report download', 'AI narrative generation', 'Rule 11UA · FEMA · ESOP · IBC'].map(f => (
+                  <li key={f} className="flex items-center gap-1.5 text-xs text-[oklch(0.65 0.01 260)]">
+                    <Check className="w-3.5 h-3.5 text-[oklch(0.62 0.22 330)]" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="shrink-0 text-center">
+              <div className="text-3xl font-heading text-white mb-0.5">₹4,999<span className="text-base text-[oklch(0.55 0.01 260)]">/mo</span></div>
+              <p className="text-[11px] text-[oklch(0.50 0.01 260)] mb-4">Professional · Unlimited</p>
+              <Link
+                href="/valuatein"
+                className="btn-press group inline-flex items-center justify-center gap-2 h-11 px-7 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330)] text-white hover:bg-[oklch(0.52_0.22_330)] transition-all"
+              >
+                Try ValuateIN Free
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
       {/* Trust strip */}
       <section className="border-y border-[oklch(0.91_0.005_260)] bg-[oklch(0.97 0.003 260)] py-8 px-6">
         <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-6">

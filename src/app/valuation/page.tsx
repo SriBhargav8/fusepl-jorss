@@ -227,6 +227,32 @@ export default function ValuationPage() {
               </motion.div>
             )}
 
+            {/* ValuateIN upsell — compliance use cases */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="relative rounded-2xl overflow-hidden border border-[oklch(0.62_0.22_330/0.20)] bg-[oklch(0.62_0.22_330/0.04)] p-6"
+            >
+              <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, oklch(0.62 0.22 330 / 0.6), transparent)' }} />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-1">Need Statutory Compliance?</p>
+                  <h4 className="font-heading text-base text-[oklch(0.15 0.02 260)] mb-1">Rule 11UA · FEMA · ESOP · IBC — Use ValuateIN</h4>
+                  <p className="text-xs text-[oklch(0.45 0.01 260)] leading-relaxed max-w-md">
+                    This tool gives you an indicative range. For tax-authority-accepted Rule 11UA certificates,
+                    FEMA NDI compliance, ESOP strike pricing, or IBBI-ready IBC reports — switch to ValuateIN Professional.
+                  </p>
+                </div>
+                <Link
+                  href="/valuatein"
+                  className="shrink-0 inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330)] text-white hover:bg-[oklch(0.52_0.22_330)] transition-all whitespace-nowrap"
+                >
+                  Try ValuateIN →
+                </Link>
+              </div>
+            </motion.div>
+
             {/* Email gate modal */}
             <EmailGate open={gateOpen} onOpenChange={setGateOpen} onUnlocked={handleUnlocked} />
           </motion.div>
