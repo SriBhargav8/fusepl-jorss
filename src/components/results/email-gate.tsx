@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useValuationStore } from '@/stores/valuation-store'
-import { EMAIL_REGEX } from '@/lib/utils'
+import { EMAIL_REGEX, normalizePhone } from '@/lib/utils'
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { Loader2, Lock, FileDown, BarChart3, Users, Brain, ArrowRight } from 'lucide-react'
+import { Loader2, Lock, FileDown, BarChart3, Users, Brain, ArrowRight, ChevronRight } from 'lucide-react'
 
 interface Props {
   open: boolean
@@ -27,19 +27,49 @@ const UNLOCKS = [
 ]
 
 export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
-  const { inputs, result, setEmail, purpose } = useValuationStore()
+  const { inputs, result, setEmail, setUserName, setUserPhone, purpose } = useValuationStore()
   const [emailInput, setEmailInput] = useState('')
+  const [nameInput, setNameInput] = useState('')
+  const [phoneInput, setPhoneInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [inputError, setInputError] = useState<string | null>(null)
+  const [unlocked, setUnlocked] = useState(false)
 
-  const isValidEmail = EMAIL_REGEX.test(emailInput)
+  // Enable button once we have basic non-empty strings
+  const isButtonReady = nameInput.trim().length > 0 && emailInput.trim().length > 0 && phoneInput.trim().length > 0
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!isValidEmail || !result) return
-
-    setLoading(true)
+    setLoading(true) 
     setError('')
+    setInputError(null)
+
+    if (nameInput.trim().length < 2) {
+      setError('Please enter your full name')
+      setInputError('name')
+      setLoading(false)
+      return
+    }
+    if (!EMAIL_REGEX.test(emailInput)) {
+      setError('Please enter a valid business email (yourname@company.com)')
+      setInputError('email')
+      setLoading(false)
+      return
+    }
+    if (phoneInput.trim().length < 10) {
+      setError('Please enter a 10-digit mobile number')
+      setInputError('phone')
+      setLoading(false)
+      return
+    }
+    if (!result) {
+      setError('Valuation result not found. Please refresh and try again.')
+      setLoading(false)
+      return
+    }
+
+    const normalizedPhone = normalizePhone(phoneInput)
 
     try {
       const res = await fetch('/api/capture', {
@@ -47,6 +77,8 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: emailInput,
+          name: nameInput,
+          phone: normalizedPhone,
           valuation_inputs: inputs,
           valuation_result: result,
           purpose,
@@ -56,16 +88,23 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
       if (res.ok) {
         const data = await res.json()
         setEmail(emailInput)
-        onOpenChange(false)
-        onUnlocked(data.report_id)
+        setUserName(nameInput)
+        setUserPhone(normalizedPhone)
+        setUnlocked(true)
+        setTimeout(() => {
+          onOpenChange(false)
+          onUnlocked(data.report_id)
+        }, 1000)
         return
       }
     } catch {
-      // Supabase not configured — that's fine for beta
+      // API failed
     }
 
-    // Always unlock locally even if API fails
+    // Fallback unlock
     setEmail(emailInput)
+    setUserName(nameInput)
+    setUserPhone(normalizedPhone)
     onOpenChange(false)
     onUnlocked('local')
     setLoading(false)
@@ -111,38 +150,80 @@ export function EmailGate({ open, onOpenChange, onUnlocked }: Props) {
             ))}
           </div>
 
-          {/* Email form */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3">
-            <input
-              type="email"
-              placeholder="founder@startup.com"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              required
-              autoFocus
-              className="w-full h-12 px-4 text-sm rounded-xl bg-[oklch(0.985 0.002 260)] border border-[oklch(0.91 0.005 260)] text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)] transition-all"
-            />
-            <button
-              type="submit"
-              disabled={!isValidEmail || loading}
-              className="group w-full h-12 text-sm font-semibold rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024] hover:shadow-[0_0_24px_oklch(0.62_0.22_330/0.2)] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Unlocking...
-                </>
-              ) : (
-                <>
-                  Unlock Full Report
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </>
-              )}
-            </button>
+            <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Your Full Name"
+                  value={nameInput}
+                  onChange={(e) => {
+                    setNameInput(e.target.value)
+                    if (inputError === 'name') setInputError(null)
+                  }}
+                  required
+                  autoFocus
+                  className={`w-full h-12 sm:h-14 px-4 text-sm sm:text-base rounded-xl bg-[oklch(0.985 0.002 260)] border ${inputError === 'name' ? 'border-[oklch(0.62_0.18_25)]' : 'border-[oklch(0.91 0.005 260)]'} text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none ${inputError === 'name' ? 'focus:border-[oklch(0.62_0.18_25)] focus:shadow-[0_0_0_3px_oklch(0.62_0.18_25/0.1)]' : 'focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)]'} transition-all`}
+                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="email"
+                    placeholder="Business Email"
+                    value={emailInput}
+                    onChange={(e) => {
+                      setEmailInput(e.target.value)
+                      if (inputError === 'email') setInputError(null)
+                    }}
+                    required
+                    className={`w-full h-12 sm:h-14 px-4 text-sm sm:text-base rounded-xl bg-[oklch(0.985 0.002 260)] border ${inputError === 'email' ? 'border-[oklch(0.62_0.18_25)]' : 'border-[oklch(0.91 0.005 260)]'} text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none ${inputError === 'email' ? 'focus:border-[oklch(0.62_0.18_25)] focus:shadow-[0_0_0_3px_oklch(0.62_0.18_25/0.1)]' : 'focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3_oklch(0.62_0.22_330/0.06)]'} transition-all`}
+                  />
+                  <input
+                    type="tel"
+                    placeholder="10-Digit Mobile"
+                    value={phoneInput}
+                    onChange={(e) => {
+                      setPhoneInput(e.target.value.replace(/\D/g, '').slice(0, 10))
+                      if (inputError === 'phone') setInputError(null)
+                    }}
+                    required
+                    className={`w-full h-12 sm:h-14 px-4 text-sm sm:text-base rounded-xl bg-[oklch(0.985 0.002 260)] border ${inputError === 'phone' ? 'border-[oklch(0.62_0.18_25)]' : 'border-[oklch(0.91 0.005 260)]'} text-[oklch(0.20 0.02 260)] placeholder:text-[oklch(0.45_0.01_250)] focus:outline-none ${inputError === 'phone' ? 'focus:border-[oklch(0.62_0.18_25)] focus:shadow-[0_0_0_3px_oklch(0.62_0.18_25/0.1)]' : 'focus:border-[oklch(0.62_0.22_330/0.4)] focus:shadow-[0_0_0_3px_oklch(0.62_0.22_330/0.06)]'} transition-all`}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={!isButtonReady || loading || unlocked}
+                className="btn-press group w-full h-14 sm:h-16 flex items-center justify-center gap-3 rounded-2xl bg-[#32373c] text-white text-sm sm:text-base font-bold shadow-[0_8px_32px_oklch(0_0_0/0.2)] hover:bg-[#1d2024] active:scale-[0.98] transition-all disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : unlocked ? (
+                  <>
+                    <Lock className="w-4 h-4 text-[oklch(0.62_0.22_330)]" />
+                    Unlocked! Redirecting...
+                  </>
+                ) : (
+                  <>
+                    Unlock Valuation Report
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+              </button>
           </form>
 
           {error && (
-            <p className="text-xs text-[oklch(0.62_0.18_25)]">{error}</p>
+            <motion.div 
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-center gap-2 py-1 px-3 rounded-lg bg-[oklch(0.62_0.18_25/0.05)] border border-[oklch(0.62_0.18_25/0.1)]"
+            >
+              <div className="w-1 h-1 rounded-full bg-[oklch(0.62_0.18_25)]" />
+              <p className="text-[11px] font-medium text-[oklch(0.62_0.18_25)]">{error}</p>
+            </motion.div>
           )}
 
           <p className="text-[10px] text-[oklch(0.45_0.01_250)] text-center">

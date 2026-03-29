@@ -24,15 +24,21 @@ const APPROACH_ACCENT: Record<ValuationApproach, string> = {
 function confidenceBar(confidence: number) {
   const pct = Math.round(confidence * 100)
   const color =
-    confidence >= 0.7 ? 'bg-[oklch(0.65_0.16_155)]' :
-    confidence >= 0.4 ? 'bg-[oklch(0.62 0.22 330)]' :
-    'bg-[oklch(0.45_0.01_250)]'
+    confidence >= 0.7 ? 'bg-[#22c55e]' : // Green
+    confidence >= 0.4 ? 'bg-[#f59e0b]' : // Amber
+    'bg-[#ef4444]' // Red
+  
   return (
     <div className="flex items-center gap-2">
-      <div className="w-12 h-1 rounded-full bg-[oklch(0.91 0.005 260)] overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+      <div className="w-24 h-1.5 rounded-full bg-[oklch(0.91_0.005_260)] overflow-hidden shadow-inner">
+        <motion.div 
+          className={`h-full rounded-full ${color} shadow-sm`} 
+          initial={{ width: '0%', opacity: 0 }}
+          animate={{ width: `${Math.max(pct, 4)}%`, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        />
       </div>
-      <span className="text-[10px] text-[oklch(0.45 0.01 260)] tabular-nums">{pct}%</span>
+      <span className="text-[10px] font-bold text-[oklch(0.40_0.01_260)] tabular-nums">{pct}%</span>
     </div>
   )
 }
@@ -41,14 +47,17 @@ interface Props {
   methods: MethodResult[]
   monteCarlo: MonteCarloResult | null
   unlocked?: boolean
+  approachFilter?: ValuationApproach
 }
 
-export function MethodCards({ methods, monteCarlo, unlocked }: Props) {
-  const grouped = APPROACH_ORDER.map(approach => ({
-    approach,
-    label: APPROACH_LABELS[approach],
-    methods: methods.filter(m => m.approach === approach && m.applicable),
-  })).filter(g => g.methods.length > 0)
+export function MethodCards({ methods, monteCarlo, unlocked, approachFilter }: Props) {
+  const grouped = APPROACH_ORDER
+    .filter(approach => !approachFilter || approach === approachFilter)
+    .map(approach => ({
+      approach,
+      label: APPROACH_LABELS[approach],
+      methods: methods.filter(m => m.approach === approach && m.applicable),
+    })).filter(g => g.methods.length > 0)
 
   const approachAvg = (ms: MethodResult[]) => {
     if (ms.length === 0) return 0
@@ -69,9 +78,9 @@ export function MethodCards({ methods, monteCarlo, unlocked }: Props) {
             viewport={{ once: true, margin: '-30px' }}
             transition={{ duration: 0.4, delay: i * 0.08 }}
           >
-            <div className="group rounded-xl bg-[oklch(0.97 0.003 260)] border border-[oklch(0.91 0.005 260)] overflow-hidden transition-all duration-300 hover:border-[oklch(0.62_0.22_330/0.3)] hover:shadow-[0_4px_24px_oklch(0_0_0/0.08)]">
+            <div className="glass-card grain relative rounded-xl border border-[oklch(0.91_0.005_260/0.8)] overflow-hidden transition-all duration-300 hover:border-[oklch(0.62_0.22_330/0.3)] hover:shadow-[0_4px_24px_oklch(0_0_0/0.08)] bg-gradient-to-br from-[oklch(0.99_0.002_260)] to-[oklch(0.985_0.002_260)]">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[oklch(0.91 0.005 260)]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[oklch(0.91_0.005_260/0.5)]">
                 <div className="flex items-center gap-2.5">
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center"

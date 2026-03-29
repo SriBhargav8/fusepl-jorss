@@ -47,34 +47,68 @@ const stepVariants = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 
 
 export function HowItWorks() {
   return (
-    <section className="grain relative py-28 px-6">
-      <div className="section-divider absolute inset-x-0 top-0" />
-      <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-16">
-          <p className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">How It Works</p>
-          <h2 className="font-heading text-3xl sm:text-[2.75rem] text-[oklch(0.15 0.02 260)] leading-tight">From Zero to Valuation in 5 Minutes</h2>
+    <section className="relative py-32 px-6 overflow-hidden bg-[oklch(0.98_0.002_260)]">
+      <div className="section-divider absolute inset-x-0 top-0 opacity-50" />
+      
+      <div className="max-w-6xl mx-auto relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} 
+          className="text-center mb-20"
+        >
+          <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.3em] mb-5">Minimal Effort</p>
+          <h2 className="font-heading text-4xl sm:text-[3.5rem] text-[oklch(0.15 0.02 260)] leading-tight">
+            From Zero to Valuation in <span className="text-gold-gradient italic">5 Minutes</span>
+          </h2>
         </motion.div>
 
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }} className="grid md:grid-cols-3 gap-6">
+        <motion.div 
+          variants={containerVariants} 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: '-100px' }} 
+          className="grid md:grid-cols-3 gap-8"
+        >
           {STEPS.map((step, idx) => (
-            <motion.div key={step.num} variants={stepVariants} className="glass-card relative p-7 rounded-2xl text-center overflow-hidden">
-              {/* Connecting arrow between steps */}
+            <motion.div 
+              key={step.num} 
+              variants={stepVariants} 
+              className="glass-card group relative p-10 rounded-3xl text-center overflow-hidden"
+            >
+              {/* Progress Line */}
               {idx < STEPS.length - 1 && (
-                <div className="hidden md:flex absolute top-1/2 -right-3 z-10 w-6 h-6 items-center justify-center rounded-full bg-[oklch(0.91 0.005 260)] border border-[oklch(0.32_0.02_250/0.5)]">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="oklch(0.45 0.01 260)" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                </div>
+                <div className="hidden lg:block absolute top-[20%] -right-4 w-8 h-px bg-gradient-to-r from-[oklch(0.15_0.02_260/0.1)] to-transparent z-10" />
               )}
-              {/* Step icon */}
-              <div className="flex justify-center mb-5">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ color: step.color, background: `color-mix(in oklch, ${step.color} 12%, transparent)`, border: `1px solid color-mix(in oklch, ${step.color} 25%, transparent)` }}>
-                  {step.icon}
+
+              {/* Step number icon */}
+              <div className="flex justify-center mb-8">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-sm" 
+                    style={{ 
+                      color: step.color, 
+                      background: `color-mix(in oklch, ${step.color} 10%, white)`, 
+                      border: `1.5px solid color-mix(in oklch, ${step.color} 20%, transparent)` 
+                    }}
+                  >
+                    {step.icon}
+                  </div>
+                  <span className="absolute -top-3 -right-3 w-7 h-7 rounded-full bg-white border border-[oklch(0.15_0.02_260/0.1)] flex items-center justify-center text-[10px] font-bold shadow-sm" style={{ color: step.color }}>
+                    {step.num}
+                  </span>
                 </div>
               </div>
-              {/* Step number */}
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2 block" style={{ color: step.color }}>{step.num}</span>
-              <h3 className="font-heading text-xl text-[oklch(0.15 0.02 260)] mb-3">{step.title}</h3>
-              <p className="text-sm text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">{step.desc}</p>
-              <span className="inline-block text-[11px] font-bold uppercase tracking-[0.15em] px-3 py-1 rounded-full" style={{ color: step.color, backgroundColor: `color-mix(in oklch, ${step.color} 10%, transparent)` }}>{step.time}</span>
+
+              <h3 className="font-heading text-2xl text-[oklch(0.15 0.02 260)] mb-4">{step.title}</h3>
+              <p className="text-[15px] text-[oklch(0.40 0.01 260)] leading-relaxed mb-6 font-medium">{step.desc}</p>
+              
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[oklch(0.15_0.02_260/0.04)] border border-[oklch(0.15_0.02_260/0.08)]">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: step.color }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: step.color }}>{step.time}</span>
+              </div>
             </motion.div>
           ))}
         </motion.div>

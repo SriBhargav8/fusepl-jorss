@@ -53,34 +53,78 @@ const cardVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 
 
 export function MethodShowcase() {
   return (
-    <section className="grain relative py-28 px-6 bg-gradient-to-b from-[oklch(0.98 0.002 260)] via-[oklch(0.97 0.003 260)] to-[oklch(0.98 0.002 260)]">
-      <div className="section-divider absolute inset-x-0 top-0" />
-      <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-16">
-          <p className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">The Rigour Behind the Numbers</p>
-          <h2 className="font-heading text-3xl sm:text-[2.75rem] text-[oklch(0.15 0.02 260)] leading-tight">4 Approaches &times; 10 Methods</h2>
-          <p className="mt-5 text-base text-[oklch(0.45 0.01 260)] max-w-lg mx-auto leading-relaxed">The same framework that institutional investors and IBBI professionals rely on.</p>
+    <section className="relative py-32 px-6 overflow-hidden bg-[oklch(0.98_0.002_260)]">
+      <div className="section-divider absolute inset-x-0 top-0 opacity-50" />
+      
+      <div className="max-w-6xl mx-auto relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} 
+          className="text-center mb-20"
+        >
+          <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.3em] mb-5">The Methodology</p>
+          <h2 className="font-heading text-4xl sm:text-[3.5rem] text-[oklch(0.15 0.02 260)] leading-[1.1] tracking-tight">
+            4 Approaches &times; <span className="text-gold-gradient italic">10 Methods</span>
+          </h2>
+          <p className="mt-6 text-[clamp(1rem,1.5vw,1.15rem)] text-[oklch(0.40 0.01 260)] max-w-xl mx-auto leading-relaxed font-medium">
+            The same framework relied upon by institutional investors, 
+            investment banks, and IBBI-registered professionals.
+          </p>
         </motion.div>
 
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }} className="grid sm:grid-cols-2 gap-5">
+        <motion.div 
+          variants={containerVariants} 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: '-100px' }} 
+          className="grid sm:grid-cols-2 gap-6"
+        >
           {APPROACHES.map((a) => (
-            <motion.div key={a.key} variants={cardVariants} className="glass-card relative rounded-2xl p-7 overflow-hidden group">
-              <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(90deg, transparent, ${a.color}, transparent)` }} />
-              <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ backgroundColor: `color-mix(in oklch, ${a.color} 15%, transparent)` }} />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ color: a.color, background: `color-mix(in oklch, ${a.color} 12%, transparent)`, border: `1px solid color-mix(in oklch, ${a.color} 25%, transparent)` }}>
+            <motion.div 
+              key={a.key} 
+              variants={cardVariants} 
+              className="glass-card group relative p-8 rounded-3xl overflow-hidden"
+            >
+              {/* Animated hover gradient */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br from-[oklch(0.62_0.22_330/0.03)] via-transparent to-transparent pointer-events-none" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm" 
+                    style={{ 
+                      color: a.color, 
+                      backgroundColor: `color-mix(in oklch, ${a.color} 10%, white)`, 
+                      border: `1.5px solid color-mix(in oklch, ${a.color} 20%, transparent)` 
+                    }}
+                  >
                     {a.icon}
                   </div>
-                  <h3 className="font-heading text-lg text-[oklch(0.15 0.02 260)]">{APPROACH_LABELS[a.key]}</h3>
-                  <span className="ml-auto text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ color: a.color, backgroundColor: `color-mix(in oklch, ${a.color} 10%, transparent)` }}>{a.methods.length} methods</span>
+                  <div>
+                    <h3 className="font-heading text-xl text-[oklch(0.15 0.02 260)]">{APPROACH_LABELS[a.key]}</h3>
+                    <span className="text-[10px] font-bold text-[oklch(0.45 0.01 260)] uppercase tracking-wider">
+                      {a.methods.length} Institutional Methods
+                    </span>
+                  </div>
                 </div>
-                <ul className="space-y-3">
-                  {a.methods.map((m) => (
-                    <li key={m} className="text-sm flex items-start gap-3 text-[oklch(0.40 0.01 260)]">
-                      <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style={{ backgroundColor: a.color }} />
-                      {m}
-                    </li>
+                
+                <ul className="space-y-4">
+                  {a.methods.map((m, i) => (
+                    <motion.li 
+                      key={m}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="text-[14px] flex items-start gap-4 text-[oklch(0.35 0.01 260)] font-medium group/item"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0 mt-2 transition-transform duration-300 group-hover/item:scale-150" 
+                        style={{ backgroundColor: a.color }} 
+                      />
+                      <span className="group-hover/item:text-[oklch(0.15 0.02 260)] transition-colors duration-300">
+                        {m}
+                      </span>
+                    </motion.li>
                   ))}
                 </ul>
               </div>

@@ -58,7 +58,7 @@ describe('calculateNAV', () => {
 
   it('applies sector-specific tech multiplier', () => {
     const saas = calculateNAV(makeInputs({ sector: 'saas_horizontal', dev_stage: 'mvp' }), makeDerived())
-    const mfg = calculateNAV(makeInputs({ sector: 'manufacturing', dev_stage: 'mvp' }), makeDerived())
+    const mfg = calculateNAV(makeInputs({ sector: 'manufacturing_3d', dev_stage: 'mvp' }), makeDerived())
     // Hardware sectors get 2.0x tech multiplier vs software 1.5x
     expect(mfg.value).toBeGreaterThan(saas.value)
   })

@@ -21,6 +21,10 @@ interface PDFData {
   sector: string
   stage: string
   result: ValuationResult
+  userName?: string | null
+  userPhone?: string | null
+  userEmail?: string | null
+  reportId?: string | null
   benchmark?: { ev_revenue: number; ev_ebitda: number | null; wacc: number; beta: number; gross_margin: number | null } | null
   comparables?: Array<{ name: string; sector: string; stage: string; valuation: string; similarity: number }>
   listedComparables?: { publicEquivalent: number; discount: number; adjustedValue: number }
@@ -41,10 +45,10 @@ const TEXT_MED = [100, 100, 108] as const
 const TEXT_LIGHT = [140, 140, 148] as const
 
 function formatINRForPDF(value: number): string {
-  if (value === 0) return '₹0'
+  if (value === 0) return 'Rs. 0'
   const crore = 10_000_000
-  if (value >= crore) return `₹${(value / crore).toFixed(1)} Cr`
-  return `₹${(value / 100_000).toFixed(0)} L`
+  if (value >= crore) return `Rs. ${(value / crore).toFixed(1)} Cr`
+  return `Rs. ${(value / 100_000).toFixed(0)} L`
 }
 
 function checkPageBreak(doc: jsPDF, y: number, needed = 40): number {
@@ -103,70 +107,133 @@ export async function generateValuationPDF(data: PDFData): Promise<jsPDF> {
   let y = 0
 
   // ===== COVER PAGE =====
-  // Dark background
+  // Dark background foundation
   doc.setFillColor(...DARK_BG)
   doc.rect(0, 0, pageWidth, doc.internal.pageSize.height, 'F')
 
-  // Gold accent bar at top
-  doc.setFillColor(...GOLD)
-  doc.rect(0, 0, pageWidth, 3, 'F')
+  // Ambient Glow Effect (Spotlight behind valuation)
+  const centerX = pageWidth / 2
+  const centerY = 160
+  for (let i = 0; i < 30; i++) {
+    const opacity = 0.05 * (1 - i / 30)
+    doc.setFillColor(GOLD[0], GOLD[1], GOLD[2])
+    doc.setGState(new (doc as any).GState({ opacity }))
+    doc.circle(centerX, centerY, 20 + i * 3, 'F')
+  }
+  doc.setGState(new (doc as any).GState({ opacity: 1 }))
 
-  // Brand name
-  y = 50
-  doc.setFontSize(11)
-  doc.setFont('helvetica', 'normal')
-  doc.setTextColor(...GOLD)
-  doc.text('FIRST UNICORN STARTUP', pageWidth / 2, y, { align: 'center' })
-  y += 5
-  doc.setFontSize(7)
-  doc.setTextColor(130, 130, 138)
-  doc.text('India\'s Most Rigorous Startup Valuation Platform', pageWidth / 2, y, { align: 'center' })
-
-  // Decorative line
-  y += 15
+  // Elegant Inner Frame (Double Gold Lines)
   doc.setDrawColor(...GOLD)
+  doc.setLineWidth(0.1)
+  doc.rect(5, 5, pageWidth - 10, doc.internal.pageSize.height - 10)
   doc.setLineWidth(0.3)
-  doc.line(60, y, pageWidth - 60, y)
+  doc.rect(7, 7, pageWidth - 14, doc.internal.pageSize.height - 14)
 
-  // Report title
+  // Brand name (Logo area)
+  y = 45
+  doc.setFontSize(16)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(...GOLD)
+  // To ensure perfect centering with charSpace, we manually nudge it or use native centering if available
+  doc.text('FIRST UNICORN', pageWidth / 2, y, { align: 'center', charSpace: 3 })
+  
+  y += 6
+  doc.setFontSize(7)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(160, 160, 168)
+  doc.text('STARTUP EVOLVERS • PROTOCOL V1.4', pageWidth / 2, y, { align: 'center', charSpace: 2 })
+
+  // Decorative Horizontal Divider
+  y += 18
+  doc.setDrawColor(...GOLD)
+  doc.setLineWidth(0.5)
+  doc.line(centerX - 30, y, centerX + 30, y)
+
+  // Certificate Label
+  y += 28
+  doc.setFontSize(9)
+  doc.setFont('helvetica', 'bolditalic')
+  doc.setTextColor(...GOLD_LIGHT)
+  doc.text('C O N F I D E N T I A L   V A L U A T I O N', pageWidth / 2, y, { align: 'center' })
+
+  // Company Name - THE HERO
   y += 20
-  doc.setFontSize(28)
+  const companyName = data.companyName?.toUpperCase() || 'UNNAMED STARTUP'
+  // Auto-shrink font if name is very long
+  let nameFontSize = 36
+  if (companyName.length > 20) nameFontSize = 28
+  if (companyName.length > 30) nameFontSize = 22
+  
+  doc.setFontSize(nameFontSize)
   doc.setFont('helvetica', 'bold')
   doc.setTextColor(255, 255, 255)
-  doc.text('Valuation Report', pageWidth / 2, y, { align: 'center' })
+  doc.text(companyName, pageWidth / 2, y, { align: 'center' })
 
-  // Company name
-  y += 16
-  doc.setFontSize(20)
-  doc.setTextColor(...GOLD_LIGHT)
-  doc.text(data.companyName || 'Unnamed Startup', pageWidth / 2, y, { align: 'center' })
+  // Record ID Badge
+  if (data.reportId) {
+    y += 14
+    const recordId = `CERTIFICATE NO. ${data.reportId.split('-')[0].toUpperCase()}`
+    doc.setFontSize(7)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(140, 140, 148)
+    doc.text(recordId, pageWidth / 2, y, { align: 'center', charSpace: 1 })
+  }
 
-  // Composite value - the hero number
-  y += 30
-  doc.setFontSize(36)
+  // Composite value number (The Core Figure)
+  y += 38
+  doc.setFontSize(54)
   doc.setFont('helvetica', 'bold')
   doc.setTextColor(...GOLD)
   doc.text(formatINRForPDF(data.result.composite_value), pageWidth / 2, y, { align: 'center' })
-  y += 10
-  doc.setFontSize(10)
-  doc.setTextColor(180, 180, 188)
-  doc.text('Weighted Composite Valuation', pageWidth / 2, y, { align: 'center' })
-
-  // Range
+  
   y += 12
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(255, 255, 255)
+  doc.text('ESTIMATED ENTERPRISE VALUE', pageWidth / 2, y, { align: 'center', charSpace: 1.5 })
+
+  // Range text
+  y += 14
   doc.setFontSize(11)
-  doc.setTextColor(150, 150, 158)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(180, 180, 188)
   doc.text(
-    `Range: ${formatINRForPDF(data.result.composite_low)} — ${formatINRForPDF(data.result.composite_high)}`,
+    `${formatINRForPDF(data.result.composite_low)} — ${formatINRForPDF(data.result.composite_high)}`,
     pageWidth / 2, y, { align: 'center' }
   )
 
-  // Cover page metadata
-  y += 30
+  // Standards badge at bottom of cover (Fixed position)
+  const badgeY = 245
+  doc.setDrawColor(...GOLD)
+  doc.setLineWidth(0.3)
+  doc.line(60, badgeY - 5, pageWidth - 60, badgeY - 5)
+  doc.setFontSize(7)
+  doc.setTextColor(...GOLD)
+  doc.text('IVS 105 Aligned  •  IBBI Standards  •  Rule 11UA  •  Damodaran Data  •  10,000 Monte Carlo Simulations', pageWidth / 2, badgeY + 2, { align: 'center' })
+
+  // Cover page metadata (Anchored above the badge to prevent overlap)
+  y = badgeY - 50 // Start metadata 50mm above the badge
   doc.setFontSize(8)
   doc.setTextColor(100, 100, 108)
+  
+  if (data.reportId) {
+    doc.text(`Record ID: ${data.reportId.split('-')[0].toUpperCase()}`, pageWidth / 2, y, { align: 'center' })
+    y += 6
+  }
+
+  const userMeta = [
+    data.userName && `Generated By: ${data.userName}`,
+    (data.userEmail || data.userPhone) && `Contact: ${[data.userEmail, data.userPhone].filter(Boolean).join(' | ')}`,
+  ].filter(Boolean)
+
+  userMeta.forEach(line => {
+    doc.text(line as string, pageWidth / 2, y, { align: 'center' })
+    y += 6
+  })
+
+  y += 4
   const metaLines = [
-    `Sector: ${data.sector}  |  Stage: ${data.stage}`,
+    `Sector: ${data.sector}  |  Stage: ${data.stage.replace(/_/g, ' ')}`,
     `Confidence Score: ${data.result.confidence_score}/100  |  Methods Applied: ${data.result.methods.filter(m => m.applicable).length}/10`,
     `Generated: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`,
   ]
@@ -174,16 +241,6 @@ export async function generateValuationPDF(data: PDFData): Promise<jsPDF> {
     doc.text(line, pageWidth / 2, y, { align: 'center' })
     y += 6
   })
-
-  // Standards badge at bottom of cover
-  y = 240
-  doc.setDrawColor(...GOLD)
-  doc.setLineWidth(0.3)
-  doc.line(60, y, pageWidth - 60, y)
-  y += 8
-  doc.setFontSize(7)
-  doc.setTextColor(...GOLD)
-  doc.text('IVS 105 Aligned  •  IBBI Standards  •  Rule 11UA  •  Damodaran Data  •  10,000 Monte Carlo Simulations', pageWidth / 2, y, { align: 'center' })
 
   // ===== PAGE 2: EXECUTIVE SUMMARY + METHODOLOGY =====
   doc.addPage()

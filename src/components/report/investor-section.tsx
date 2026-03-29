@@ -24,58 +24,70 @@ export function InvestorSection({ sector, stage, targetRaise }: Props) {
 
   if (matches.length === 0) {
     return (
-      <Card className="bg-slate-900 border-slate-800">
-        <CardHeader>
-          <CardTitle className="text-white">Investor Matching</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-slate-400">
-            No exact matches in our database for your profile. This is common for niche sectors
-            or very early-stage companies. Browse all investors at our advisory service.
-          </p>
-        </CardContent>
-      </Card>
+    <div className="glass-card grain relative rounded-xl p-6 h-full flex flex-col" 
+      style={{ 
+        borderColor: 'oklch(0.91 0.005 260 / 0.8)', 
+        background: 'linear-gradient(135deg, oklch(0.99 0.002 260), oklch(0.985 0.002 260))' 
+      }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="space-y-0.5">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Investor Matching</h3>
+        </div>
+        <span className="px-2 py-0.5 rounded-full bg-[oklch(0.65_0.14_200/0.1)] text-[9px] font-bold text-[oklch(0.65_0.14_200)] uppercase">Advisory Only</span>
+      </div>
+      <p className="text-xs text-[oklch(0.45_0.01_260)] leading-relaxed italic opacity-60">
+        No exact matches in our database for your specific profile. This is typical for niche sectors or very early stages.
+      </p>
+    </div>
     )
   }
 
   return (
-    <Card className="bg-slate-900 border-slate-800">
-      <CardHeader>
-        <CardTitle className="text-white">Top Investor Matches</CardTitle>
-        <p className="text-sm text-slate-400">
-          Based on your profile — {sector.replace(/_/g, ' ')}, {stage.replace(/_/g, ' ')} stage
-        </p>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-700">
-                <th className="text-left py-2 text-slate-300">Investor</th>
-                <th className="text-left py-2 text-slate-300">Type</th>
-                <th className="text-right py-2 text-slate-300">Check Size</th>
-                <th className="text-left py-2 text-slate-300">Why Matched</th>
-              </tr>
-            </thead>
-            <tbody>
-              {matches.slice(0, 5).map((m, i) => (
-                <tr key={i} className="border-b border-slate-800 last:border-0">
-                  <td className="py-2 font-medium text-white">{m.investor.name}</td>
-                  <td className="py-2 text-slate-300">{m.investor.type.toUpperCase()}</td>
-                  <td className="py-2 text-right text-slate-300">
-                    {formatINR(m.investor.check_size_min_cr * 1_00_00_000)}–{formatINR(m.investor.check_size_max_cr * 1_00_00_000)}
-                  </td>
-                  <td className="py-2 text-slate-400">{m.reasons.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="glass-card grain relative rounded-xl p-6 h-full flex flex-col" 
+      style={{ 
+        borderColor: 'oklch(0.91 0.005 260 / 0.8)', 
+        background: 'linear-gradient(135deg, oklch(0.99 0.002 260), oklch(0.985 0.002 260))' 
+      }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="space-y-0.5">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Top Investor Matches</h3>
+          <p className="text-[10px] text-[oklch(0.50 0.01 260)]">{sector.replace(/_/g, ' ')} • {stage.replace(/_/g, ' ')}</p>
         </div>
-        <p className="text-xs text-slate-500 mt-3">
-          Disclaimer: Investor suggestions are based on publicly available investment preferences.
-          Introductions are not guaranteed.
+        <span className="px-2 py-0.5 rounded-full bg-[oklch(0.65_0.14_200/0.1)] text-[9px] font-bold text-[oklch(0.65_0.14_200)] uppercase">Strategic Alignment</span>
+      </div>
+
+      <div className="flex-1 overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-[oklch(0.91_0.005_260/0.5)]">
+              <th className="text-left py-2 text-[oklch(0.45_0.01_260)] uppercase tracking-tighter text-[9px] font-bold">Investor</th>
+              <th className="text-left py-2 text-[oklch(0.45_0.01_260)] uppercase tracking-tighter text-[9px] font-bold">Type</th>
+              <th className="text-right py-2 text-[oklch(0.45_0.01_260)] uppercase tracking-tighter text-[9px] font-bold">Check</th>
+              <th className="text-left py-2 text-[oklch(0.45_0.01_260)] uppercase tracking-tighter text-[9px] font-bold pl-3">Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            {matches.slice(0, 5).map((m, i) => (
+              <tr key={i} className="border-b border-[oklch(0.91_0.005_260/0.3)] last:border-0 hover:bg-[oklch(0.15_0.02_260/0.02)] transition-colors">
+                <td className="py-2.5 font-bold text-[oklch(0.15_0.02_260)] text-xs">{m.investor.name}</td>
+                <td className="py-2.5 text-[oklch(0.45_0.01_260)] text-[10px] uppercase font-medium">{m.investor.type}</td>
+                <td className="py-2.5 text-right font-mono text-[10px] text-[oklch(0.15_0.02_260)]">
+                  {formatINR(m.investor.check_size_min_cr * 1_00_00_000).replace(/\.0$/, '')}–{formatINR(m.investor.check_size_max_cr * 1_00_00_000).replace(/\.0$/, '')}
+                </td>
+                <td className="py-2.5 text-[oklch(0.45_0.01_260)] text-[10px] pl-3 italic opacity-60">{m.reasons.slice(0, 1)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-auto pt-4 border-t border-[oklch(0.91_0.005_260/0.3)] opacity-50">
+        <p className="text-[9px] text-[oklch(0.45_0.01_260)] italic">
+          Suggestions based on historical preferences. No guarantee of introduction.
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

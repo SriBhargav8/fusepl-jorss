@@ -30,19 +30,21 @@ export function ComparablesPreview({ sector, stage, revenue, compositeValue }: P
       transition={{ delay: 0.3, duration: 0.5 }}
     >
       <div className="relative rounded-2xl overflow-hidden">
-        <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[oklch(0.62_0.22_330/0.15)] via-transparent to-[oklch(0.62_0.22_330/0.08)]" />
-
-        <div className="relative rounded-2xl bg-[oklch(0.98 0.002 260)] m-px p-6 sm:p-8">
+        <div className="relative rounded-xl border border-rose-100 overflow-hidden h-full bg-gradient-to-br from-[#FFF1F2] via-[#FFF5F5] to-[#FFF1F2]">
+          {/* Subtle noise/texture */}
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[oklch(0.62_0.22_330/0.02)] mix-blend-overlay" />
           {/* Header */}
-          <div className="flex items-center gap-2.5 mb-1">
+          <div className="flex items-center gap-2.5 px-5 py-4 border-b border-[oklch(0.91_0.005_260/0.5)] mb-2">
             <div className="w-7 h-7 rounded-lg bg-[oklch(0.62_0.22_330/0.08)] flex items-center justify-center">
               <Scale className="w-3.5 h-3.5 text-[oklch(0.62 0.22 330)]" />
             </div>
-            <h3 className="text-base font-semibold text-[oklch(0.15_0.02_260)]">Comparable Companies</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Comparable Market</h3>
           </div>
-          <p className="text-xs text-[oklch(0.50 0.01 260)] mb-5 ml-[38px]">
-            Transparency matters — here are the companies we compared your startup against in {sectorLabel}.
-          </p>
+          
+          <div className="px-5 pb-5 space-y-4">
+            <p className="text-[10px] text-[oklch(0.50 0.01 260)] leading-relaxed italic opacity-70">
+              Analysis of {sectorLabel} market comps.
+            </p>
 
           {/* Private Comparable Transactions */}
           {comparables.length > 0 && (
@@ -143,12 +145,12 @@ export function ComparablesPreview({ sector, stage, revenue, compositeValue }: P
           )}
 
           {/* Source attribution */}
-          <p className="text-[10px] text-[oklch(0.50 0.01 260)] mt-4 pt-3 border-t border-[oklch(0.91 0.005 260)]">
-            Sources: Publicly reported Indian startup funding rounds, NSE/BSE listed company data, Damodaran India (Jan 2026).
-            Valuations are estimates. Listed multiples as of Dec 2025.
+          <p className="text-[9px] text-[oklch(0.50 0.01 260)] mt-4 pt-3 border-t border-[oklch(0.91_0.005_260/0.3)] italic opacity-60">
+            Sources: Indian startup data, NSE/BSE. Dec 2025 Market benchmarks.
           </p>
         </div>
       </div>
-    </motion.div>
+    </div>
+  </motion.div>
   )
 }

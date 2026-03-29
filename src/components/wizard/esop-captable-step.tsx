@@ -20,7 +20,7 @@ const CHART_COLORS = [
 
 function CapTableRing({ percentage, entries }: {
   percentage: number
-  entries: { name: string; percentage: number }[]
+  entries: { name: string; percentage: number; share_class?: string }[]
 }) {
   const animatedPct = useAnimatedCounter(Math.round(percentage))
   const radius = 48
@@ -37,6 +37,13 @@ function CapTableRing({ percentage, entries }: {
     hasTriggered100.current = false
   }
 
+  const SHARE_CLASS_COLORS: Record<string, string> = {
+    common: 'oklch(0.65 0.16 250)',     // Indigo
+    preference: 'oklch(0.65 0.16 155)', // Emerald
+    esop: 'oklch(0.62 0.22 330)',       // Pink
+    advisory: 'oklch(0.75 0.18 80)',    // Amber
+  }
+
   const color = percentage === 100
     ? 'oklch(0.65 0.16 155)'
     : percentage >= 90 && percentage <= 110
@@ -46,17 +53,24 @@ function CapTableRing({ percentage, entries }: {
     : 'oklch(0.50 0.01 260)'
 
   let cumulativeOffset = 0
-  const segments = entries.filter(e => e.percentage > 0).map((entry, i) => {
+  const sortedEntries = [...entries].sort((a, b) => b.percentage - a.percentage)
+  
+  const segments = sortedEntries.filter(e => e.percentage > 0).map((entry, i) => {
     const segPct = Math.min(entry.percentage, 100) / 100
     const segLength = segPct * circumference
-    const offset = circumference - segLength
     const rotation = (cumulativeOffset / circumference) * 360 - 90
     cumulativeOffset += segLength
-    return { ...entry, offset, segLength, rotation, color: CHART_COLORS[i % CHART_COLORS.length], index: i }
+    
+    // Assign colors precisely — prioritizing share class over position
+    const baseColor = entry.share_class && SHARE_CLASS_COLORS[entry.share_class]
+      ? SHARE_CLASS_COLORS[entry.share_class]
+      : CHART_COLORS[i % CHART_COLORS.length]
+
+    return { ...entry, offset: circumference - segLength, segLength, rotation, color: baseColor, index: i }
   })
 
   return (
-    <div className="glass-card grain relative rounded-xl p-5 flex flex-col items-center overflow-hidden" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260 / 0.8), oklch(0.97 0.003 260 / 0.6))' }}>
+    <div className="glass-card grain relative rounded-xl p-5 flex flex-col items-center overflow-hidden h-full" style={{ background: 'linear-gradient(135deg, oklch(0.98 0.003 260 / 0.8), oklch(0.97 0.003 260 / 0.6))' }}>
       {/* Subtle background icons */}
       <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 opacity-[0.04] pointer-events-none">
         <PieChart className="w-10 h-10" /><PieChart className="w-10 h-10" /><PieChart className="w-10 h-10" />
@@ -65,58 +79,50 @@ function CapTableRing({ percentage, entries }: {
         <PieChart className="w-4 h-4 text-[oklch(0.62 0.22 330)]" />
         <span className="font-heading text-sm text-[oklch(0.45 0.01 260)]">Ownership Distribution</span>
       </div>
-      <div className="relative">
-        <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
-          {/* Decorative outer dashed ring */}
-          <circle cx={cx} cy={cy} r={radius + 8} fill="none" stroke="oklch(0.80 0.01 260 / 0.4)" strokeWidth="1" strokeDasharray="4 8" />
-          {/* Background circle */}
-          <circle cx={cx} cy={cy} r={radius} fill="none" stroke="oklch(0.96 0.005 260)" strokeWidth="8" />
-          {/* Multi-segment arcs */}
-          {segments.map((seg) => (
-            <motion.circle
-              key={seg.index}
-              cx={cx} cy={cy} r={radius}
-              fill="none"
-              stroke={seg.color}
-              strokeWidth="8"
-              strokeLinecap="round"
-              strokeDasharray={`${seg.segLength} ${circumference - seg.segLength}`}
-              transform={`rotate(${seg.rotation} ${cx} ${cy})`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: seg.index * 0.08 }}
-              style={{ filter: percentage === 100 ? `drop-shadow(0 0 8px ${seg.color})` : undefined }}
-            />
-          ))}
-          {/* Single-color fallback when no entries */}
-          {segments.length === 0 && percentage > 0 && (
-            <motion.circle
-              cx={cx} cy={cy} r={radius}
-              fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference * (1 - Math.min(percentage, 120) / 100)}
-              transform={`rotate(-90 ${cx} ${cy})`}
-              initial={{ strokeDashoffset: circumference }}
-              animate={{ strokeDashoffset: circumference * (1 - Math.min(percentage, 120) / 100) }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            />
-          )}
-        </svg>
-        {/* Pulse effect at 100% */}
-        {showPulse && (
-          <motion.div
-            className="absolute inset-0 rounded-full pointer-events-none"
-            initial={{ scale: 1, opacity: 0.5 }}
-            animate={{ scale: 1.15, opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            style={{ border: '2px solid oklch(0.65 0.16 155)', boxShadow: '0 0 20px oklch(0.65 0.16 155 / 0.4)' }}
-          />
-        )}
-        {/* Center text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`font-mono text-2xl font-bold tabular-nums ${percentage === 100 ? 'text-gold-gradient' : ''}`} style={percentage !== 100 ? { color } : undefined}>
-            {animatedPct}%
-          </span>
+      <div className="flex-1 flex flex-col items-center justify-center w-full min-h-[220px]">
+        <div className="relative w-full flex justify-center">
+          <svg width="100%" height="auto" viewBox="0 0 120 120" className="max-w-[200px] overflow-visible">
+            {/* Decorative outer dashed ring */}
+            <circle cx={cx} cy={cy} r={radius + 8} fill="none" stroke="oklch(0.80 0.01 260 / 0.4)" strokeWidth="1" strokeDasharray="4 8" />
+            {/* Background circle */}
+            <circle cx={cx} cy={cy} r={radius} fill="none" stroke="oklch(0.96 0.005 260)" strokeWidth="8" />
+            {/* Multi-segment arcs */}
+            {segments.map((seg) => (
+              <motion.circle
+                key={seg.index}
+                cx={cx} cy={cy} r={radius}
+                fill="none"
+                stroke={seg.color}
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeDasharray={`${seg.segLength} ${circumference - seg.segLength}`}
+                transform={`rotate(${seg.rotation} ${cx} ${cy})`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: seg.index * 0.08 }}
+                style={{ filter: percentage === 100 ? `drop-shadow(0 0 8px ${seg.color})` : undefined }}
+              />
+            ))}
+            {/* Single-color fallback when no entries */}
+            {segments.length === 0 && percentage > 0 && (
+              <motion.circle
+                cx={cx} cy={cy} r={radius}
+                fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={circumference * (1 - Math.min(percentage, 120) / 100)}
+                transform={`rotate(-90 ${cx} ${cy})`}
+                initial={{ strokeDashoffset: circumference }}
+                animate={{ strokeDashoffset: circumference * (1 - Math.min(percentage, 120) / 100) }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
+          </svg>
+          {/* Center text */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className={`font-mono text-2xl font-bold tabular-nums ${percentage === 100 ? 'text-gold-gradient' : ''}`} style={percentage !== 100 ? { color } : undefined}>
+              {animatedPct}%
+            </span>
+          </div>
         </div>
       </div>
       {/* Status message */}
@@ -146,82 +152,107 @@ export function ESOPCapTableStep() {
   const { inputs, setField } = useValuationStore()
   const defaultEsop = DEFAULT_ESOP_PCT[inputs.stage] ?? 10
 
-  const capTableTotal = useMemo(() => {
-    if (!inputs.current_cap_table || inputs.current_cap_table.length === 0) return 0
-    return inputs.current_cap_table.reduce((s, e) => s + e.percentage, 0)
-  }, [inputs.current_cap_table])
-
   const capEntries = useMemo(() => {
-    if (!inputs.current_cap_table) return []
-    return inputs.current_cap_table.map(e => ({ name: e.name, percentage: e.percentage }))
-  }, [inputs.current_cap_table])
+    const raw = inputs.current_cap_table || []
+    const explicit = raw.map(e => ({ 
+      name: e.name || 'Unnamed', 
+      percentage: e.percentage,
+      share_class: e.share_class 
+    }))
+    
+    // Inject ESOP Pool from Strategy if not explicitly in table
+    const hasEsopRow = raw.some(r => r.share_class === 'esop')
+    const poolPct = inputs.esop_pool_pct ?? 0
+    if (!hasEsopRow && poolPct > 0) {
+      explicit.push({ 
+        name: 'ESOP Pool', 
+        percentage: poolPct, 
+        share_class: 'esop' 
+      })
+    }
+    return explicit
+  }, [inputs.current_cap_table, inputs.esop_pool_pct])
+
+  const capTableTotal = useMemo(() => {
+    return capEntries.reduce((s, e) => s + e.percentage, 0)
+  }, [capEntries])
+
+  const SHARE_CLASS_COLORS: Record<string, string> = {
+    common: 'oklch(0.65 0.16 250)',     // Indigo
+    preference: 'oklch(0.65 0.16 155)', // Emerald
+    esop: 'oklch(0.62 0.22 330)',       // Pink
+    advisory: 'oklch(0.75 0.18 80)',    // Amber
+  }
 
   return (
-    <motion.div className="space-y-5" variants={staggerContainer} initial="hidden" animate="visible">
-      {/* Header */}
-      <motion.div variants={staggerItem}>
-        <div className="flex items-center gap-2.5 mb-1">
-          <div className="w-8 h-8 rounded-lg bg-[oklch(0.62_0.22_330/0.12)] flex items-center justify-center">
-            <PieChart className="w-4 h-4 text-[oklch(0.62 0.22 330)]" />
-          </div>
-          <h2 className="font-heading text-2xl text-[oklch(0.15 0.02 260)]">ESOP & Cap Table</h2>
-        </div>
-        <p className="text-[oklch(0.45 0.01 260)] text-sm">Optional but powerful. ESOP pools and cap tables help us calculate per-share value and dilution impact.</p>
-      </motion.div>
-
-      {/* Skip encouragement */}
-      <motion.div variants={staggerItem} className="glass-card relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg">
-        <SkipForward className="w-4 h-4 text-[oklch(0.62 0.22 330)] shrink-0 animate-[float_3s_ease-in-out_infinite]" />
-        <p className="text-xs text-[oklch(0.45 0.01 260)]">
-          Not sure? <span className="text-[oklch(0.62 0.22 330)] font-medium">Just click &quot;Get Valuation&quot;</span> — we&apos;ll use smart defaults based on your stage ({inputs.stage.replace(/_/g, ' ')}: {defaultEsop}% ESOP).
-        </p>
-      </motion.div>
-
-      {/* Cap Table Ring at TOP (only show when there are entries) */}
-      {inputs.current_cap_table && inputs.current_cap_table.length > 0 && (
-        <motion.div variants={staggerItem}>
-          <CapTableRing percentage={capTableTotal} entries={capEntries} />
+    <motion.div className="space-y-6" variants={staggerContainer} initial="hidden" animate="visible">
+      
+      {/* Bento Top Row: Distribution & Strategy */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <motion.div variants={staggerItem} className="lg:col-span-5 flex flex-col h-full">
+           <CapTableRing percentage={capTableTotal} entries={capEntries} />
         </motion.div>
-      )}
 
-      {/* ESOP Pool */}
-      <motion.div variants={staggerItem} className="glass-card grain relative rounded-xl p-5 space-y-5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[oklch(0.45 0.01 260)]">ESOP Pool</span>
-        <div>
-          <div className="flex items-center justify-between">
-            <Label className="text-[oklch(0.78_0.005_250)] text-xs font-semibold uppercase tracking-wider">ESOP Pool (%)</Label>
-            <span className="font-mono text-sm font-bold tabular-nums text-[oklch(0.62 0.22 330)]">{inputs.esop_pool_pct ?? defaultEsop}%</span>
+        <motion.div variants={staggerItem} className="lg:col-span-7 flex flex-col h-full">
+          <div className="glass-card grain relative rounded-xl p-5 space-y-6 h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-[10px] font-medium uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Equity Strategy</Label>
+                <p className="text-[10px] text-[oklch(0.50 0.01 260)]">Retention Pool & Exit Horizon</p>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-[oklch(0.62_0.22_330/0.1)] text-[9px] font-bold text-[oklch(0.62_0.22_330)] uppercase">Dilution Impact</span>
+            </div>
+
+            <div className="space-y-5">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-medium uppercase tracking-widest text-[oklch(0.78_0.005_250)]">ESOP Pool (%)</Label>
+                    <p className="text-[9px] text-[oklch(0.45_0.01_260)] opacity-60">Typical for {inputs.stage.replace(/_/g, ' ')}: {defaultEsop}%</p>
+                  </div>
+                  <span className="font-mono text-sm font-bold text-[oklch(0.62 0.22 330)]">{inputs.esop_pool_pct ?? defaultEsop}%</span>
+                </div>
+                <Slider
+                  value={[inputs.esop_pool_pct ?? defaultEsop]}
+                  onValueChange={(v) => setField('esop_pool_pct', Array.isArray(v) ? v[0] : v)}
+                  min={0} max={30} step={1}
+                />
+                <p className="text-[9px] text-[oklch(0.45_0.01_260)] opacity-40 italic mt-1.5">Drag to adjust ESOP percentage</p>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-medium uppercase tracking-widest text-[oklch(0.78_0.005_250)]">Time to Liquidity</Label>
+                    <p className="text-[9px] text-[oklch(0.45_0.01_260)] opacity-60">Years until projected exit event.</p>
+                  </div>
+                  <span className="font-mono text-sm font-bold text-[oklch(0.62 0.22 330)]">{inputs.time_to_liquidity_years ?? 4} Yrs</span>
+                </div>
+                <Slider
+                  value={[inputs.time_to_liquidity_years ?? 4]}
+                  onValueChange={(v) => setField('time_to_liquidity_years', Array.isArray(v) ? v[0] : v)}
+                  min={1} max={15} step={1}
+                />
+                <p className="text-[9px] text-[oklch(0.45_0.01_260)] opacity-40 italic mt-1.5">Drag to set projected exit years</p>
+              </div>
+            </div>
+
+            <div className="mt-auto pt-4 border-t border-[oklch(0.91_0.005_260/0.4)] flex items-center gap-2.5">
+               <SkipForward className="w-3.5 h-3.5 text-[oklch(0.62 0.22 330)] shrink-0 opacity-60" />
+               <p className="text-[10px] text-[oklch(0.45_0.01_260)] opacity-70 italic leading-tight">
+                 Feel free to skip. We use stage-based benchmarks to calibrate your per-share value.
+               </p>
+            </div>
           </div>
-          <p className="text-[10px] text-[oklch(0.50 0.01 260)] mb-2">
-            Equity reserved for employees. Typical for {inputs.stage.replace(/_/g, ' ')}: {defaultEsop}%
-          </p>
-          <Slider
-            value={[inputs.esop_pool_pct ?? defaultEsop]}
-            onValueChange={(v) => setField('esop_pool_pct', Array.isArray(v) ? v[0] : v)}
-            min={0} max={30} step={1}
-          />
-        </div>
+        </motion.div>
+      </div>
 
-        <div>
-          <div className="flex items-center justify-between">
-            <Label className="text-[oklch(0.78_0.005_250)] text-xs font-semibold uppercase tracking-wider">Time to Liquidity</Label>
-            <span className="font-mono text-sm font-bold tabular-nums text-[oklch(0.62 0.22 330)]">{inputs.time_to_liquidity_years ?? 4} yrs</span>
-          </div>
-          <p className="text-[10px] text-[oklch(0.50 0.01 260)] mb-2">Years until exit (acquisition/IPO). Typical: 3-7 years.</p>
-          <Slider
-            value={[inputs.time_to_liquidity_years ?? 4]}
-            onValueChange={(v) => setField('time_to_liquidity_years', Array.isArray(v) ? v[0] : v)}
-            min={1} max={15} step={1}
-          />
-        </div>
-      </motion.div>
-
-      {/* Cap Table */}
+      {/* Bento Bottom Row: Cap Table Ledger */}
       <motion.div variants={staggerItem} className="glass-card grain relative rounded-xl p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[oklch(0.45 0.01 260)]">Current Cap Table</span>
-            <p className="text-[10px] text-[oklch(0.50 0.01 260)]">Add up to 10 shareholders. Total should equal 100%.</p>
+        <div className="flex items-center justify-between mb-4">
+          <div className="space-y-0.5">
+            <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-[oklch(0.45 0.01 260)]">Shareholder Ledger</span>
+            <p className="text-[10px] text-[oklch(0.50 0.01 260)]">Institutional distribution of ownership.</p>
           </div>
           <button
             onClick={() => {
@@ -233,70 +264,96 @@ export function ESOPCapTableStep() {
                 ])
               }
             }}
-            className="text-sm text-[oklch(0.62 0.22 330)] hover:text-[oklch(0.75 0.18 162)] px-3 py-1.5 rounded border border-[oklch(0.62_0.22_330/0.3)] hover:border-[oklch(0.62_0.22_330/0.5)] transition-colors"
+            className="text-[10px] font-bold uppercase bg-white border border-[oklch(0.91_0.005_260)] hover:border-[oklch(0.62_0.22_330/0.4)] px-4 py-2 rounded-lg transition-all shadow-sm"
           >
-            + Add Row
+            + Add Shareholder
           </button>
         </div>
 
         {inputs.current_cap_table && inputs.current_cap_table.length > 0 ? (
-          <div className="space-y-2">
-            <div className="grid grid-cols-12 gap-2 text-[10px] text-[oklch(0.45_0.01_250)] font-bold uppercase tracking-wider px-1">
-              <span className="col-span-5">Name</span>
-              <span className="col-span-3">Ownership %</span>
-              <span className="col-span-3">Class</span>
+          <div className="space-y-1.5 pt-2">
+            <div className="grid grid-cols-12 gap-4 text-[9px] text-[oklch(0.45_0.01_250)] font-bold uppercase tracking-widest px-3 mb-2 opacity-50">
+              <span className="col-span-5">Entity / Name</span>
+              <span className="col-span-3">Stake %</span>
+              <span className="col-span-3">Share Class</span>
               <span className="col-span-1"></span>
             </div>
             {inputs.current_cap_table.map((entry, idx) => (
-              <div key={idx} className="grid grid-cols-12 gap-2 items-center">
-                <Input
-                  value={entry.name}
-                  onChange={(e) => {
-                    const updated = [...inputs.current_cap_table!]
-                    updated[idx] = { ...updated[idx], name: e.target.value }
-                    setField('current_cap_table', updated)
-                  }}
-                  placeholder="Shareholder name"
-                  className="col-span-5 bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] text-sm h-9"
-                />
-                <Input
-                  type="number"
-                  value={entry.percentage}
-                  onChange={(e) => {
-                    const updated = [...inputs.current_cap_table!]
-                    updated[idx] = { ...updated[idx], percentage: parseFloat(e.target.value) || 0 }
-                    setField('current_cap_table', updated)
-                  }}
-                  min={0} max={100}
-                  className="col-span-3 bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] text-sm h-9"
-                />
-                <select
-                  value={entry.share_class}
-                  onChange={(e) => {
-                    const updated = [...inputs.current_cap_table!]
-                    updated[idx] = { ...updated[idx], share_class: e.target.value as any }
-                    setField('current_cap_table', updated)
-                  }}
-                  className="col-span-3 bg-[oklch(0.98 0.002 260)] border-[oklch(0.91 0.005 260)] text-[oklch(0.15 0.02 260)] text-sm h-9 rounded-md px-2"
-                >
-                  <option value="common">Common</option>
-                  <option value="preference">Preference</option>
-                  <option value="esop">ESOP</option>
-                </select>
-                <button
-                  onClick={() => {
-                    const updated = inputs.current_cap_table!.filter((_, i) => i !== idx)
-                    setField('current_cap_table', updated.length > 0 ? updated : null)
-                  }}
-                  className="col-span-1 text-red-400 hover:text-red-300 text-sm"
-                >
-                  ×
-                </button>
+              <div key={idx} className="grid grid-cols-12 gap-3 items-center p-1 rounded-lg hover:bg-[oklch(0.15_0.02_260/0.02)] transition-colors">
+                <div className="col-span-5 flex items-center gap-2">
+                  <div 
+                    className="w-2 h-6 rounded-sm shrink-0" 
+                    style={{ background: SHARE_CLASS_COLORS[entry.share_class] || 'oklch(0.50 0.01 260)' }}
+                  />
+                  <Input
+                    value={entry.name}
+                    onChange={(e) => {
+                      const updated = [...inputs.current_cap_table!]
+                      updated[idx] = { ...updated[idx], name: e.target.value }
+                      setField('current_cap_table', updated)
+                    }}
+                    placeholder="E.g. Founders"
+                    className="bg-white/50 border-[oklch(0.91 0.005 260/0.6)] text-[oklch(0.15 0.02 260)] text-xs h-8 pl-2.5 rounded-md focus-visible:ring-0"
+                  />
+                </div>
+                <div className="col-span-3">
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      value={entry.percentage || ''}
+                      onChange={(e) => {
+                        const updated = [...inputs.current_cap_table!]
+                        updated[idx] = { ...updated[idx], percentage: parseFloat(e.target.value) || 0 }
+                        setField('current_cap_table', updated)
+                      }}
+                      min={0} max={100}
+                      className="bg-white/50 border-[oklch(0.91 0.005 260/0.6)] text-[oklch(0.15 0.02 260)] text-xs h-8 pr-6 rounded-md focus-visible:ring-0"
+                    />
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold text-[oklch(0.50 0.01 260)]">%</span>
+                  </div>
+                </div>
+                <div className="col-span-3">
+                  <select
+                    value={entry.share_class}
+                    onChange={(e) => {
+                      const updated = [...inputs.current_cap_table!]
+                      updated[idx] = { ...updated[idx], share_class: e.target.value as any }
+                      setField('current_cap_table', updated)
+                    }}
+                    className="w-full bg-white/50 border-[oklch(0.91 0.005 260/0.6)] text-[oklch(0.15 0.02 260)] text-[10px] font-bold h-8 rounded-md px-2 outline-none"
+                  >
+                    <option value="common">Common</option>
+                    <option value="preference">Preference</option>
+                    <option value="advisory">Advisory</option>
+                  </select>
+                </div>
+                <div className="col-span-1 flex justify-end">
+                  <button
+                    onClick={() => {
+                      const updated = inputs.current_cap_table!.filter((_, i) => i !== idx)
+                      setField('current_cap_table', updated.length > 0 ? updated : null)
+                    }}
+                    className="w-6 h-6 flex items-center justify-center rounded-md hover:bg-red-50 text-red-400/60 hover:text-red-500 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-[oklch(0.45_0.01_250)] italic">No cap table entries. Click &quot;+ Add Row&quot; to start.</p>
+          <div className="py-10 flex flex-col items-center justify-center bg-[oklch(0.15_0.02_260/0.02)] border border-dashed border-[oklch(0.91_0.005_260)] rounded-xl group cursor-pointer"
+            onClick={() => {
+              setField('current_cap_table', [
+                { name: 'Founders', percentage: 100 - (inputs.esop_pool_pct ?? 0), share_class: 'common' },
+                { name: 'ESOP Pool', percentage: inputs.esop_pool_pct ?? 0, share_class: 'esop' }
+              ])
+            }}
+          >
+             <PieChart className="w-8 h-8 text-[oklch(0.62 0.22 330)] opacity-40 mb-3 group-hover:scale-110 transition-transform" />
+             <p className="text-[11px] text-[oklch(0.15 0.02 260)] font-bold">Initialize Cap Table</p>
+             <p className="text-[9px] text-[oklch(0.45 0.01 260)] opacity-60 mt-1">Founders + ESOP Pool will be added automatically.</p>
+          </div>
         )}
       </motion.div>
     </motion.div>

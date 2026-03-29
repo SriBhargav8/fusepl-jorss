@@ -13,26 +13,50 @@ function Slider({
   max = 100,
   ...props
 }: SliderPrimitive.Root.Props) {
-  const _values = React.useMemo(
-    () =>
-      Array.isArray(value)
-        ? value
-        : Array.isArray(defaultValue)
-          ? defaultValue
-          : [min, max],
-    [value, defaultValue, min, max]
-  )
+  const isDragging = React.useRef(false)
+  const [localValue, setLocalValue] = React.useState<number[]>(() => {
+    const val = (value as number | number[]) ?? (defaultValue as number | number[]) ?? [min, max]
+    return (Array.isArray(val) ? val : [val]).map(v => Number(v) || 0)
+  })
+
+  // Sync with prop ONLY when not interacting to prevent "stuck" feeling during drag
+  React.useEffect(() => {
+    if (value !== undefined && !isDragging.current) {
+      const incoming = (Array.isArray(value) ? value : [value]).map(v => Number(v) || 0)
+      const matches = incoming.length === localValue.length && 
+                      incoming.every((v, i) => v === localValue[i])
+      
+      if (!matches) {
+        setLocalValue(incoming)
+      }
+    }
+  }, [value])
+
+  const _values = React.useMemo(() => localValue, [localValue])
+
+  const handleValueChange = (v: any) => {
+    const vals = Array.isArray(v) ? v : [v]
+    const sanitized = vals.map(val => Number(val) || 0)
+    setLocalValue(sanitized)
+    if (props.onValueChange) {
+      // @ts-ignore - Base-UI signature mismatch across versions
+      props.onValueChange(sanitized)
+    }
+  }
 
   return (
     <SliderPrimitive.Root
-      className={cn("data-horizontal:w-full data-vertical:h-full", className)}
+      {...props}
+      className={cn("data-horizontal:w-full data-vertical:h-full relative", className)}
       data-slot="slider"
-      defaultValue={defaultValue}
-      value={value}
+      value={_values}
       min={min}
       max={max}
+      onValueChange={handleValueChange}
       thumbAlignment="edge"
-      {...props}
+      onPointerDown={() => { isDragging.current = true }}
+      onPointerUp={() => { isDragging.current = false }}
+      onBlur={() => { isDragging.current = false }}
     >
       <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
         <SliderPrimitive.Track
@@ -48,7 +72,7 @@ function Slider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            className="relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+            className="relative block size-5 shrink-0 rounded-full border-2 border-primary bg-white ring-ring/50 transition-[color,box-shadow] select-none touch-none after:absolute after:-inset-4 hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden active:ring-4 disabled:pointer-events-none disabled:opacity-50 cursor-grab active:cursor-grabbing"
           />
         ))}
       </SliderPrimitive.Control>

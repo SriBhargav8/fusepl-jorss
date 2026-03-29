@@ -83,29 +83,71 @@ const cardVariants = {
 
 export function TrustSignals() {
   return (
-    <section className="grain relative py-28 px-6 bg-gradient-to-b from-[oklch(0.98 0.002 260)] via-[oklch(0.985 0.002 260)] to-[oklch(0.98 0.002 260)]">
-      <div className="section-divider absolute inset-x-0 top-0" />
-      <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-16">
-          <p className="text-[11px] font-semibold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">Why founders trust us</p>
-          <h2 className="font-heading text-3xl sm:text-[2.75rem] text-[oklch(0.15 0.02 260)] leading-tight">Not a Random Number Generator</h2>
-          <p className="mt-5 text-base text-[oklch(0.40 0.01 260)] max-w-lg mx-auto leading-relaxed">
-            When an investor asks &ldquo;how did you arrive at this valuation?&rdquo; — you&apos;ll have a real answer.
+    <section className="relative py-32 px-6 overflow-hidden bg-[oklch(0.985_0.002_260)]">
+      <div className="section-divider absolute inset-x-0 top-0 opacity-50" />
+      
+      {/* Background accents */}
+      <div className="absolute top-1/4 left-[-10%] w-[600px] h-[600px] rounded-full bg-[oklch(0.62_0.22_330/0.03)] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-[-10%] w-[600px] h-[600px] rounded-full bg-[oklch(0.75_0.18_162/0.03)] blur-[120px] pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} 
+          className="text-center mb-20"
+        >
+          <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.3em] mb-5">Institutional Rigour</p>
+          <h2 className="font-heading text-4xl sm:text-[3.5rem] text-[oklch(0.15 0.02 260)] leading-[1.1] tracking-tight">
+            Not a Random <span className="text-gold-gradient italic">Number Generator</span>
+          </h2>
+          <p className="mt-6 text-[clamp(1rem,1.5vw,1.15rem)] text-[oklch(0.40 0.01 260)] max-w-xl mx-auto leading-relaxed font-medium">
+            When an investor asks &ldquo;how did you arrive at this valuation?&rdquo; 
+            — you&apos;ll have a defensible, multi-method answer.
           </p>
         </motion.div>
 
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div 
+          variants={containerVariants} 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: true, margin: '-100px' }} 
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {SIGNALS.map((s) => (
-            <motion.div key={s.label} variants={cardVariants} className="glass-card group relative p-6 rounded-2xl overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(90deg, transparent, ${s.color}, transparent)` }} />
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ color: s.color, backgroundColor: `color-mix(in oklch, ${s.color} 12%, transparent)`, border: `1px solid color-mix(in oklch, ${s.color} 20%, transparent)` }}>
-                  {s.icon}
+            <motion.div 
+              key={s.label} 
+              variants={cardVariants} 
+              className="glass-card group relative p-8 rounded-3xl overflow-hidden"
+            >
+              {/* Animated hover gradient */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-tr from-[oklch(0.62_0.22_330/0.03)] via-transparent to-transparent pointer-events-none" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm" 
+                    style={{ 
+                      color: s.color, 
+                      backgroundColor: `color-mix(in oklch, ${s.color} 10%, white)`, 
+                      border: `1.5px solid color-mix(in oklch, ${s.color} 20%, transparent)` 
+                    }}
+                  >
+                    {s.icon}
+                  </div>
+                  <span className="text-[10px] font-bold px-3 py-1 rounded-full border shadow-sm" 
+                    style={{ 
+                      color: s.color, 
+                      backgroundColor: `color-mix(in oklch, ${s.color} 8%, white)`,
+                      borderColor: `color-mix(in oklch, ${s.color} 15%, transparent)`
+                    }}
+                  >
+                    {s.metric}
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-[oklch(0.20 0.02 260)] uppercase tracking-[0.12em]">{s.label}</span>
-                <span className="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ color: s.color, backgroundColor: `color-mix(in oklch, ${s.color} 12%, transparent)` }}>{s.metric}</span>
+                <h3 className="text-sm font-bold text-[oklch(0.15 0.02 260)] uppercase tracking-[0.15em] mb-3">{s.label}</h3>
+                <p className="text-[15px] text-[oklch(0.40 0.01 260)] leading-relaxed font-medium">{s.text}</p>
               </div>
-              <p className="text-sm text-[oklch(0.40 0.01 260)] leading-relaxed">{s.text}</p>
             </motion.div>
           ))}
         </motion.div>

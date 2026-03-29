@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -142,11 +143,17 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.02;
+  opacity: 0.015;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 128px 128px;
   mix-blend-mode: overlay;
+}
+
+.mesh-gradient {
+  background-image: url('/hero_mesh_gradient.png');
+  background-size: cover;
+  background-position: center;
 }
 
 /* ---- Section divider ---- */
@@ -209,18 +216,21 @@ html {
 /* ---- Glass card ---- */
 .glass-card {
   background: linear-gradient(
-    135deg,
-    oklch(1 0 0) 0%,
-    oklch(0.98 0.003 260) 100%
+    145deg,
+    oklch(1 0 0 / 0.7) 0%,
+    oklch(0.99 0.002 260 / 0.4) 100%
   );
-  border: 1px solid oklch(0.91 0.005 260);
-  box-shadow: 0 4px 24px oklch(0 0 0 / 0.06), inset 0 1px 0 oklch(1 0 0 / 0.5);
-  transition: border-color 0.3s ease,
-              box-shadow 0.3s ease;
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0.91 0.005 260 / 0.5);
+  box-shadow: 0 4px 24px oklch(0 0 0 / 0.04), inset 0 1px 0 oklch(1 0 0 / 0.8);
+  transition: border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .glass-card:hover {
-  border-color: oklch(0.62 0.22 330 / 0.3);
-  box-shadow: 0 8px 40px oklch(0 0 0 / 0.08), 0 0 0 1px oklch(0.62 0.22 330 / 0.1), inset 0 1px 0 oklch(1 0 0 / 0.5);
+  border-color: oklch(0.62 0.22 330 / 0.4);
+  box-shadow: 0 12px 48px oklch(0 0 0 / 0.1), 0 0 0 1px oklch(0.62 0.22 330 / 0.15), inset 0 1px 0 oklch(1 0 0 / 0.9);
+  transform: translateY(-4px);
 }
 
 /* ---- Card hover ---- */
@@ -251,6 +261,27 @@ html {
 }
 
 /* ---- Selection ---- */
+/* ---- Prose Customizations ---- */
+.prose ul > li {
+  position: relative;
+  padding-left: 0.5rem;
+  list-style-type: none !important;
+}
+
+.prose ul > li::before {
+  content: "→";
+  position: absolute;
+  left: -1.25rem;
+  color: oklch(0.62 0.22 330);
+  font-weight: bold;
+  opacity: 0.6;
+}
+
+.prose ol > li::marker {
+  color: oklch(0.62 0.22 330);
+  font-weight: bold;
+}
+
 ::selection {
   background: oklch(0.62 0.22 330 / 0.15);
   color: oklch(0.15 0.02 260);

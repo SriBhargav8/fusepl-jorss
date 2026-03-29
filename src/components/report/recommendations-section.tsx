@@ -1,6 +1,5 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { ValuationResult } from '@/types'
 
 interface Props {
@@ -13,24 +12,38 @@ export function RecommendationsSection({ result, sector, stage }: Props) {
   const checklist = generateChecklist(result, stage)
 
   return (
-    <Card className="bg-slate-900 border-slate-800">
-      <CardHeader>
-        <CardTitle className="text-white">Recommendations & Fundraise Checklist</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div className="glass-card grain relative rounded-xl p-8 h-full flex flex-col" 
+      style={{ 
+        borderColor: 'oklch(0.91 0.005 260 / 0.8)', 
+        background: 'linear-gradient(135deg, oklch(0.99 0.002 260), oklch(0.985 0.002 260))' 
+      }}
+    >
+      <div className="flex items-center justify-between mb-6">
+        <div className="space-y-1">
+          <h2 className="text-lg font-bold uppercase tracking-widest text-[oklch(0.45_0.01_260)]">Strategic Roadmap</h2>
+          <p className="text-xs text-[oklch(0.50 0.01 260)] opacity-60">Curated Fundraise & Growth Checklist</p>
+        </div>
+        <div className="flex gap-2">
+            <span className="px-3 py-1 rounded-full bg-[oklch(0.65_0.18_160/0.1)] text-[10px] font-bold text-[oklch(0.65_0.18_160)] uppercase">Ready to Raise</span>
+        </div>
+      </div>
+
+      <div className="space-y-6">
         <div>
-          <h3 className="text-sm font-semibold mb-2 text-amber-400">Before Approaching Investors:</h3>
-          <ul className="space-y-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider mb-4 text-[oklch(0.65_0.18_160)]">Pre-Flight Checklist:</h3>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3">
             {checklist.map((item, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm">
-                <span className="text-slate-500 mt-0.5">&#9744;</span>
-                <span className="text-slate-300">{item}</span>
+              <li key={i} className="flex items-start gap-3 group">
+                <div className="w-5 h-5 rounded border border-[oklch(0.91_0.005_260/0.8)] flex items-center justify-center text-[10px] text-[oklch(0.65_0.18_160)] group-hover:bg-[oklch(0.65_0.18_160/0.05)] transition-colors">
+                  <span className="opacity-0 group-hover:opacity-100 italic font-bold">✓</span>
+                </div>
+                <span className="text-xs text-[oklch(0.15_0.02_260)] font-medium leading-normal opacity-80 group-hover:opacity-100 transition-opacity">{item}</span>
               </li>
             ))}
           </ul>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 

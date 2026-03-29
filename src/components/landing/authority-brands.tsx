@@ -17,22 +17,32 @@ const CREDENTIALS = [
 
 export function AuthorityBrands() {
   return (
-    <section className="relative py-8 px-6 overflow-hidden bg-[oklch(0.98 0.002 260)] border-y border-[oklch(0.91 0.005 260/0.5)]">
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[oklch(0.98 0.002 260)] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[oklch(0.98 0.002 260)] to-transparent z-10 pointer-events-none" />
+    <section className="relative py-12 overflow-hidden bg-[oklch(0.985_0.002_260)] border-y border-[oklch(0.15_0.02_260/0.05)]">
+      {/* Soft masks for the marquee edges */}
+      <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-[oklch(0.985_0.002_260)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-[oklch(0.985_0.002_260)] to-transparent z-10 pointer-events-none" />
 
-      <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-        className="text-center text-[10px] font-semibold text-[oklch(0.45 0.01 260)] uppercase tracking-[0.25em] mb-5"
+      <motion.p 
+        initial={{ opacity: 0 }} 
+        whileInView={{ opacity: 1 }} 
+        viewport={{ once: true }}
+        className="text-center text-[9px] font-bold text-[oklch(0.55_0.01_260)] uppercase tracking-[0.4em] mb-8"
       >
-        Standards, data sources &amp; methodology we follow
+        Standards, Data Sources &amp; Professional Rigour
       </motion.p>
 
       <div className="relative">
-        <motion.div className="flex gap-6 w-max" animate={{ x: ['0%', '-50%'] }} transition={{ duration: 35, ease: 'linear', repeat: Infinity }}>
+        <motion.div 
+          className="flex gap-8 w-max" 
+          animate={{ x: ['0%', '-50%'] }} 
+          transition={{ duration: 40, ease: 'linear', repeat: Infinity }}
+        >
           {[...CREDENTIALS, ...CREDENTIALS].map((b, i) => (
-            <div key={`${b.label}-${i}`} className="flex items-center gap-3 px-5 py-2.5 rounded-xl border border-[oklch(0.91 0.005 260)] bg-[oklch(0.97 0.003 260/0.6)] backdrop-blur-sm shrink-0">
-              <span className="text-sm font-semibold text-[oklch(0.20 0.02 260)]">{b.label}</span>
-              <span className="text-[10px] text-[oklch(0.45 0.01 260)] uppercase tracking-wider">{b.detail}</span>
+            <div key={`${b.label}-${i}`} className="group flex items-center gap-4 px-6 py-3 rounded-2xl border border-[oklch(0.15_0.02_260/0.08)] bg-white/50 backdrop-blur-sm shrink-0 transition-all duration-300 hover:border-[oklch(0.62_0.22_330/0.3)] hover:shadow-sm">
+              <div className="flex flex-col">
+                <span className="text-sm font-bold text-[oklch(0.15 0.02 260)] tracking-tight">{b.label}</span>
+                <span className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-wider opacity-70">{b.detail}</span>
+              </div>
             </div>
           ))}
         </motion.div>

@@ -47,7 +47,7 @@ export function ShareButtons({ compositeValue, companyName }: Props) {
         <button
           key={label}
           onClick={onClick}
-          className="h-9 px-4 text-xs font-medium rounded-lg border border-[oklch(0.91 0.005 260)] text-[oklch(0.45 0.01 260)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.62 0.22 330)]"
+          className="h-9 px-4 text-xs font-medium rounded-lg border border-[oklch(0.91 0.005 260)] text-[oklch(0.45 0.01 260)] transition-all hover:border-[oklch(0.30_0.008_260)] hover:text-[oklch(0.62 0.22 330)] cursor-pointer"
         >
           {label}
         </button>

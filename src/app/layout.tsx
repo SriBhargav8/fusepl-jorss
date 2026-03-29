@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { DM_Sans, DM_Serif_Display } from 'next/font/google'
 import { Toaster } from 'sonner'
 import { Header } from '@/components/layout/header'
+import { FloatingActions } from '@/components/layout/floating-actions'
+import { ModalProvider } from '@/components/providers/modal-provider'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -43,11 +45,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${dmSans.variable} ${dmSerif.variable} font-sans antialiased`}>
-        <Header />
-        {children}
-        <Toaster position="top-right" />
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${dmSans.variable} ${dmSerif.variable} font-sans antialiased`} suppressHydrationWarning>
+        <ModalProvider>
+          <Header />
+          {children}
+          <FloatingActions />
+          <Toaster 
+            position="top-center" 
+            richColors 
+            closeButton
+            toastOptions={{
+              style: {
+                background: 'oklch(0.99 0.002 260)',
+                border: '1px solid oklch(0.91 0.005 260)',
+                borderRadius: '16px',
+                fontSize: '13px',
+                boxShadow: '0 8px 32px oklch(0 0 0 / 0.08)',
+              },
+            }}
+          />
+        </ModalProvider>
       </body>
     </html>
   )

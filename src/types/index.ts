@@ -658,7 +658,7 @@ export interface WizardInputs {
 export interface CapTableEntry {
   name: string
   percentage: number
-  share_class: 'common' | 'preference' | 'esop'
+  share_class: 'common' | 'preference' | 'esop' | 'advisory'
 }
 
 // ============================================================
@@ -870,6 +870,8 @@ export interface SectorMapping {
 
 export interface CaptureRequest {
   email: string
+  name?: string
+  phone?: string
   valuation_inputs: WizardInputs
   valuation_result: ValuationResult
 }

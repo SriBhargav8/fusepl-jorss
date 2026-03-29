@@ -16,6 +16,7 @@ import { PILLARS } from '@/lib/pillars'
 interface NavLink {
   href: string
   label: string
+  isExternal?: boolean
 }
 
 interface MobileNavProps {
@@ -49,12 +50,10 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
 
         <div className="flex flex-col h-full">
-          {/* Branding */}
           <div className="flex items-center gap-2 p-5 border-b border-[oklch(0.91_0.005_260)]">
-            <Image src="/logo.png" alt="First Unicorn Startup" width={120} height={32} className="h-7 w-auto" />
+            <Image src="/logo.png" alt="First Unicorn Startup" width={140} height={36} className="h-8 w-auto" />
           </div>
 
-          {/* Navigation */}
           <nav className="flex flex-col gap-1 p-4 flex-1 overflow-y-auto">
             {links.map((link) => {
               const isActive =
@@ -67,6 +66,8 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                   <div className="flex items-center">
                     <Link
                       href={link.href}
+                      target={link.isExternal ? '_blank' : undefined}
+                      rel={link.isExternal ? 'noopener noreferrer' : undefined}
                       onClick={() => setOpen(false)}
                       className={`
                         relative rounded-lg px-4 py-3 text-sm font-medium transition-colors flex-1
@@ -89,7 +90,6 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                     )}
                   </div>
 
-                  {/* Learn sub-menu */}
                   {isLearn && learnExpanded && (
                     <div className="ml-4 mt-1 mb-2 space-y-0.5">
                       {PILLARS.map((pillar) => (
@@ -113,14 +113,13 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
             })}
           </nav>
 
-          {/* CTA at bottom */}
           <div className="p-4 border-t border-[oklch(0.91_0.005_260)]">
             <Link
               href="/valuation"
               onClick={() => setOpen(false)}
               className="flex items-center justify-center w-full rounded-lg h-10 px-4 text-sm font-semibold bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
             >
-              Get Valuation
+              Try Free Valuation Engine
             </Link>
           </div>
         </div>
