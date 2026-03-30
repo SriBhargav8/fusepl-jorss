@@ -20,7 +20,7 @@ export function ReadingProgress() {
 
   return (
     <div
-      className="fixed top-[3.5rem] left-0 h-[2px] z-60 transition-[width] duration-75 ease-linear"
+      className="fixed top-[81px] left-0 h-[3px] z-[49] transition-[width] duration-75 ease-linear"
       style={{
         width: `${progress}%`,
         background: 'linear-gradient(90deg, oklch(0.62 0.22 330), oklch(0.75 0.18 162))',

@@ -34,11 +34,11 @@ export function TableOfContents({ headings }: { headings: TocItem[] }) {
   if (headings.length === 0) return null
 
   return (
-    <nav className="space-y-1" aria-label="Table of contents">
-      <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-3">
+    <nav className="flex flex-col" aria-label="Table of contents">
+      <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-2 pb-2 border-b border-[oklch(0.91_0.005_260)]">
         On This Page
       </p>
-      {headings.map((h) => (
+      {headings.map((h, i) => (
         <a
           key={h.id}
           href={`#${h.id}`}
@@ -46,12 +46,18 @@ export function TableOfContents({ headings }: { headings: TocItem[] }) {
             e.preventDefault()
             document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth' })
           }}
-          className={`block text-[13px] leading-relaxed transition-colors duration-200 ${
-            h.level === 3 ? 'pl-4' : h.level === 4 ? 'pl-8' : ''
+          className={`block transition-all duration-200 ${
+            h.level === 2
+              ? `text-[13px] font-semibold leading-snug ${i > 0 ? 'mt-4' : 'mt-2'}`
+              : h.level === 3
+              ? 'text-[12px] leading-relaxed pl-3 mt-2 border-l-2 border-[oklch(0.91_0.005_260)]'
+              : 'text-[11px] leading-relaxed pl-6 mt-1.5 border-l-2 border-[oklch(0.91_0.005_260)]'
           } ${
             activeId === h.id
-              ? 'text-[oklch(0.62 0.22 330)] font-medium'
-              : 'text-[oklch(0.50 0.01 260)] hover:text-[oklch(0.25 0.02 260)]'
+              ? 'text-[oklch(0.62 0.22 330)] border-[oklch(0.62_0.22_330)]'
+              : h.level === 2
+              ? 'text-[oklch(0.30 0.02 260)] hover:text-[oklch(0.62 0.22 330)]'
+              : 'text-[oklch(0.50 0.01 260)] hover:text-[oklch(0.62 0.22 330)] hover:border-[oklch(0.62_0.22_330/0.4)]'
           }`}
         >
           {h.text}
