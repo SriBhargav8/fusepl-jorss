@@ -27,24 +27,14 @@ export function MobileCtaBar({ pillar }: Props) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
       <div className="bg-[oklch(0.995_0.001_260/0.92)] backdrop-blur-xl border-t border-[oklch(0.91_0.005_260)] px-4 py-3 flex items-center gap-3">
-        {/* Primary CTA */}
-        <Link
-          href={magnet.toolHref}
-          className="btn-press flex-1 flex items-center justify-center gap-2 h-11 text-[13px] font-semibold tracking-wide rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
-        >
-          {magnet.toolLabel}
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-
-        {/* WhatsApp */}
-        <a
-          href={WHATSAPP_COMMUNITY_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 w-11 h-11 rounded-xl bg-[oklch(0.65_0.16_155/0.12)] border border-[oklch(0.65_0.16_155/0.20)] flex items-center justify-center transition-colors hover:bg-[oklch(0.65_0.16_155/0.20)]"
-        >
-          <MessageCircle className="w-5 h-5 text-[oklch(0.65 0.16 155)]" />
-        </a>
+      {/* Primary CTA */}
+      <Link
+        href={magnet.toolHref}
+        className="btn-press flex-1 flex items-center justify-center gap-2 h-11 text-[13px] font-semibold tracking-wide rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
+      >
+        {magnet.toolLabel}
+        <ArrowRight className="w-4 h-4" />
+      </Link>
       </div>
     </div>
   )

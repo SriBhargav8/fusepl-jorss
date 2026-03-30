@@ -149,7 +149,7 @@ export function ArticlePageClient({
       <div className="section-divider" />
 
       {/* Article Body + Sidebar */}
-      <div className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-[1fr_220px] gap-12">
+      <div className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-[1fr_320px] gap-12">
         {/* Body */}
         <article className="max-w-3xl min-w-0">{children}</article>
 
