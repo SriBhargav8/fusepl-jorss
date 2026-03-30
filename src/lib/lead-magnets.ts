@@ -90,4 +90,4 @@ export function getLeadMagnet(pillar: string) {
 export const WHATSAPP_COMMUNITY_LINK = 'https://chat.whatsapp.com/YOUR_COMMUNITY_LINK'
 
 // Expert call booking link — update when ready
-export const EXPERT_CALL_LINK = 'https://calendly.com/firstunicornstartup/strategy-call'
+export const EXPERT_CALL_LINK = 'https://wa.me/919667744073?text=Hi%20FirstUnicorn%2C%20I%27m%20exploring%20your%20platform%20and%20have%20a%20question%20about...'

@@ -43,7 +43,7 @@ export function ConversionFooter({ pillar, pillarColor, articleSlug, related }: 
           Your Next Step
         </motion.p>
 
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Tool CTA */}
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <Link
@@ -65,33 +65,10 @@ export function ConversionFooter({ pillar, pillarColor, articleSlug, related }: 
               <p className="text-xs text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">
                 10 methods, Monte Carlo simulation, Damodaran India data. Results in under 5 minutes.
               </p>
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[oklch(0.62 0.22 330)] group-hover:gap-2.5 transition-all">
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[oklch(0.62 0.22 330)] group-hover:gap-2.5 transition-all mt-auto">
                 Try Free <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </Link>
-          </motion.div>
-
-          {/* WhatsApp CTA */}
-          <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} transition={{ delay: 0.1 }}>
-            <a
-              href={WHATSAPP_COMMUNITY_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-card card-hover group block rounded-2xl p-6 h-full"
-            >
-              <div className="w-10 h-10 rounded-xl bg-[oklch(0.65_0.16_155/0.12)] border border-[oklch(0.65_0.16_155/0.20)] flex items-center justify-center mb-4">
-                <MessageCircle className="w-5 h-5 text-[oklch(0.65 0.16 155)]" />
-              </div>
-              <h3 className="font-heading text-base text-[oklch(0.15 0.02 260)] mb-2">
-                Join the Community
-              </h3>
-              <p className="text-xs text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">
-                {magnet.whatsappText}. Connect with founders, share learnings, get feedback.
-              </p>
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[oklch(0.65 0.16 155)] group-hover:gap-2.5 transition-all">
-                Join WhatsApp <ArrowRight className="w-3.5 h-3.5" />
-              </span>
-            </a>
           </motion.div>
 
           {/* Expert Call CTA */}
@@ -111,8 +88,8 @@ export function ConversionFooter({ pillar, pillarColor, articleSlug, related }: 
               <p className="text-xs text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">
                 IBBI-registered valuer. Certified reports for fundraising, M&A, and compliance.
               </p>
-              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[oklch(0.72 0.16 300)] group-hover:gap-2.5 transition-all">
-                Book a Call <ArrowRight className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[oklch(0.72 0.16 300)] group-hover:gap-2.5 transition-all mt-auto">
+                Chat on WhatsApp <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </a>
           </motion.div>
