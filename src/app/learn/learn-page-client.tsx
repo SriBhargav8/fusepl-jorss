@@ -103,12 +103,12 @@ export function LearnPageClient({ articles }: { articles: Article[] }) {
       </section>
 
       {/* Pillar Navigation */}
-      <section className="border-b border-[oklch(0.91 0.005 260)] bg-[oklch(0.98 0.002 260)] sticky top-14 z-40">
+      <section className="border-b border-[oklch(0.91 0.005 260)] bg-[oklch(0.98 0.002 260)] pb-2 pt-1 border-t border-[oklch(0.91_0.005_260)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex gap-2 overflow-x-auto py-3 scrollbar-none snap-x snap-mandatory">
+          <div className="flex flex-wrap justify-center gap-2.5 py-4">
             <button
               onClick={() => setActivePillar(null)}
-              className={`shrink-0 snap-start text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 ${
+              className={`text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 ${
                 !activePillar
                   ? 'bg-[oklch(0.62_0.22_330/0.12)] text-[oklch(0.62 0.22 330)] border border-[oklch(0.62_0.22_330/0.25)]'
                   : 'text-[oklch(0.45 0.01 260)] hover:text-[oklch(0.25 0.02 260)] hover:bg-[oklch(0.96 0.005 260)] border border-transparent'
@@ -120,7 +120,7 @@ export function LearnPageClient({ articles }: { articles: Article[] }) {
               <button
                 key={pillar.slug}
                 onClick={() => setActivePillar(activePillar === pillar.slug ? null : pillar.slug)}
-                className={`shrink-0 snap-start text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2 ${
+                className={`text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2 ${
                   activePillar === pillar.slug
                     ? 'border'
                     : 'text-[oklch(0.45 0.01 260)] hover:text-[oklch(0.25 0.02 260)] hover:bg-[oklch(0.96 0.005 260)] border border-transparent'
@@ -184,44 +184,46 @@ export function LearnPageClient({ articles }: { articles: Article[] }) {
 
           {/* Sidebar */}
           <aside className="hidden lg:block space-y-6">
-            <div className="glass-card rounded-2xl p-5">
-              <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">
-                Content Pillars
-              </p>
-              <ul className="space-y-2.5">
-                {PILLARS.map((pillar) => {
-                  const count = articles.filter((a) => a.frontmatter.pillar === pillar.slug).length
-                  return (
-                    <li key={pillar.slug}>
-                      <Link
-                        href={`/learn/${pillar.slug}`}
-                        className="flex items-center gap-2.5 text-[13px] text-[oklch(0.40 0.01 260)] hover:text-[oklch(0.20 0.02 260)] transition-colors"
-                      >
-                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: pillar.color }} />
-                        <span className="flex-1 truncate">{pillar.name}</span>
-                        <span className="text-[10px] font-bold text-[oklch(0.50 0.01 260)]">
-                          {count > 0 ? count : `${pillar.pieces}`}
-                        </span>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+            <div className="sticky top-[100px] space-y-6">
+              <div className="glass-card rounded-2xl p-5">
+                <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-4">
+                  Content Pillars
+                </p>
+                <ul className="space-y-2.5">
+                  {PILLARS.map((pillar) => {
+                    const count = articles.filter((a) => a.frontmatter.pillar === pillar.slug).length
+                    return (
+                      <li key={pillar.slug}>
+                        <Link
+                          href={`/learn/${pillar.slug}`}
+                          className="flex items-center gap-2.5 text-[13px] text-[oklch(0.40 0.01 260)] hover:text-[oklch(0.20 0.02 260)] transition-colors"
+                        >
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: pillar.color }} />
+                          <span className="flex-1 truncate">{pillar.name}</span>
+                          <span className="text-[10px] font-bold text-[oklch(0.50 0.01 260)]">
+                            {count > 0 ? count : `${pillar.pieces}`}
+                          </span>
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
 
-            <div className="glass-card rounded-2xl p-5 border-[oklch(0.62_0.22_330/0.15)]">
-              <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-2">
-                The Founder&apos;s Edge
-              </p>
-              <p className="text-sm text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">
-                Weekly valuation insights, founder playbooks, and funding intelligence.
-              </p>
-              <Link
-                href="/valuation"
-                className="btn-press block w-full text-center h-10 leading-10 text-sm font-semibold tracking-wide rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
-              >
-                Get Started Free
-              </Link>
+              <div className="glass-card rounded-2xl p-5 border-[oklch(0.62_0.22_330/0.15)]">
+                <p className="text-[10px] font-bold text-[oklch(0.62 0.22 330)] uppercase tracking-[0.2em] mb-2">
+                  The Founder&apos;s Edge
+                </p>
+                <p className="text-sm text-[oklch(0.45 0.01 260)] leading-relaxed mb-4">
+                  Weekly valuation insights, founder playbooks, and funding intelligence.
+                </p>
+                <Link
+                  href="/valuation"
+                  className="btn-press block w-full text-center h-10 leading-10 text-sm font-semibold tracking-wide rounded-xl bg-[#32373c] text-white transition-all hover:bg-[#1d2024]"
+                >
+                  Get Started Free
+                </Link>
+              </div>
             </div>
           </aside>
         </div>
