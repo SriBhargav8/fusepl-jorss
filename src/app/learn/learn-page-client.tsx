@@ -63,8 +63,7 @@ export function LearnPageClient({ articles }: { articles: Article[] }) {
           animate="visible"
           className="font-heading text-[clamp(2.8rem,7vw,5.5rem)] leading-[1.05] tracking-tight max-w-4xl"
         >
-          <span className="text-[oklch(0.15 0.02 260)]">The Founder&apos;s</span>
-          <br />
+          <span className="text-[oklch(0.15 0.02 260)]">The Founder&apos;s </span>
           <span className="text-gold-gradient">Edge</span>
         </motion.h1>
 

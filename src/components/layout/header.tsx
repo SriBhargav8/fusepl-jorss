@@ -48,13 +48,13 @@ export function Header() {
                   href={link.href}
                   target={isExternal ? '_blank' : undefined}
                   rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className={`focus-ring relative px-3.5 py-1.5 text-[13px] font-medium tracking-wide uppercase rounded-lg transition-all duration-200
+                  className={`focus-ring relative px-2.5 py-1.5 text-[12px] font-semibold tracking-wide uppercase rounded-lg transition-all duration-200 whitespace-nowrap flex items-center gap-1.5
                     ${isActive ? 'text-[oklch(0.62_0.22_330)] bg-[oklch(0.62_0.22_330/0.08)]' : 'text-[oklch(0.35_0.02_260)] hover:text-[oklch(0.20_0.02_260)] hover:bg-[oklch(0.96_0.005_260)]'}`}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {link.label}
                   {isLearn && (
-                    <svg className="inline-block ml-1 w-3 h-3 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <svg className="inline-block w-3 h-3 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   )}
