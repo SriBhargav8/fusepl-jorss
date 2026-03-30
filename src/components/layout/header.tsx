@@ -7,14 +7,17 @@ import { useState } from 'react'
 import { MobileNav } from './mobile-nav'
 import { PILLARS } from '@/lib/pillars'
 
+import { HandCoins, PieChart, BookOpen, Building2, Briefcase } from 'lucide-react'
+
 const NAV_LINKS = [
-  { href: '/learn', label: 'Learn' },
-  { href: '/valuation', label: 'Valuation' },
-  { href: '/deal-check', label: 'Deal Check' },
-  { href: '/cap-table', label: 'Cap Table' },
-  { href: '/esop-calculator', label: 'ESOP' },
-  { href: '/services', label: 'Pricing' },
-  { href: 'https://profile.firstunicornstartup.com/', label: 'Our Services', isExternal: true },
+  { href: '/learn', label: 'Learn', icon: BookOpen },
+  { href: '/valuation', label: 'Valuation', icon: PieChart },
+  { href: '/deal-check', label: 'Fundraising', icon: HandCoins },
+  { href: '/cap-table', label: 'Cap Table', icon: PieChart },
+  { href: '/esop-calculator', label: 'ESOP', icon: Briefcase },
+  { href: '/guides', label: 'Guides', icon: BookOpen },
+  { href: '/guides/startup-india-registration-explained', label: 'Startup India', icon: Building2 },
+  { href: 'https://profile.firstunicornstartup.com/', label: 'Our Services', isExternal: true, icon: Briefcase },
 ]
 
 export function Header() {

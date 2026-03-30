@@ -12,11 +12,13 @@ import {
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { PILLARS } from '@/lib/pillars'
+import { useModal } from '@/components/providers/modal-provider'
 
 interface NavLink {
   href: string
   label: string
   isExternal?: boolean
+  icon?: any
 }
 
 interface MobileNavProps {
@@ -27,6 +29,7 @@ interface MobileNavProps {
 export function MobileNav({ links, pathname }: MobileNavProps) {
   const [open, setOpen] = useState(false)
   const [learnExpanded, setLearnExpanded] = useState(false)
+  const { openLeadModal } = useModal()
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -60,6 +63,24 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                 pathname === link.href ||
                 (pathname?.startsWith(link.href + '/') ?? false)
               const isLearn = link.href === '/learn'
+              const isModal = (link as any).isModal
+              const Icon = link.icon
+
+              if (isModal) {
+                return (
+                  <button
+                    key={link.label}
+                    onClick={() => {
+                      setOpen(false)
+                      openLeadModal()
+                    }}
+                    className="flex items-center gap-3 relative rounded-lg px-4 py-3 text-sm text-left font-medium transition-colors text-[oklch(0.35_0.02_260)] hover:text-[oklch(0.15_0.02_260)] hover:bg-[oklch(0.96_0.005_260)]"
+                  >
+                    {Icon && <Icon className="h-4 w-4" />}
+                    {link.label}
+                  </button>
+                )
+              }
 
               return (
                 <div key={link.href}>
@@ -70,7 +91,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                       rel={link.isExternal ? 'noopener noreferrer' : undefined}
                       onClick={() => setOpen(false)}
                       className={`
-                        relative rounded-lg px-4 py-3 text-sm font-medium transition-colors flex-1
+                        flex items-center gap-3 relative rounded-lg px-4 py-3 text-sm font-medium transition-colors flex-1
                         ${
                           isActive
                             ? 'bg-[oklch(0.62_0.22_330/0.08)] text-[oklch(0.62_0.22_330)] border-l-2 border-[oklch(0.62_0.22_330)]'
@@ -78,6 +99,7 @@ export function MobileNav({ links, pathname }: MobileNavProps) {
                         }
                       `}
                     >
+                      {Icon && <Icon className="h-4 w-4" />}
                       {link.label}
                     </Link>
                     {isLearn && (
