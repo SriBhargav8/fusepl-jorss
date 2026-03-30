@@ -5,7 +5,8 @@ import { motion } from 'framer-motion'
 import { PILLARS } from '@/lib/pillars'
 import type { Article } from '@/lib/content-types'
 import { ArticleCard } from '@/components/learn/article-card'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { Search, X } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -25,10 +26,18 @@ const STATS = [
 
 export function LearnPageClient({ articles }: { articles: Article[] }) {
   const [activePillar, setActivePillar] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const filtered = activePillar
-    ? articles.filter((a) => a.frontmatter.pillar === activePillar)
-    : articles
+  const filtered = useMemo(() => {
+    return articles.filter((a) => {
+      const matchesPillar = !activePillar || a.frontmatter.pillar === activePillar
+      const searchStr = searchQuery.toLowerCase()
+      const matchesSearch = !searchQuery || 
+        a.frontmatter.title.toLowerCase().includes(searchStr) ||
+        a.frontmatter.excerpt.toLowerCase().includes(searchStr)
+      return matchesPillar && matchesSearch
+    })
+  }, [articles, activePillar, searchQuery])
 
   return (
     <main className="bg-[oklch(0.985 0.002 260)] min-h-screen">
@@ -102,43 +111,63 @@ export function LearnPageClient({ articles }: { articles: Article[] }) {
         </motion.div>
       </section>
 
-      {/* Pillar Navigation */}
-      <section className="border-b border-[oklch(0.91 0.005 260)] bg-[oklch(0.98 0.002 260)] pb-2 pt-1 border-t border-[oklch(0.91_0.005_260)]">
+      {/* Filters & Search */}
+      <section className="bg-[oklch(0.98 0.002 260)] pt-8 pb-12 border-t border-[oklch(0.91_0.005_260)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-wrap justify-center gap-2.5 py-4">
-            <button
-              onClick={() => setActivePillar(null)}
-              className={`text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 ${
-                !activePillar
-                  ? 'bg-[oklch(0.62_0.22_330/0.12)] text-[oklch(0.62 0.22 330)] border border-[oklch(0.62_0.22_330/0.25)]'
-                  : 'text-[oklch(0.45 0.01 260)] hover:text-[oklch(0.25 0.02 260)] hover:bg-[oklch(0.96 0.005 260)] border border-transparent'
-              }`}
-            >
-              All
-            </button>
-            {PILLARS.map((pillar) => (
+          <div className="space-y-8">
+            {/* Search Bar */}
+            <div className="relative max-w-2xl mx-auto">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <Search className="w-5 h-5 text-[oklch(0.50_0.01_260)]" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search articles (e.g. 'Valuation', 'Term Sheet')..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white border border-[oklch(0.91_0.005_260)] text-[oklch(0.15_0.02_260)] placeholder:text-[oklch(0.55_0.01_260)] focus:outline-none focus:ring-2 focus:ring-[oklch(0.62_0.22_330/0.2)] focus:border-[oklch(0.62_0.22_330/0.3)] transition-all shadow-sm shadow-black/5"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-4 flex items-center text-[oklch(0.50_0.01_260)] hover:text-[oklch(0.15_0.02_260)] transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex flex-wrap justify-center gap-2">
               <button
-                key={pillar.slug}
-                onClick={() => setActivePillar(activePillar === pillar.slug ? null : pillar.slug)}
-                className={`text-[12px] font-semibold px-4 py-2 rounded-full transition-all duration-200 flex items-center gap-2 ${
-                  activePillar === pillar.slug
-                    ? 'border'
-                    : 'text-[oklch(0.45 0.01 260)] hover:text-[oklch(0.25 0.02 260)] hover:bg-[oklch(0.96 0.005 260)] border border-transparent'
-                }`}
-                style={
-                  activePillar === pillar.slug
-                    ? {
-                        color: pillar.color,
-                        backgroundColor: `color-mix(in oklch, ${pillar.color} 10%, transparent)`,
-                        borderColor: `color-mix(in oklch, ${pillar.color} 25%, transparent)`,
-                      }
-                    : undefined
-                }
+                onClick={() => setActivePillar(null)}
+                className={`
+                  px-5 py-2.5 rounded-full text-sm font-semibold transition-all
+                  ${!activePillar 
+                    ? 'bg-[#1d2024] text-white shadow-[0_4px_12px_oklch(0_0_0/0.15)]' 
+                    : 'bg-white border border-[oklch(0.91_0.005_260)] text-[oklch(0.35_0.02_260)] hover:bg-[oklch(0.98_0.002_260)] hover:border-[oklch(0.85_0.01_260)] shadow-sm shadow-black/5'
+                  }
+                `}
               >
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: pillar.color }} />
-                {pillar.name}
+                All
               </button>
-            ))}
+              {PILLARS.map((pillar) => (
+                <button
+                  key={pillar.slug}
+                  onClick={() => setActivePillar(activePillar === pillar.slug ? null : pillar.slug)}
+                  className={`
+                    px-5 py-2.5 rounded-full text-sm font-semibold transition-all flex items-center gap-2
+                    ${activePillar === pillar.slug 
+                      ? 'bg-[#1d2024] text-white shadow-[0_4px_12px_oklch(0_0_0/0.15)]' 
+                      : 'bg-white border border-[oklch(0.91_0.005_260)] text-[oklch(0.35_0.02_260)] hover:bg-[oklch(0.98_0.002_260)] hover:border-[oklch(0.85_0.01_260)] shadow-sm shadow-black/5'
+                    }
+                  `}
+                >
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: pillar.color }} />
+                  {pillar.name}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
