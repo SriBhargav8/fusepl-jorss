@@ -26,10 +26,10 @@ export function generateArticleSchema(frontmatter: ArticleFrontmatter, wordCount
     mainEntityOfPage: `${BASE_URL}/learn/${frontmatter.pillar}/${frontmatter.slug}`,
     image: frontmatter.image || `${BASE_URL}/og/learn/${frontmatter.pillar}/${frontmatter.slug}.png`,
     wordCount,
-    keywords: [
+    keywords: frontmatter.keywords ? [
       frontmatter.keywords.primary,
       ...(frontmatter.keywords.secondary || []),
-    ].join(', '),
+    ].filter(Boolean).join(', ') : '',
   }
 }
 

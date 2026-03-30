@@ -26,6 +26,9 @@ export function getAllArticles(): Article[] {
       const { data, content } = matter(raw)
       const stats = readingTime(content)
 
+      if (!data.slug) data.slug = file.replace(/\.mdx$/, '')
+      if (!data.pillar) data.pillar = pillar.slug
+
       articles.push({
         frontmatter: data as ArticleFrontmatter,
         content,
@@ -56,6 +59,9 @@ export function getArticle(pillarSlug: string, articleSlug: string): Article | u
   for (const file of files) {
     const raw = fs.readFileSync(path.join(pillarDir, file), 'utf-8')
     const { data, content } = matter(raw)
+
+    if (!data.slug) data.slug = file.replace(/\.mdx$/, '')
+    if (!data.pillar) data.pillar = pillarSlug
 
     if (data.slug === articleSlug) {
       const stats = readingTime(content)

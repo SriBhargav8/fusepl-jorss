@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ pillar: s
   if (!article) return {}
 
   return {
-    title: article.frontmatter.title,
-    description: article.frontmatter.excerpt,
-    keywords: [
+    title: article.frontmatter.title || 'Article',
+    description: article.frontmatter.excerpt || '',
+    keywords: article.frontmatter.keywords ? [
       article.frontmatter.keywords.primary,
       ...(article.frontmatter.keywords.secondary || []),
-    ],
+    ].filter(Boolean) : [],
     openGraph: {
       title: article.frontmatter.title,
       description: article.frontmatter.excerpt,
