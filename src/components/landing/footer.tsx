@@ -9,7 +9,7 @@ const LINKS: { heading: string; links: { href: string; label: string }[] }[] = [
       { href: '/deal-check', label: 'Investor Deal Check' },
       { href: '/cap-table', label: 'Cap Table' },
       { href: '/esop-calculator', label: 'ESOP Calculator' },
-      { href: '/valuatein', label: 'ValuateIN Professional' },
+      { href: '#', label: 'ValuateIN (Coming Soon)' },
     ],
   },
   {

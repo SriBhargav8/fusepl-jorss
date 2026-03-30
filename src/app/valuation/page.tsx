@@ -338,12 +338,11 @@ export default function ValuationPage() {
                     FEMA NDI compliance, ESOP strike pricing, or IBBI-ready IBC reports — switch to ValuateIN Professional.
                   </p>
                 </div>
-                <Link
-                  href="/valuatein"
-                  className="shrink-0 inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330)] text-white hover:bg-[oklch(0.52_0.22_330)] transition-all whitespace-nowrap"
+                <span
+                  className="shrink-0 inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330/0.5)] cursor-not-allowed text-white whitespace-nowrap"
                 >
-                  Try ValuateIN →
-                </Link>
+                  ValuateIN (Coming Soon)
+                </span>
               </div>
             </motion.div>
 

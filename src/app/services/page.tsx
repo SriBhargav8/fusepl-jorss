@@ -235,13 +235,11 @@ export default function ServicesPage() {
             <div className="shrink-0 text-center">
               <div className="text-3xl font-heading text-white mb-0.5">₹4,999<span className="text-base text-[oklch(0.55 0.01 260)]">/mo</span></div>
               <p className="text-[11px] text-[oklch(0.50 0.01 260)] mb-4">Professional · Unlimited</p>
-              <Link
-                href="/valuatein"
-                className="btn-press group inline-flex items-center justify-center gap-2 h-11 px-7 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330)] text-white hover:bg-[oklch(0.52_0.22_330)] transition-all"
+              <span
+                className="inline-flex items-center justify-center gap-2 h-11 px-7 text-sm font-semibold rounded-xl bg-[oklch(0.62_0.22_330/0.5)] text-white cursor-not-allowed"
               >
-                Try ValuateIN Free
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
+                ValuateIN (Coming Soon)
+              </span>
             </div>
           </div>
         </motion.div>
